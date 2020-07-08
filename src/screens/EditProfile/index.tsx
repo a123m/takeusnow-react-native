@@ -54,7 +54,7 @@ interface State {
   user_image: any;
   imageIndex: number;
   isImageViewVisible: boolean;
-  portfolio: Array<object>;
+  portfolio: Array<any>;
   languagesData: Array<object>;
   ableToTravel: string;
   enteredLanguage: string;
@@ -153,28 +153,6 @@ const getResponseData = {
     '[{"value":"English","rating":5},{"value":"Hindi","rating":5}]',
 };
 
-const catData = [
-  { cat_id: 0, name: 'Select Category', status: 0 },
-  { cat_id: 1, name: 'Photography', status: 0 },
-  { cat_id: 2, name: 'Videography', status: 0 },
-  { cat_id: 3, name: 'Wedding Planning', status: 0 },
-  { cat_id: 4, name: 'Makeup Artist', status: 0 },
-  { cat_id: 5, name: 'Decoration', status: 0 },
-  { cat_id: 6, name: 'Choreography', status: 0 },
-  { cat_id: 7, name: 'Astrology', status: 0 },
-  { cat_id: 8, name: 'Entertainment', status: 0 },
-];
-const subCatData = [
-  { sub_cat_id: 11, cat_id: 1, name: 'Still', status: 0 },
-  { sub_cat_id: 22, cat_id: 1, name: 'Videograph', status: 0 },
-  { sub_cat_id: 33, cat_id: 1, name: 'Wedding Planners', status: 0 },
-  { sub_cat_id: 44, cat_id: 1, name: 'Makeup Artist', status: 0 },
-  { sub_cat_id: 55, cat_id: 2, name: 'Decorators', status: 0 },
-  { sub_cat_id: 66, cat_id: 2, name: 'Choreographers', status: 0 },
-  { sub_cat_id: 77, cat_id: 2, name: 'Astrologers', status: 0 },
-  { sub_cat_id: 88, cat_id: 3, name: 'Entertainers', status: 0 },
-];
-
 const nature: Array<any> = [
   {
     source: {
@@ -205,9 +183,10 @@ const nature: Array<any> = [
 ];
 
 export default class ProfileEdit extends React.PureComponent<any, State> {
-  combinedCatData: any = [];
-  catData: any = [];
-  subCatData: any = [];
+  private combinedCatData: any = [];
+  private catData: any = [];
+  private subCatData: any = [];
+  private userId: Promise<string | null>;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -244,6 +223,8 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
 
       height: 0,
     };
+
+    this.userId = AsyncStorage.getItem('userId');
   }
 
   componentDidMount() {
@@ -252,9 +233,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
 
   setDefaultView = async () => {
     try {
-      let id: any = await AsyncStorage.getItem('userId');
-
-      // const response = await APIService.sendGetCall('/profile/main/' + id);
+      // const response = await APIService.sendGetCall('/profile/main/' + this.userId);
       const response = getResponseData;
 
       const fullName: string = response.fname.concat(' ', response.lname);
@@ -505,6 +484,8 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         </>
       );
     }
+    const portfolioLength = portfolio.length - 1;
+    console.log('portfolioLength', portfolioLength);
     return (
       <AppCard style={{ overflow: 'visible' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -524,12 +505,13 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
           style={styles.portfolioStyle}
           data={portfolio}
           horizontal={true}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index: number) => index.toString()}
           renderItem={({ item, index }) => (
             <View>
               <TouchableOpacity
                 style={{ marginRight: 5 }}
                 onPress={() => {
+                  console.log('index', index);
                   this.setState({
                     imageIndex: index,
                     isImageViewVisible: true,
@@ -552,11 +534,43 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                     </TouchableOpacity>
                   ) : null}
 
-                  <Image
-                    style={{ width: 300, height: 200, borderRadius: 30 }}
-                    source={item.source}
-                    resizeMode="cover"
-                  />
+                  {index === portfolioLength ? (
+                    <Image
+                      style={{
+                        width: 300,
+                        height: 200,
+                        borderRadius: 30,
+                        marginRight: 15,
+                      }}
+                      source={item.source}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View>
+                      {index === 0 ? (
+                        <Image
+                          style={{
+                            width: 300,
+                            height: 200,
+                            borderRadius: 30,
+                            marginLeft: 20,
+                          }}
+                          source={item.source}
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            width: 300,
+                            height: 200,
+                            borderRadius: 30,
+                          }}
+                          source={item.source}
+                          resizeMode="cover"
+                        />
+                      )}
+                    </View>
+                  )}
                 </View>
               </TouchableOpacity>
             </View>
@@ -583,10 +597,8 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
           my_skills: this.state.skillData,
         };
 
-        console.log(params);
         const response = await APIService.sendPatchCall('profile/main', params);
 
-        console.log('respons\n', response.data);
         this.setState({
           allowEdit: false,
           isLoading: false,
@@ -773,9 +785,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         }
       }
     }
-    console.log('filteredSubCat', filteredSubCat);
-    console.log('selectedSubCat', selectedSubCat);
-    console.log('selectedSubCat', typeof selectedSubCat[1]);
     return (
       <View style={styles.cardStyle}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -1317,6 +1326,45 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
     );
   };
 
+  _renderCheckReviews = () => {
+    const { toReview } = this.props;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          toReview(this.userId);
+        }}
+      >
+        <View
+          style={{
+            height: 50,
+            width: '100%',
+            backgroundColor: Styles.PrimaryColor2,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              color: 'white',
+              fontWeight: 'bold',
+              paddingLeft: 10,
+            }}
+          >
+            Check Reviews
+          </Text>
+          <Icon
+            style={{ paddingRight: 10 }}
+            name="arrow-right-circle"
+            color="white"
+            size={24}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   render() {
     const { isLoading, showDatePicker, dateOfBirth } = this.state;
     return (
@@ -1360,6 +1408,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
             }}
           />
         )}
+        {this._renderCheckReviews()}
         {isLoading ? (
           <Spinner mode="overlay" size="large" color="white" />
         ) : null}
@@ -1400,9 +1449,8 @@ const styles = StyleSheet.create({
   },
   portfolioStyle: {
     height: 205,
-    marginLeft: '-3%',
+    marginLeft: '-4%',
     marginRight: '-4%',
-    // paddingLeft: '6%',
     marginTop: 5,
   },
   modalContainer: { padding: 10, flex: 1, justifyContent: 'space-between' },

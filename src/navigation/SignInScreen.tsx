@@ -8,6 +8,7 @@ type Props = {
   navigation: any;
   onViewSignUp: Function;
   onViewSignIn: Function;
+  onViewForgetPassword: Function;
 };
 
 export default class LoginScreen extends React.PureComponent<Props> {
@@ -32,6 +33,9 @@ export default class LoginScreen extends React.PureComponent<Props> {
         }}
         onViewSignUp={() => {
           navigate('AccountType');
+        }}
+        onViewForgetPassword={() => {
+          navigate('ForgetPassword');
         }}
       />
     );

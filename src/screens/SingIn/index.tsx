@@ -19,6 +19,7 @@ import APIService from '../../utils/APIService';
 type Props = {
   onViewSignUp: Function;
   onViewSignIn: Function;
+  onViewForgetPassword: any;
 };
 
 type State = {
@@ -81,6 +82,7 @@ export default class SignIn extends React.PureComponent<Props, State> {
   };
 
   render() {
+    const { onViewForgetPassword } = this.props;
     const { email, password, isLoading } = this.state;
     return (
       <ImageBackground
@@ -125,7 +127,9 @@ export default class SignIn extends React.PureComponent<Props, State> {
               />
             </View>
             <View style={{ alignItems: 'flex-end', padding: 5 }}>
-              <Text style={{ color: 'white' }}>Forget Your Password?</Text>
+              <TouchableOpacity onPress={onViewForgetPassword}>
+                <Text style={{ color: 'white' }}>Forget Your Password?</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.container}>

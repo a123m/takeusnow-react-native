@@ -10,6 +10,7 @@ import { Styles } from '../common/index';
 
 import SplashScreen from './SplashScreen';
 import SignInScreen from './SignInScreen';
+import ForgetPassword from './ForgetPasswordScreen';
 import { SignUpScreen, AccountTypeScreen, MobileScreen } from './SignUpScreen';
 import HomeScreen from './HomeScreen';
 import PlansScreen from './PlansScreen';
@@ -124,7 +125,6 @@ BrowseStack.navigationOptions = ({ navigation }: any) => {
 
 const ProfileStack = createStackNavigator({
   EditProfile: EditProfileScreen,
-  Profile: ProfileScreen,
   Review: ReviewScreen,
   Settings: SettingsScreen,
 });
@@ -160,6 +160,7 @@ const AppTab = createBottomTabNavigator(
 );
 const AuthStack = createStackNavigator({
   SignIn: { screen: SignInScreen },
+  ForgetPassword: { screen: ForgetPassword },
   AccountType: { screen: AccountTypeScreen },
   Mobile: { screen: MobileScreen },
   SignUp: { screen: SignUpScreen },

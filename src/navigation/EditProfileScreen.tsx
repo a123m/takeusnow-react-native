@@ -6,7 +6,7 @@ import { HeaderRight } from '../components';
 
 import { Styles } from '../common';
 
-export default class ProfileEditScreen extends React.PureComponent {
+export default class ProfileEditScreen extends React.PureComponent<any> {
   static navigationOptions = ({ navigation }: any) => ({
     headerTitle: 'My Profile',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
@@ -18,10 +18,17 @@ export default class ProfileEditScreen extends React.PureComponent {
           navigation.navigate('Settings');
         }}
       />
-    )
+    ),
   });
 
   render() {
-    return <MyProfile />;
+    const { navigation } = this.props;
+    return (
+      <MyProfile
+        toReview={(userId: string) =>
+          navigation.navigate('Review', { userId: userId })
+        }
+      />
+    );
   }
 }
