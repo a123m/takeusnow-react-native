@@ -37,7 +37,6 @@ import { GlobalErr } from '../../utils/utils';
 import { Styles } from '../../common';
 
 interface State {
-  id: any;
   fullName: string;
   about: string;
   showSkillModal: boolean;
@@ -99,7 +98,7 @@ const getResponseData = {
   gender: 'Male',
   work_experience: '1 year',
   able_to_travel: 'yes',
-  sub_cat: '[11,22,33,44,55]',
+  sub_cat: '[]',
   user_image:
     'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
   portfolio: [
@@ -138,14 +137,14 @@ const getResponseData = {
     { cat_id: 8, name: 'Entertainment', status: 0 },
   ],
   subCatData: [
-    { sub_cat_id: 11, cat_id: 1, name: 'Still', status: 0 },
-    { sub_cat_id: 22, cat_id: 1, name: 'Videograph', status: 0 },
-    { sub_cat_id: 33, cat_id: 1, name: 'Wedding Planners', status: 0 },
-    { sub_cat_id: 44, cat_id: 1, name: 'Makeup Artist', status: 0 },
-    { sub_cat_id: 55, cat_id: 2, name: 'Decorators', status: 0 },
-    { sub_cat_id: 66, cat_id: 2, name: 'Choreographers', status: 0 },
-    { sub_cat_id: 77, cat_id: 2, name: 'Astrologers', status: 0 },
-    { sub_cat_id: 88, cat_id: 3, name: 'Entertainers', status: 0 },
+    { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
+    { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
+    { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
+    { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
+    { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
+    { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
+    { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
+    { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
   ],
   my_equipments:
     '[{ "value": "Canon 350", "rating": 5 },{ "value": "Nikon 560", "rating": 5 }]',
@@ -190,7 +189,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   constructor(props: any) {
     super(props);
     this.state = {
-      id: 0,
       fullName: 'Aman Chhabra',
       user_image: '',
       imageIndex: 0,
@@ -219,7 +217,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       portfolio: [],
       languagesData: [],
       selectedItems: [],
-      selectedSubCat: [11, 22],
+      selectedSubCat: [],
 
       height: 0,
     };
@@ -256,7 +254,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       this.subCatData = response.subCatData;
 
       for (let i of this.catData) {
-        let myArr = [];
+        let childrenArr = [];
         for (let j of this.subCatData) {
           if (i.cat_id === j.cat_id) {
             let subCatObj = {
@@ -265,16 +263,16 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
               name: j.name,
               status: j.status,
             };
-            myArr.push(subCatObj);
+            childrenArr.push(subCatObj);
           }
         }
-        let myObj: any = {
+        let catObj: any = {
           id: i.cat_id,
           name: i.name,
           status: i.status,
-          children: myArr,
+          children: childrenArr,
         };
-        this.combinedCatData.push(myObj);
+        this.combinedCatData.push(catObj);
       }
 
       let portfolio = response.portfolio;
@@ -298,7 +296,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       }
 
       this.setState({
-        id: JSON.parse(id),
         fullName: fullName,
         about: response.about,
         state: state,
@@ -485,7 +482,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       );
     }
     const portfolioLength = portfolio.length - 1;
-    console.log('portfolioLength', portfolioLength);
     return (
       <AppCard style={{ overflow: 'visible' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -511,7 +507,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
               <TouchableOpacity
                 style={{ marginRight: 5 }}
                 onPress={() => {
-                  console.log('index', index);
                   this.setState({
                     imageIndex: index,
                     isImageViewVisible: true,
@@ -521,14 +516,23 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                 <View>
                   {allowEdit ? (
                     <TouchableOpacity
-                      onPress={() => {
-                        this.setState({
-                          portfolio: portfolio.filter(
-                            (newItem, newIndex) => index !== newIndex
-                          ),
-                        });
+                      onPress={async () => {
+                        const response = await APIService.sendDelCall(
+                          'portfolio/' + item.id
+                        );
+                        //Need testing for negative test
+                        if (response) {
+                          this.setState({
+                            portfolio: portfolio.filter(
+                              (newItem, newIndex) => index !== newIndex
+                            ),
+                          });
+                        }
                       }}
-                      style={styles.crossIconStyle}
+                      style={[
+                        styles.crossIconStyle,
+                        index === portfolioLength ? { marginRight: 20 } : {},
+                      ]}
                     >
                       <Icon name="close" size={35} color="white" />
                     </TouchableOpacity>
@@ -583,26 +587,54 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   /**
    * async function for API call and save data to local and server
    */
-  saveHandler = async () => {
+  saveHandler = () => {
+    const {
+      about,
+      state,
+      city,
+      user_image,
+      dateOfBirth,
+      workExperience,
+      ableToTravel,
+      selectedSubCat,
+      equipmentsData,
+      languagesData,
+    } = this.state;
     if (this.state.allowEdit) {
       try {
-        this.setState({
-          isLoading: true,
-        });
-        let params = {
-          id: this.state.id,
-          about: this.state.about,
-          state: this.state.state,
-          city: this.state.city,
-          my_skills: this.state.skillData,
-        };
+        this.setState(
+          {
+            isLoading: true,
+          },
+          async () => {
+            const params = {
+              about: about,
+              state: state,
+              city: city,
+              user_image: user_image,
+              // portfolio:portfolio,portfolio will have different API
+              dateOfBirth: dateOfBirth,
+              workExperience: workExperience,
+              ableToTravel: ableToTravel,
+              sub_cat: selectedSubCat,
+              my_equipments: equipmentsData,
+              languages_known: languagesData,
+            };
 
-        const response = await APIService.sendPatchCall('profile/main', params);
+            const response = await APIService.sendPatchCall(
+              'profile/main/' + this.userId,
+              params
+            );
+            if (response) {
+              Alert.alert('Alert', 'Your data is saved');
+            }
 
-        this.setState({
-          allowEdit: false,
-          isLoading: false,
-        });
+            this.setState({
+              allowEdit: false,
+              isLoading: false,
+            });
+          }
+        );
       } catch (err) {
         GlobalErr(err);
         this.setState({
@@ -857,7 +889,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
 
   _renderSkillModal = () => {
     const { selectedSubCat } = this.state;
-    console.log(this.combinedCatData);
     return (
       <AppModal visible={this.state.showSkillModal}>
         <View style={styles.modalContainer}>

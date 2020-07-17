@@ -13,7 +13,7 @@ import { Styles } from '../../common';
 
 interface Props {
   title: String;
-  createdAt: Date;
+  createdAt?: string | Date;
   budget: Number;
   proposals: Number;
   location: String;
@@ -33,7 +33,7 @@ const ProjectCard = (props: Props) => {
           Styles.PrimaryColor3,
         ]}
         style={{
-          margin: 10,
+          margin: 5,
           borderRadius: 10,
           // height: 150,
           alignItems: 'center',

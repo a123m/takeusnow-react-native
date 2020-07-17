@@ -16,6 +16,7 @@ import MyProjectCard from './MyProjectCard';
 import AppProposal from './AppProposal';
 import ExploreCard from './ExploreCard';
 import BoxText from './BoxText';
+import UserCard from './UserCard';
 
 export {
   AppInput,
@@ -36,4 +37,5 @@ export {
   AppProposal,
   ExploreCard,
   BoxText,
+  UserCard,
 };

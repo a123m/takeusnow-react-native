@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Alert } from 'react-native';
 
 import Config from '../utils/Config';
+import { GlobalErr } from './utils';
 
 axios.defaults.baseURL = Config.Debug ? Config.LocalIP : Config.ServerIP;
 axios.defaults.timeout = 9000;
@@ -151,11 +152,11 @@ export default class APIService {
         Alert.alert('Alert', 'Please Login Again');
         return;
       }
-      if (response.status !== 200) {
-        Alert.alert('Alert', 'Something went wrong please try again');
-        return;
+      if (response.status === 200 || response.status === 204) {
+        return response.data;
       }
-      return response.data;
+      Alert.alert('Alert', 'Something went wrong please try again');
+      return;
     } catch (err) {
       // console.log(err.response)
       return err.response;
@@ -208,6 +209,54 @@ export default class APIService {
     } catch (err) {
       // console.log(err.response)
       return err.response;
+    }
+  }
+
+  /**
+   * This is async function for making all Delete Calls to server.
+   * @param url
+   * @param headers
+   * @returns {Promise<void>}
+   */
+  static async sendDelCall(url: string) {
+    const token = await AsyncStorage.getItem('userToken');
+    let headerObj = { headers: {} };
+    if (token) {
+      headerObj.headers = {
+        'Content-Type': 'application/json',
+        Authorization: 'JWT ' + token,
+      };
+    } else {
+      headerObj.headers = { 'Content-Type': 'application/json' };
+    }
+    const netStatus = await NetInfo.fetch();
+    try {
+      if (netStatus.isConnected == false) {
+        Alert.alert(
+          'Alert',
+          'Unable to access internet, Please check your connectivity and try again'
+        );
+        throw new Error('Network Fail');
+      }
+
+      axios.interceptors.request.use((request: object) => {
+        // console.log('=====request======\n', request);
+        return request;
+      });
+
+      const response = await axios.delete(url, headerObj);
+
+      if (response.status === 500) {
+        Alert.alert('Alert', 'Please Login Again');
+        return;
+      }
+      if (response.status === 200 || response.status === 200) {
+        return response.data;
+      }
+      Alert.alert('Alert', 'Something went wrong please try again');
+    } catch (err) {
+      GlobalErr(err);
+      return;
     }
   }
 }

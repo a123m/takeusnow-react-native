@@ -48,6 +48,9 @@ export default class CategoryScreen extends React.PureComponent<Props> {
         onProjectPress={(projectId: number) =>
           navigation.navigate('Details', { projectId: projectId })
         }
+        onUserPress={(userId: number) =>
+          navigation.navigate('Profile', { userId: userId })
+        }
         showFilterModal={this.state.showFilterModal}
         filterModalHandler={this.filterModalHandler}
         category={navigation.getParam('category')}

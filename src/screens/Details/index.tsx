@@ -1,10 +1,11 @@
 import React from 'react';
 import { Text, Alert, View, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import moment from 'moment';
 
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
-import { AppButton, AppCard, AppProposal } from '../../components';
+import { AppButton, AppCard, AppProposal, BoxText } from '../../components';
 
 import { Styles } from '../../common';
 
@@ -19,9 +20,10 @@ interface State {
   about: String;
   budget: Number;
   location: String;
-  postedOn: String | Date;
+  postedOn: string;
+  reqOn: string;
   proposals: Array<object>;
-  skills: Array<String>;
+  skills: Array<string>;
   showMore: Boolean;
 }
 
@@ -31,11 +33,15 @@ export default class Details extends React.PureComponent<Props, State> {
     this.state = {
       title: '',
       about: '',
-      budget: 0,
       location: '',
       postedOn: '',
+      reqOn: '',
+
+      budget: 0,
+
       proposals: [],
       skills: [],
+
       showMore: false,
     };
   }
@@ -49,7 +55,10 @@ export default class Details extends React.PureComponent<Props, State> {
       budget: 80000,
       location: 'Agra',
       skills: ['photo Editing', 'professional photography'],
-      postedOn: new Date().toDateString(),
+      postedOn: moment().toISOString(),
+      reqOn: moment()
+        .add(7, 'd')
+        .toISOString(),
       proposals: [
         {
           proposalId: 1,
@@ -91,7 +100,15 @@ export default class Details extends React.PureComponent<Props, State> {
 
   _renderDetailsView = () => {
     const { toProposal } = this.props;
-    const { title, budget, location, skills, postedOn, proposals } = this.state;
+    const {
+      title,
+      budget,
+      location,
+      skills,
+      postedOn,
+      proposals,
+      reqOn,
+    } = this.state;
     return (
       <ScrollView style={{ flex: 0.9 }} showsVerticalScrollIndicator={false}>
         <AppCard>
@@ -100,29 +117,25 @@ export default class Details extends React.PureComponent<Props, State> {
           </View>
           {this._renderAboutSection()}
         </AppCard>
-        <AppCard>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          >
-            <View>
-              <View style={{ margin: 5 }}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-                  Budget (INR)
-                </Text>
-              </View>
-              <View style={{ margin: 5 }}>
-                <Text style={{ fontSize: 18 }}>₹{budget}</Text>
-              </View>
+        <AppCard
+          style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+        >
+          <View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                Budget (INR)
+              </Text>
             </View>
-            <View>
-              <View style={{ margin: 5 }}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                  Location
-                </Text>
-              </View>
-              <View style={{ margin: 5 }}>
-                <Text style={{ fontSize: 18 }}>{location}</Text>
-              </View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 18 }}>₹{budget}</Text>
+            </View>
+          </View>
+          <View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Location</Text>
+            </View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 18 }}>{location}</Text>
             </View>
           </View>
         </AppCard>
@@ -135,31 +148,38 @@ export default class Details extends React.PureComponent<Props, State> {
           <View style={{ margin: 5, flexDirection: 'row' }}>
             {skills.map((item, index) => {
               return (
-                <View
-                  style={{
-                    borderRadius: 8,
-                    borderColor: Styles.PrimaryColor2,
-                    borderWidth: 1,
-                    margin: 2,
-                    padding: 4,
-                    flexDirection: 'row',
-                  }}
+                <BoxText
+                  color={Styles.PrimaryColor2}
+                  size={12}
                   key={index}
-                >
-                  <Text style={{ color: Styles.PrimaryColor2, fontSize: 11 }}>
-                    {item}
-                  </Text>
-                </View>
+                  text={item}
+                />
               );
             })}
           </View>
         </AppCard>
-        <AppCard>
-          <View style={{ margin: 5 }}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Posted On</Text>
+        <AppCard
+          style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+        >
+          <View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                Posted On
+              </Text>
+            </View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 18 }}>{moment(postedOn).fromNow()}</Text>
+            </View>
           </View>
-          <View style={{ margin: 5 }}>
-            <Text style={{ fontSize: 18 }}>{postedOn}</Text>
+          <View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Req On</Text>
+            </View>
+            <View style={{ margin: 5 }}>
+              <Text style={{ fontSize: 18 }}>
+                {moment(reqOn).format('Do MMMM YYYY')}
+              </Text>
+            </View>
           </View>
         </AppCard>
         {proposals.length !== 0 ? (

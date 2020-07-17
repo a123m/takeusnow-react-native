@@ -3,7 +3,7 @@ import { View, Image, StyleSheet } from 'react-native';
 
 type Props = {
   size: string;
-  source: string | object;
+  source: string;
 };
 
 const _renderAvatar = (props: Props) => {
@@ -25,10 +25,10 @@ const _renderAvatar = (props: Props) => {
       break;
   }
   let mySource;
-  if (!source || source !== '' || source === undefined) {
+  if (source.length === 0 || source === undefined) {
     mySource = require('../../Images/avatar.png');
   } else {
-    mySource = source;
+    mySource = { uri: source };
   }
   return (
     <View style={containerStyle}>

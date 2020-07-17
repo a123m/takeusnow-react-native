@@ -9,6 +9,7 @@ interface Props {
   showCross?: boolean | undefined;
   size?: number;
   onPress?: any;
+  color?: string;
 }
 
 const boxText = (props: Props) => {
@@ -30,11 +31,19 @@ const boxText = (props: Props) => {
     );
   }
   return (
-    <View style={styles.container2}>
+    <View
+      style={[
+        styles.container2,
+        { borderColor: props.color ? props.color : 'grey' },
+      ]}
+    >
       <Text
         style={
           props.size
-            ? { color: 'grey', fontSize: props.size }
+            ? {
+                color: props.color ? props.color : 'grey',
+                fontSize: props.size,
+              }
             : styles.textStyle
         }
       >

@@ -1,7 +1,13 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+// eslint-disable-next-line no-unused-vars
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
-const AppCard = (props: any) => {
+type Props = {
+  style: ViewStyle;
+  children: any;
+};
+
+const AppCard = (props: Props) => {
   return <View style={[styles.cardStyle, props.style]}>{props.children}</View>;
 };
 

@@ -1,108 +1,140 @@
 import React from 'react';
 import {
   FlatList,
-  Alert,
   View,
   Text,
   StyleSheet,
   Picker,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 import { SearchBar, Slider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-import { ProjectCard, AppModal, AppCard, AppButton } from '../../components';
+import {
+  ProjectCard,
+  AppModal,
+  AppCard,
+  AppButton,
+  UserCard,
+} from '../../components';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 import RegionList from '../../utils/RegionList';
 
 import { Styles } from '../../common';
+import moment from 'moment';
+// import AsyncStorage from '@react-native-community/async-storage';
 
 interface Props {
   category: string;
   onProjectPress: any;
   showFilterModal: any;
-  filterModalHandler: any;
+  filterModalHandler(): void;
+  onUserPress(userId: number): void;
 }
 
 interface State {
   searchInput: string;
   projectData: Array<Data> | never[];
+  userData: any[];
   minBudget: number | undefined;
   maxBudget: number | undefined;
   state: string;
   city: string;
   category: string;
+  isLoading: boolean;
+  isListEnd: boolean;
 }
 
 interface Data {
-  projectId: Number;
-  title: String;
-  createdAt: Date;
-  budget: Number;
-  proposals: Number;
-  location: String;
-  skills: Array<String>;
+  projectId: number;
+  title: string;
+  created_at: Date | string;
+  budget: number;
+  proposals: number;
+  location: string;
+  skills: Array<string>;
+  status: string;
 }
 
-const data: Array<Data> = [
+const responseDummyWork: Array<Data> = [
   {
     projectId: 1,
     title: 'Need a marriage Planner',
-    createdAt: new Date(),
+    created_at: moment().toISOString(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
     skills: ['Professional photographer', 'Editing experience'],
+    status: 'A',
   },
   {
     projectId: 2,
     title: 'Need a marriage Planner',
-    createdAt: new Date(),
+    created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
     skills: ['Professional photographer', 'Editing experience'],
+    status: 'A',
   },
   {
     projectId: 3,
     title: 'Need a marriage Planner',
-    createdAt: new Date(),
+    created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
     skills: ['Professional photographer', 'Editing experience'],
+    status: 'A',
   },
   {
     projectId: 4,
     title: 'Need a marriage Planner',
-    createdAt: new Date(),
+    created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
     skills: ['Professional photographer', 'Editing experience'],
+    status: 'A',
   },
   {
     projectId: 5,
     title: 'Need a marriage Planner',
-    createdAt: new Date(),
+    created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
     skills: ['Professional photographer', 'Editing experience'],
+    status: 'A',
   },
   {
     projectId: 6,
     title: 'Need a marriage Planner',
-    createdAt: new Date(),
+    created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
     skills: ['Professional photographer', 'Editing experience'],
+    status: 'A',
+  },
+];
+
+const responseDummyHire = [
+  {
+    userId: 1,
+    fname: 'Aman',
+    lname: 'Chhabra',
+    user_image:
+      'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
+    average_reviews: 4,
+    total_reviews: 5,
   },
 ];
 
 export default class Category extends React.PureComponent<Props, State> {
+  role: string | Promise<string | null>;
   scrollY = new Animated.Value(0);
   startHeight = 70;
   endHeight = 0;
@@ -121,39 +153,52 @@ export default class Category extends React.PureComponent<Props, State> {
     outputRange: [-30, 0],
     extrapolate: 'clamp',
   });
+  categoryId: any;
   constructor(props: any) {
     super(props);
     this.state = {
-      searchInput: '',
       projectData: [],
+      userData: [],
+
       minBudget: 0,
       maxBudget: 0,
+
       state: '',
       city: '',
       category: '',
+      searchInput: '',
+
+      isLoading: false,
+      isListEnd: false,
     };
+    // this.role = AsyncStorage.getItem('role');
+    this.role = 'work';
   }
 
   componentDidMount() {
-    // this.setDefaultView();
-    this.setState({ projectData: data });
+    this.setDefaultView();
   }
 
   setDefaultView = async () => {
-    const { category } = this.props;
-    let params = { category: category };
+    // const { category } = this.props;
+    // let params = { category: category };
+    let response;
     try {
-      const response: any = APIService.sendPostCall('browse/category', params);
-      if (response.status !== 200) {
-        Alert.alert('Alert', 'Something went wrong please try again!');
-        return;
+      if (this.role === 'hire') {
+        // const response: any =await APIService.sendGetCall('browse/category/hire/'+ this.categoryId);
+        response = responseDummyHire;
+        this.setState({
+          userData: response,
+        });
       }
-
-      let data: Array<Data> = response.data.projects;
-
-      this.setState({
-        projectData: data,
-      });
+      if (this.role === 'work') {
+        // const response: any = await APIService.sendGetCall('browse/category/work/'+ this.categoryId);
+        response = responseDummyWork;
+        this.setState({
+          projectData: response,
+        });
+        console.log(response);
+      }
     } catch (err) {
       GlobalErr(err);
     }
@@ -299,7 +344,32 @@ export default class Category extends React.PureComponent<Props, State> {
     );
   };
 
-  saveFilterHandler = () => {};
+  saveFilterHandler = async () => {
+    this.props.filterModalHandler;
+    this.setState({
+      isLoading: true,
+    });
+    // const params = {
+
+    // }
+    // try {
+    //   if (this.role === 'hire') {
+    //     // const response: any = await APIService.sendPostCall('browse/category/hire/', params);
+    //   }
+    //   if (this.role === 'work') {
+    //     // const response: any = await APIService.sendPostCall('browse/category/work', params);
+    //   }
+
+    //   const response = responseDummyWork;
+    //   // const response = responseDummyHire;
+
+    //   this.setState({
+    //     projectData: response,
+    //   });
+    // } catch (err) {
+    //   GlobalErr(err);
+    // }
+  };
 
   _renderSearchBar = () => {
     const { searchInput } = this.state;
@@ -329,7 +399,7 @@ export default class Category extends React.PureComponent<Props, State> {
             borderColor: 'white',
             borderBottomColor: 'white',
             borderTopColor: 'white',
-            margin: 10,
+            margin: 5,
           }}
           inputContainerStyle={{ backgroundColor: 'white' }}
           autoCapitalize="none"
@@ -339,21 +409,70 @@ export default class Category extends React.PureComponent<Props, State> {
     );
   };
 
+  loadMoreData = () => {
+    if (!this.state.isLoading && !this.state.isListEnd) {
+      //On click of Load More button We will call the web API again
+      this.setState({ isLoading: true }, async () => {
+        try {
+          const response = await APIService.sendGetCall(
+            `reviews/${this.userId}/more?page=${this.page}&limit=${this.limit}`
+          );
+          if (response.length > 0) {
+            //Successful response from the API Call
+            this.page = this.page + 1;
+            //After the response increasing the offset for the next API call.
+            this.setState({
+              reviews: [...this.state.reviews, ...response],
+              //adding the new data with old one available
+              isLoading: false,
+              //updating the loading state to false
+            });
+          } else {
+            this.setState({
+              isLoading: false,
+              isListEnd: true,
+            });
+          }
+        } catch (err) {
+          GlobalErr(err);
+          this.setState({
+            isLoading: false,
+            isListEnd: true,
+          });
+        }
+      });
+    }
+  };
+
   _renderProjects = () => {
     const { projectData } = this.state;
-    console.log('this.animatedSearchHeight', this.animatedSearchHeight);
+    console.log('projectData', projectData);
     return (
       <FlatList
+        showsVerticalScrollIndicator={false}
         onScroll={Animated.event([
           { nativeEvent: { contentOffset: { y: this.scrollY } } },
         ])}
         data={projectData}
         keyExtractor={(item) => item.projectId.toString()}
         style={{ paddingTop: 70 }}
+        ListFooterComponent={() => (
+          <View style={styles.footer}>
+            {this.state.isLoading ? (
+              <ActivityIndicator
+                color={Styles.PrimaryColor2}
+                style={{ height: 150, paddingBottom: 70 }}
+                size="large"
+              />
+            ) : (
+              <View style={{ height: 50 }} />
+            )}
+          </View>
+        )}
         renderItem={({ item }) => (
           <ProjectCard
             title={item.title}
-            createdAt={item.createdAt}
+            createdAt={item.created_at}
             budget={item.budget}
             location={item.location}
             onPress={() => this.projectClickHandler(item.projectId)}
@@ -370,17 +489,72 @@ export default class Category extends React.PureComponent<Props, State> {
     onProjectPress(projectId);
   };
 
-  render() {
+  _renderFreeLancers = () => {
+    const { onUserPress } = this.props;
+    const { userData } = this.state;
     return (
-      <>
-        {this._renderFilterModal()}
-        {this._renderSearchBar()}
-        {this._renderProjects()}
-      </>
+      <FlatList
+        onScroll={Animated.event([
+          { nativeEvent: { contentOffset: { y: this.scrollY } } },
+        ])}
+        data={userData}
+        keyExtractor={(item) => item.userId.toString()}
+        style={{ paddingTop: 70 }}
+        ListFooterComponent={() => (
+          <View style={styles.footer}>
+            {this.state.isLoading ? (
+              <ActivityIndicator
+                color={Styles.PrimaryColor2}
+                style={{ height: 150, paddingBottom: 70 }}
+                size="large"
+              />
+            ) : (
+              <View style={{ height: 50 }} />
+            )}
+          </View>
+        )}
+        renderItem={({ item }) => (
+          <UserCard
+            fname={item.fname}
+            lname={item.lname}
+            averageReviews={item.average_reviews}
+            totalReviews={item.total_reviews}
+            userImage={item.user_image}
+            onPress={() => onUserPress(item.userId)}
+          />
+        )}
+      />
     );
+  };
+
+  render() {
+    if (this.role === 'work') {
+      return (
+        <>
+          {this._renderFilterModal()}
+          {this._renderSearchBar()}
+          {this._renderProjects()}
+        </>
+      );
+    }
+    if (this.role === 'hire') {
+      return (
+        <>
+          {this._renderFilterModal()}
+          {this._renderSearchBar()}
+          {this._renderFreeLancers()}
+        </>
+      );
+    }
   }
 }
 
 const styles = StyleSheet.create({
   headingStyle: { fontSize: 16, fontWeight: 'bold' },
+  footer: {
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
 });

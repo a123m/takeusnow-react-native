@@ -37,7 +37,7 @@ export function _flatListItemSeparator() {
         marginLeft: '21%',
         height: 1,
         width: '60%',
-        backgroundColor: 'silver'
+        backgroundColor: 'silver',
       }}
     />
   );
@@ -45,7 +45,7 @@ export function _flatListItemSeparator() {
 
 export function GlobalErr(err: Error) {
   if (Config.Debug) {
-    console.log(err);
+    console.log('Global Error', err);
   } else {
     APIService.sendPostCall('global/error', err);
   }
