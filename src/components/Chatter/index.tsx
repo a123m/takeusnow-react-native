@@ -19,7 +19,7 @@ const _renderChatter = (props: Props) => {
     <TouchableOpacity onLongPress={props.onLongPress} onPress={props.onPress}>
       <View style={styles.mainContainer}>
         <View style={styles.smallContainer}>
-          <Avatar size={'small'} />
+          <Avatar size={'small'} source={''} />
         </View>
         <View style={styles.bigContainer}>
           <View style={styles.internalContainer}>
@@ -41,18 +41,18 @@ const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'row',
     marginTop: 8,
-    marginBottom: 8
+    marginBottom: 8,
   },
   smallContainer: {
     flex: 1.5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   bigContainer: {
     flex: 4,
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
   },
-  internalContainer: { height: 20, width: '100%', overflow: 'hidden' }
+  internalContainer: { height: 20, width: '100%', overflow: 'hidden' },
 });
 
 export default _renderChatter;

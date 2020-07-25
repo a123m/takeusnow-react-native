@@ -7,14 +7,16 @@ import {
   Picker,
   Animated,
   ActivityIndicator,
+  Slider,
 } from 'react-native';
-import { SearchBar, Slider } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import moment from 'moment';
 
 import {
   ProjectCard,
   AppModal,
-  AppCard,
+  // AppCard,
   AppButton,
   UserCard,
 } from '../../components';
@@ -23,7 +25,6 @@ import { GlobalErr } from '../../utils/utils';
 import RegionList from '../../utils/RegionList';
 
 import { Styles } from '../../common';
-import moment from 'moment';
 // import AsyncStorage from '@react-native-community/async-storage';
 
 interface Props {
@@ -36,9 +37,9 @@ interface Props {
 
 interface State {
   searchInput: string;
-  projectData: Array<Data> | never[];
+  projectData: Data[];
   userData: any[];
-  minBudget: number | undefined;
+  minBudget: number;
   maxBudget: number | undefined;
   state: string;
   city: string;
@@ -48,80 +49,89 @@ interface State {
 }
 
 interface Data {
-  projectId: number;
+  req_skills: string[];
+  id: number;
   title: string;
   created_at: Date | string;
   budget: number;
   proposals: number;
   location: string;
-  skills: Array<string>;
   status: string;
 }
 
+type HireResponseType = {
+  userId: number;
+  fname: string;
+  lname: string;
+  user_image: string;
+  average_reviews: number;
+  total_reviews: number;
+};
+
 const responseDummyWork: Array<Data> = [
   {
-    projectId: 1,
+    id: 1,
     title: 'Need a marriage Planner',
     created_at: moment().toISOString(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
-    skills: ['Professional photographer', 'Editing experience'],
+    req_skills: ['Professional photographer', 'Editing experience'],
     status: 'A',
   },
   {
-    projectId: 2,
+    id: 2,
     title: 'Need a marriage Planner',
     created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
-    skills: ['Professional photographer', 'Editing experience'],
+    req_skills: ['Professional photographer', 'Editing experience'],
     status: 'A',
   },
   {
-    projectId: 3,
+    id: 3,
     title: 'Need a marriage Planner',
     created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
-    skills: ['Professional photographer', 'Editing experience'],
+    req_skills: ['Professional photographer', 'Editing experience'],
     status: 'A',
   },
   {
-    projectId: 4,
+    id: 4,
     title: 'Need a marriage Planner',
     created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
-    skills: ['Professional photographer', 'Editing experience'],
+    req_skills: ['Professional photographer', 'Editing experience'],
     status: 'A',
   },
   {
-    projectId: 5,
+    id: 5,
     title: 'Need a marriage Planner',
     created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
-    skills: ['Professional photographer', 'Editing experience'],
+    req_skills: ['Professional photographer', 'Editing experience'],
     status: 'A',
   },
   {
-    projectId: 6,
-    title: 'Need a marriage Planner',
+    id: 6,
+    title: 'My project',
     created_at: new Date(),
     budget: 200000,
     proposals: 20,
     location: 'Agra',
-    skills: ['Professional photographer', 'Editing experience'],
+    req_skills: ['Professional photographer', 'Editing experience'],
     status: 'A',
   },
 ];
 
-const responseDummyHire = [
+const responseDummyHire: HireResponseType[] = [
   {
     userId: 1,
     fname: 'Aman',
@@ -134,6 +144,13 @@ const responseDummyHire = [
 ];
 
 export default class Category extends React.PureComponent<Props, State> {
+  completeResponseData = [];
+  projectFilterParams = {
+    minBudget: 0,
+    state: '',
+    city: '',
+  };
+  userFilterParams = {};
   role: string | Promise<string | null>;
   scrollY = new Animated.Value(0);
   startHeight = 70;
@@ -154,6 +171,8 @@ export default class Category extends React.PureComponent<Props, State> {
     extrapolate: 'clamp',
   });
   categoryId: any;
+  page: any;
+  limit: any;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -168,7 +187,7 @@ export default class Category extends React.PureComponent<Props, State> {
       category: '',
       searchInput: '',
 
-      isLoading: false,
+      isLoading: true,
       isListEnd: false,
     };
     // this.role = AsyncStorage.getItem('role');
@@ -182,22 +201,37 @@ export default class Category extends React.PureComponent<Props, State> {
   setDefaultView = async () => {
     // const { category } = this.props;
     // let params = { category: category };
-    let response;
+    let response: any;
     try {
       if (this.role === 'hire') {
-        // const response: any =await APIService.sendGetCall('browse/category/hire/'+ this.categoryId);
+        // response = await APIService.sendPostCall(
+        //   `browse/${this.categoryId}/hire?page=${this.page}&limit=${
+        //     this.limit
+        //   }`,
+        //   this.userFilterParams
+        // );
         response = responseDummyHire;
+        this.completeResponseData = response;
         this.setState({
           userData: response,
+          isLoading: false,
         });
       }
       if (this.role === 'work') {
-        // const response: any = await APIService.sendGetCall('browse/category/work/'+ this.categoryId);
+        // response = await APIService.sendPostCall(
+        //   `browse/${this.categoryId}/work?page=${this.page}&limit=${
+        //     this.limit
+        //   }`,
+        //   this.projectFilterParams
+        // );
         response = responseDummyWork;
-        this.setState({
-          projectData: response,
-        });
-        console.log(response);
+        this.completeResponseData = response;
+        setTimeout(() => {
+          this.setState({
+            projectData: response,
+            isLoading: false,
+          });
+        }, 10000);
       }
     } catch (err) {
       GlobalErr(err);
@@ -205,7 +239,7 @@ export default class Category extends React.PureComponent<Props, State> {
   };
 
   _renderFilterModal = () => {
-    const { minBudget, maxBudget, state, city, category } = this.state;
+    const { minBudget, state, city } = this.state;
     const { showFilterModal, filterModalHandler } = this.props;
     // const { state, allowEdit, city } = this.state;
     let onlyState: string[] = [];
@@ -220,155 +254,142 @@ export default class Category extends React.PureComponent<Props, State> {
     }
     return (
       <AppModal visible={showFilterModal}>
-        <AppCard style={{ flex: 1 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Text style={styles.headingStyle}>Filters</Text>
-            <AppButton
-              style={{ backgroundColor: 'white' }}
-              onPress={filterModalHandler}
+        <View style={styles.modalContainer}>
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
             >
-              <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
-            </AppButton>
-          </View>
-          <View
-            style={{
-              // flex: 1,
-              alignItems: 'stretch',
-              justifyContent: 'center',
-              height: 100,
-              // backgroundColor: 'black',
-            }}
-          >
-            <Text>Minimum Budget</Text>
-            <Slider
-              value={minBudget}
-              onValueChange={(minBudget: number) =>
-                this.setState({ minBudget })
-              }
-            />
-            <Text>Value: {minBudget}</Text>
-          </View>
-          <View
-            style={{
-              // flex: 1,
-              alignItems: 'stretch',
-              justifyContent: 'center',
-              height: 100,
-              // backgroundColor: 'black',
-            }}
-          >
-            <Text>Maximum Budget</Text>
-            <Slider
-              value={maxBudget}
-              onValueChange={(maxBudget: number) =>
-                this.setState({ maxBudget })
-              }
-            />
-            <Text>Value: {maxBudget}</Text>
-          </View>
-          <View
-            style={{
-              // flex: 1,
-              alignItems: 'stretch',
-              justifyContent: 'center',
-              height: 100,
-              // backgroundColor: 'black',
-            }}
-          >
-            <Text>Category</Text>
-            <Picker
-              selectedValue={category}
-              style={{ height: 50, width: 250 }}
-              onValueChange={(category: any) => this.setState({ category })}
+              <Text style={styles.headingStyle}>Filters</Text>
+              <AppButton
+                style={{ backgroundColor: 'white' }}
+                onPress={filterModalHandler}
+              >
+                <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
+              </AppButton>
+            </View>
+
+            <View
+              style={{
+                alignItems: 'stretch',
+                justifyContent: 'center',
+                height: 100,
+              }}
             >
-              {onlyState.map((item, index) => {
-                return <Picker.Item key={index} label={item} value={item} />;
-              })}
-            </Picker>
-          </View>
-          <View
-            style={{
-              // flex: 1,
-              alignItems: 'stretch',
-              justifyContent: 'center',
-              height: 100,
-              // backgroundColor: 'black',
-            }}
-          >
-            <Text>State</Text>
-            <Picker
-              selectedValue={state}
-              style={{ height: 50, width: 250 }}
-              onValueChange={(itemValue: any) =>
-                this.setState({ state: itemValue })
-              }
-            >
-              {onlyState.map((item, index) => {
-                return <Picker.Item key={index} label={item} value={item} />;
-              })}
-            </Picker>
-          </View>
-          <View
-            style={{
-              // flex: 1,
-              alignItems: 'stretch',
-              justifyContent: 'center',
-              height: 100,
-              // backgroundColor: 'black',
-            }}
-          >
-            <Text>City</Text>
-            <Picker
-              selectedValue={city}
-              style={{ height: 50, width: 250 }}
-              onValueChange={(itemValue: any) =>
-                this.setState({ city: itemValue })
-              }
-            >
-              {onlyCity.map(
-                (item: string, index: string | number | undefined) => {
-                  return <Picker.Item key={index} label={item} value={item} />;
-                }
-              )}
-            </Picker>
+              <Text style={{ fontSize: 16 }}>Min Budget: {minBudget}</Text>
+              <Slider
+                value={minBudget}
+                maximumValue={30000}
+                minimumValue={1}
+                step={1}
+                onSlidingComplete={(minBudget) => {
+                  this.setState({ minBudget });
+                }}
+                style={{ margin: 15 }}
+              />
+            </View>
+            <Text style={{ fontSize: 16 }}>Location</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <View
+                style={{
+                  alignItems: 'stretch',
+                  justifyContent: 'center',
+                  height: 100,
+                }}
+              >
+                <Text>State</Text>
+                <Picker
+                  selectedValue={state}
+                  style={{ height: 50, width: 200 }}
+                  onValueChange={(itemValue: any) =>
+                    this.setState({ state: itemValue })
+                  }
+                >
+                  {onlyState.map((item, index) => {
+                    return (
+                      <Picker.Item key={index} label={item} value={item} />
+                    );
+                  })}
+                </Picker>
+              </View>
+              <View
+                style={{
+                  alignItems: 'stretch',
+                  justifyContent: 'center',
+                  height: 100,
+                }}
+              >
+                <Text>City</Text>
+                <Picker
+                  selectedValue={city}
+                  style={{ height: 50, width: 200 }}
+                  onValueChange={(itemValue: any) =>
+                    this.setState({ city: itemValue })
+                  }
+                >
+                  {onlyCity.map(
+                    (item: string, index: string | number | undefined) => {
+                      return (
+                        <Picker.Item key={index} label={item} value={item} />
+                      );
+                    }
+                  )}
+                </Picker>
+              </View>
+            </View>
           </View>
           <AppButton onPress={this.saveFilterHandler}>Apply Filters</AppButton>
-        </AppCard>
+        </View>
       </AppModal>
     );
   };
 
   saveFilterHandler = async () => {
-    this.props.filterModalHandler;
+    this.props.filterModalHandler();
     this.setState({
       isLoading: true,
+      projectData: [],
+      userData: [],
     });
-    // const params = {
-
-    // }
-    // try {
-    //   if (this.role === 'hire') {
-    //     // const response: any = await APIService.sendPostCall('browse/category/hire/', params);
-    //   }
-    //   if (this.role === 'work') {
-    //     // const response: any = await APIService.sendPostCall('browse/category/work', params);
-    //   }
-
-    //   const response = responseDummyWork;
-    //   // const response = responseDummyHire;
-
-    //   this.setState({
-    //     projectData: response,
-    //   });
-    // } catch (err) {
-    //   GlobalErr(err);
-    // }
+    this.page = 1;
+    this.projectFilterParams.minBudget = this.state.minBudget;
+    this.projectFilterParams.state = this.state.state;
+    this.projectFilterParams.city = this.state.city;
+    let response;
+    try {
+      if (this.role === 'hire') {
+        response = await APIService.sendPostCall(
+          `browse/${this.categoryId}/hire?page=${this.page}&limit=${
+            this.limit
+          }`,
+          this.userFilterParams
+        );
+        this.setState({
+          userData: response,
+          isLoading: false,
+        });
+      }
+      if (this.role === 'work') {
+        response = await APIService.sendPostCall(
+          `browse/${this.categoryId}/work?page=${this.page}&limit=${
+            this.limit
+          }`,
+          this.projectFilterParams
+        );
+        this.setState({
+          projectData: response,
+          isLoading: false,
+        });
+      }
+    } catch (err) {
+      GlobalErr(err);
+      this.setState({
+        isLoading: false,
+      });
+    }
   };
 
   _renderSearchBar = () => {
@@ -390,7 +411,33 @@ export default class Category extends React.PureComponent<Props, State> {
         <SearchBar
           placeholder="Search Projects..."
           onChangeText={(searchInput: string) => {
-            this.setState({ searchInput });
+            this.setState({ searchInput }, () => {
+              if (this.role === 'work') {
+                const filteredData = this.completeResponseData.filter(
+                  (item: Data) => {
+                    return item.title
+                      .toLowerCase()
+                      .includes(searchInput.toLowerCase());
+                  }
+                );
+                this.setState({ projectData: filteredData });
+              }
+              if (this.role === 'hire') {
+                const filteredData = this.completeResponseData.filter(
+                  (item: HireResponseType) => {
+                    return (
+                      item.fname
+                        .toLowerCase()
+                        .includes(searchInput.toLowerCase()) ||
+                      item.lname
+                        .toLowerCase()
+                        .includes(searchInput.toLowerCase())
+                    );
+                  }
+                );
+                this.setState({ userData: filteredData });
+              }
+            });
           }}
           value={searchInput}
           style={{ color: 'white' }}
@@ -414,19 +461,47 @@ export default class Category extends React.PureComponent<Props, State> {
       //On click of Load More button We will call the web API again
       this.setState({ isLoading: true }, async () => {
         try {
-          const response = await APIService.sendGetCall(
-            `reviews/${this.userId}/more?page=${this.page}&limit=${this.limit}`
-          );
+          let response: string | any[] = [];
+
+          if (this.role === 'work') {
+            // response = await APIService.sendPostCall(
+            //   `browse/${this.categoryId}/work?page=${this.page}&limit=${
+            //     this.limit
+            //   }`,
+            //   this.filterParams
+            // );
+          }
+
+          if (this.role === 'hire') {
+            // response = await APIService.sendPostCall(
+            //   `browse/${this.categoryId}/hire?page=${this.page}&limit=${
+            //     this.limit
+            //   }`,
+            //   this.filterParams
+            // );
+          }
+
           if (response.length > 0) {
             //Successful response from the API Call
             this.page = this.page + 1;
             //After the response increasing the offset for the next API call.
-            this.setState({
-              reviews: [...this.state.reviews, ...response],
-              //adding the new data with old one available
-              isLoading: false,
-              //updating the loading state to false
-            });
+            if (this.role === 'work') {
+              this.setState({
+                projectData: [...this.state.projectData, ...response],
+                //adding the new data with old one available
+                isLoading: false,
+                //updating the loading state to false
+              });
+            }
+
+            if (this.role === 'hire') {
+              this.setState({
+                userData: [...this.state.userData, ...response],
+                //adding the new data with old one available
+                isLoading: false,
+                //updating the loading state to false
+              });
+            }
           } else {
             this.setState({
               isLoading: false,
@@ -445,8 +520,8 @@ export default class Category extends React.PureComponent<Props, State> {
   };
 
   _renderProjects = () => {
+    const { onProjectPress } = this.props;
     const { projectData } = this.state;
-    console.log('projectData', projectData);
     return (
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -454,7 +529,7 @@ export default class Category extends React.PureComponent<Props, State> {
           { nativeEvent: { contentOffset: { y: this.scrollY } } },
         ])}
         data={projectData}
-        keyExtractor={(item) => item.projectId.toString()}
+        keyExtractor={(item) => item.id.toString()}
         style={{ paddingTop: 70 }}
         ListFooterComponent={() => (
           <View style={styles.footer}>
@@ -475,18 +550,13 @@ export default class Category extends React.PureComponent<Props, State> {
             createdAt={item.created_at}
             budget={item.budget}
             location={item.location}
-            onPress={() => this.projectClickHandler(item.projectId)}
+            onPress={() => onProjectPress(item.id)}
             proposals={item.proposals}
-            skills={item.skills}
+            skills={item.req_skills}
           />
         )}
       />
     );
-  };
-
-  projectClickHandler = (projectId: Number) => {
-    const { onProjectPress } = this.props;
-    onProjectPress(projectId);
   };
 
   _renderFreeLancers = () => {
@@ -557,4 +627,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  modalContainer: { padding: 10, flex: 1, justifyContent: 'space-between' },
 });

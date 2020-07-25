@@ -18,7 +18,7 @@ import {
   AppInput,
   SkillBox,
   AppCard,
-  Spinner,
+  Loader,
   BoxText,
 } from '../../components';
 import LinearGradient from 'react-native-linear-gradient';
@@ -295,21 +295,24 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         languagesData = '[]';
       }
 
-      this.setState({
-        fullName: fullName,
-        about: response.about,
-        state: state,
-        city: city,
-        user_image: user_image,
-        portfolio: portfolio,
-        dateOfBirth: response.DOB,
-        gender: response.gender,
-        workExperience: response.work_experience,
-        ableToTravel: response.able_to_travel,
-        selectedSubCat: JSON.parse(selectedSubCat),
-        equipmentsData: JSON.parse(equipmentsData),
-        languagesData: JSON.parse(languagesData),
-      });
+      setTimeout(() => {
+        this.setState({
+          fullName: fullName,
+          about: response.about,
+          state: state,
+          city: city,
+          user_image: user_image,
+          portfolio: portfolio,
+          dateOfBirth: response.DOB,
+          gender: response.gender,
+          workExperience: response.work_experience,
+          ableToTravel: response.able_to_travel,
+          selectedSubCat: JSON.parse(selectedSubCat),
+          equipmentsData: JSON.parse(equipmentsData),
+          languagesData: JSON.parse(languagesData),
+          isLoading: false,
+        });
+      }, 10000);
     } catch (err) {
       console.log(err);
     }
@@ -1440,9 +1443,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
           />
         )}
         {this._renderCheckReviews()}
-        {isLoading ? (
-          <Spinner mode="overlay" size="large" color="white" />
-        ) : null}
+        <Loader visible={isLoading} />
       </ScrollView>
     );
   }

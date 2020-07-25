@@ -2,85 +2,54 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import APIService from '../../utils/APIService';
 
 import { Styles } from '../../common';
 
 interface Props {
-  projectId: number;
-  toDetail: any;
-}
-
-interface State {
+  toDetails(): void;
+  toProposal(): void;
   projectStatus: string;
-  detailTick: boolean;
-  proposalTick: boolean;
-  completionTick: boolean;
-  reviewTick: boolean;
 }
 
-export default class ProjectStatus extends React.PureComponent<Props, State> {
+export default class ProjectStatus extends React.PureComponent<Props> {
+  projectStatus = '';
+  detailTick = false;
+  proposalTick = false;
+  completionTick = false;
+  reviewTick = false;
   constructor(props: Props) {
     super(props);
-    this.state = {
-      projectStatus: '',
-      detailTick: false,
-      proposalTick: false,
-      completionTick: false,
-      reviewTick: false,
-    };
-  }
 
-  componentDidMount() {
-    // this.setDefaultView()
-  }
-
-  setDefaultView = () => {
-    let projectId = this.props.projectId;
-    let params = {
-      projectId: projectId,
-    };
-    const response = APIService.sendPostCall('/main', params);
-    if (response.status !== 200) {
-      Alert.alert('Alert', 'Something went wrong please try again');
-    }
-    switch (response.data.projectStatus) {
+    switch (this.props.projectStatus) {
       case 'ACTIVE':
-        this.setState({
-          detailTick: true,
-        });
+        this.detailTick = true;
         break;
       case 'IN PROGRESS':
-        this.setState({
-          detailTick: true,
-          proposalTick: true,
-        });
+        this.detailTick = true;
+        this.proposalTick = true;
         break;
       case 'CLOSE REQUEST':
-        this.setState({
-          detailTick: true,
-          proposalTick: true,
-          completionTick: true,
-        });
+        this.detailTick = true;
+        this.proposalTick = true;
+        this.completionTick = true;
         break;
       case 'CLOSE':
-        this.setState({
-          detailTick: true,
-          proposalTick: true,
-          completionTick: true,
-          reviewTick: true,
-        });
+        this.detailTick = true;
+        this.proposalTick = true;
+        this.completionTick = true;
+        this.reviewTick = true;
         break;
+      default:
+        console.log(`Sorry, we are out of.`);
     }
-  };
+  }
 
   _renderProjectDetail = () => {
-    const { detailTick } = this.state;
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={this.props.toDetails}>
         <View style={[styles.container]}>
           <View style={styles.smallContainer}>
-            <CheckBox checked={detailTick} checkedColor="green" />
+            <CheckBox checked={this.detailTick} checkedColor="green" />
           </View>
           <View style={styles.bigContainer}>
             <Text style={styles.headingTextStyle}>Project Details</Text>
@@ -95,12 +64,11 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
   };
 
   _renderProposal = () => {
-    const { proposalTick } = this.state;
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={this.props.toProposal}>
         <View style={[styles.container]}>
           <View style={styles.smallContainer}>
-            <CheckBox checked={proposalTick} checkedColor="green" />
+            <CheckBox checked={this.proposalTick} checkedColor="green" />
           </View>
           <View style={styles.bigContainer}>
             <Text style={styles.headingTextStyle}>Selected Proposal</Text>
@@ -115,42 +83,75 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
   };
 
   _renderManagement = () => {
-    const { completionTick } = this.state;
     return (
-      <View style={[styles.container]}>
-        <View style={styles.smallContainer}>
-          <CheckBox checked={completionTick} checkedColor="green" />
+      <View style={{ borderBottomWidth: 1, borderBottomColor: 'silver' }}>
+        <View style={[styles.container, { borderBottomWidth: 0 }]}>
+          <View style={styles.smallContainer}>
+            <CheckBox checked={this.completionTick} checkedColor="green" />
+          </View>
+          <View style={styles.bigContainer}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+              Project Management
+            </Text>
+            <Text>Manage your project status.</Text>
+          </View>
         </View>
-        <View style={styles.bigContainer}>
-          <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
-            Project Completion
-          </Text>
-          <Text>
-            You can tell the project owner that you have completed your work
-          </Text>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert('Alert', 'Make sure your project is completed');
-          }}
-          style={[
-            styles.smallContainer,
-            { backgroundColor: Styles.PrimaryColor2 },
-          ]}
-        >
-          <Text style={{ fontWeight: 'bold', color: 'white' }}>DONE</Text>
-        </TouchableOpacity>
+        {this.proposalTick ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              // alignItems: 'center',
+              height: 50,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  'Alert',
+                  'Are you sure you want to cancel the project!'
+                );
+              }}
+              style={{
+                height: 35,
+                width: '20%',
+                backgroundColor: 'red',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 20,
+                padding: 10,
+              }}
+            >
+              <Text style={{ fontWeight: 'bold', color: 'white' }}>CANCEL</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert('Alert', 'Make sure your project is completed');
+              }}
+              style={{
+                height: 35,
+                width: '20%',
+                backgroundColor: Styles.PrimaryColor2,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 20,
+                padding: 10,
+              }}
+            >
+              <Text style={{ fontWeight: 'bold', color: 'white' }}>DONE</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
     );
   };
 
   _renderReview = () => {
-    const { reviewTick } = this.state;
     return (
       <TouchableOpacity>
         <View style={[styles.container]}>
           <View style={styles.smallContainer}>
-            <CheckBox checked={reviewTick} checkedColor="green" />
+            <CheckBox checked={this.reviewTick} checkedColor="green" />
           </View>
           <View style={styles.bigContainer}>
             <Text style={{ fontSize: 18, fontWeight: 'bold' }}>

@@ -17,6 +17,7 @@ import AppProposal from './AppProposal';
 import ExploreCard from './ExploreCard';
 import BoxText from './BoxText';
 import UserCard from './UserCard';
+import Loader from './Loader';
 
 export {
   AppInput,
@@ -38,4 +39,5 @@ export {
   ExploreCard,
   BoxText,
   UserCard,
+  Loader,
 };

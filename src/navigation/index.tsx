@@ -77,6 +77,9 @@ HomeStack.navigationOptions = ({ navigation }: any) => {
 const ProjectStack = createStackNavigator({
   Project: ProjectScreen,
   ProjectStatus: ProjectStatusScreen,
+  Details: DetailsScreen,
+  Proposal: ProposalScreen,
+  Profile: ProfileScreen,
   PostProject: PostProjectScreen,
   PostProject2: PostProjectScreen2,
   PostProject3: PostProjectScreen3,

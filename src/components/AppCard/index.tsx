@@ -3,8 +3,8 @@ import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
 type Props = {
-  style: ViewStyle;
-  children: any;
+  style?: ViewStyle;
+  children?: any;
 };
 
 const AppCard = (props: Props) => {

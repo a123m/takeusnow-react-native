@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableWithoutFeedback } from 'react-native';
 import { Rating } from 'react-native-elements';
 
 import { Avatar } from '../';
@@ -9,8 +9,9 @@ interface Props {
   fullName: string;
   proposalOffer: number;
   proposalText: string;
-  onPress: any;
+  onPress(): void;
   totalReviews: number;
+  averageReviews: number | undefined;
 }
 
 const AppProposal = (props: Props) => {
@@ -21,7 +22,7 @@ const AppProposal = (props: Props) => {
     str = props.proposalText;
   }
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableWithoutFeedback onPress={props.onPress}>
       <View style={{ padding: 5 }}>
         <View style={{ flexDirection: 'row' }}>
           <View
@@ -30,7 +31,7 @@ const AppProposal = (props: Props) => {
               justifyContent: 'center',
             }}
           >
-            <Avatar source={{ uri: props.sourceUri }} size={'small'} />
+            <Avatar source={props.sourceUri} size={'small'} />
           </View>
           <View style={{ flex: 0.8, justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row' }}>
@@ -44,12 +45,27 @@ const AppProposal = (props: Props) => {
               </View>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View
+                style={{
+                  height: 14,
+                  width: 25,
+                  borderRadius: 5,
+                  backgroundColor: 'rgb(241,196,15)',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: 'white', fontSize: 10 }}>
+                  {props.averageReviews}
+                </Text>
+              </View>
               <Rating
                 readonly
                 type="star"
                 ratingCount={5}
-                startingValue={4}
+                startingValue={props.averageReviews}
                 imageSize={12}
+                style={{ margin: 5 }}
               />
               <Text>{props.totalReviews} Reviews</Text>
             </View>
@@ -57,7 +73,7 @@ const AppProposal = (props: Props) => {
         </View>
         <Text>{str}...</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 

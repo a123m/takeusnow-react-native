@@ -1,18 +1,25 @@
 import React from 'react';
-import { Text, Alert, View, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 
-import APIService from '../../utils/APIService';
+// import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
-import { AppButton, AppCard, AppProposal, BoxText } from '../../components';
+import {
+  AppButton,
+  AppCard,
+  AppProposal,
+  BoxText,
+  Loader,
+} from '../../components';
 
 import { Styles } from '../../common';
+import AsyncStorage from '@react-native-community/async-storage';
 
 interface Props {
   projectId: number;
   onSendProposal: Function;
-  toProposal: any;
+  toProposal(id: number | string, showAccept: boolean): void;
 }
 
 interface State {
@@ -22,12 +29,76 @@ interface State {
   location: String;
   postedOn: string;
   reqOn: string;
-  proposals: Array<object>;
-  skills: Array<string>;
-  showMore: Boolean;
+  proposals: ProposalType[];
+  req_skills: Array<string>;
+  showMore: boolean;
+  isLoading: boolean;
 }
 
+const dummyResponse: ProjectResponseType = {
+  title: 'I need a professional photographer',
+  about:
+    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus minus quibusdam quaerat alias rerum dolore quam nulla eveniet. Temporibus id delectus, vel vitae minima dolores praesentium recusandae possimus nisi aperiam. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus dolore impedit eligendi minima reprehenderit pariatur doloribus cumque dignissimos iste, natus accusamus deleniti eveniet aperiam. Itaque quae veritatis non odit suscipit.',
+  budget: 80000,
+  location: 'Agra',
+  req_skills: ['Still Photography'],
+  postedOn: moment().toISOString(),
+  reqOn: moment()
+    .add(7, 'd')
+    .toISOString(),
+  userId: 1,
+  status: 'IN',
+  proposals: [
+    {
+      id: 1,
+      sourceUri: '',
+      fullName: 'Aman Chhabra',
+      proposalOffer: 2000,
+      proposalText:
+        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit accusantium reiciendis commodi neque! Provident ipsum, hic tempore, vel similique ullam dignissimos quam laborum dolore error unde ut possimus facilis illo!',
+      totalReviews: 10,
+      averageReviews: 3.5,
+    },
+    {
+      id: 2,
+      sourceUri: '',
+      fullName: 'Aman Chhabra',
+      proposalOffer: 2000,
+      proposalText:
+        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit accusantium reiciendis commodi neque! Provident ipsum, hic tempore, vel similique ullam dignissimos quam laborum dolore error unde ut possimus facilis illo!',
+      totalReviews: 10,
+      averageReviews: 5,
+    },
+  ],
+};
+
+type ProjectResponseType = {
+  title: string;
+  about: string;
+  budget: number;
+  location: string;
+  req_skills: string[];
+  postedOn: string;
+  reqOn: string;
+  proposals: ProposalType[];
+  userId: number;
+  status: string;
+};
+
+type ProposalType = {
+  id: number;
+  sourceUri: string;
+  fullName: string;
+  proposalOffer: number;
+  proposalText: string;
+  totalReviews: number;
+  averageReviews: number;
+};
+
 export default class Details extends React.PureComponent<Props, State> {
+  userId: string | Promise<string | null> | undefined;
+  projectUserId: string | undefined | number;
+  showAcceptOnProposal: boolean = false;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -40,61 +111,50 @@ export default class Details extends React.PureComponent<Props, State> {
       budget: 0,
 
       proposals: [],
-      skills: [],
+      req_skills: [],
 
       showMore: false,
+      isLoading: true,
     };
+    this.userId = AsyncStorage.getItem('userId');
   }
 
   componentDidMount() {
-    // this.setDefaultView();
-    this.setState({
-      title: 'I need a professional photographer',
-      about:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus minus quibusdam quaerat alias rerum dolore quam nulla eveniet. Temporibus id delectus, vel vitae minima dolores praesentium recusandae possimus nisi aperiam. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus dolore impedit eligendi minima reprehenderit pariatur doloribus cumque dignissimos iste, natus accusamus deleniti eveniet aperiam. Itaque quae veritatis non odit suscipit.',
-      budget: 80000,
-      location: 'Agra',
-      skills: ['photo Editing', 'professional photography'],
-      postedOn: moment().toISOString(),
-      reqOn: moment()
-        .add(7, 'd')
-        .toISOString(),
-      proposals: [
-        {
-          proposalId: 1,
-          sourceUri: '',
-          fullName: 'Aman Chhabra',
-          proposalOffer: 2000,
-          proposalText:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit accusantium reiciendis commodi neque! Provident ipsum, hic tempore, vel similique ullam dignissimos quam laborum dolore error unde ut possimus facilis illo!',
-          totalReviews: 10,
-        },
-        {
-          proposalId: 2,
-          sourceUri: '',
-          fullName: 'Aman Chhabra',
-          proposalOffer: 2000,
-          proposalText:
-            'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit accusantium reiciendis commodi neque! Provident ipsum, hic tempore, vel similique ullam dignissimos quam laborum dolore error unde ut possimus facilis illo!',
-          totalReviews: 10,
-        },
-      ],
-    });
+    this.setDefaultView();
   }
 
   setDefaultView = async () => {
-    const { projectId } = this.props;
+    // const { projectId } = this.props;
     try {
-      const response = await APIService.sendGetCall(
-        'browse/category/' + projectId
-      );
-      if (response.status !== 200) {
-        Alert.alert('Alert', 'Something went wrong Please try again!!');
-        return;
+      // const response = await APIService.sendGetCall(
+      //   'browse/category/' + projectId
+      // );
+      const response = dummyResponse;
+      this.projectUserId = response.userId;
+      if (response.status === 'ACTIVE') {
+        this.showAcceptOnProposal = true;
+      } else {
+        this.showAcceptOnProposal = false;
       }
-      this.setState({});
+
+      setTimeout(() => {
+        this.setState({
+          title: response.title,
+          about: response.about,
+          budget: response.budget,
+          location: response.location,
+          req_skills: response.req_skills,
+          postedOn: response.postedOn,
+          reqOn: response.reqOn,
+          proposals: response.proposals,
+          isLoading: false,
+        });
+      }, 10000);
     } catch (err) {
       GlobalErr(err);
+      this.setState({
+        isLoading: false,
+      })!;
     }
   };
 
@@ -104,7 +164,7 @@ export default class Details extends React.PureComponent<Props, State> {
       title,
       budget,
       location,
-      skills,
+      req_skills,
       postedOn,
       proposals,
       reqOn,
@@ -146,7 +206,7 @@ export default class Details extends React.PureComponent<Props, State> {
             </Text>
           </View>
           <View style={{ margin: 5, flexDirection: 'row' }}>
-            {skills.map((item, index) => {
+            {req_skills.map((item, index) => {
               return (
                 <BoxText
                   color={Styles.PrimaryColor2}
@@ -192,14 +252,18 @@ export default class Details extends React.PureComponent<Props, State> {
             {proposals.map((item) => {
               return (
                 <AppProposal
-                  key={item.proposalId.toString()}
+                  key={item.id.toString()}
                   fullName={item.fullName}
                   sourceUri={item.sourceUri}
                   proposalOffer={item.proposalOffer}
                   proposalText={item.proposalText}
                   totalReviews={item.totalReviews}
-                  onPress={() => {
-                    toProposal(item.proposalId);
+                  averageReviews={item.averageReviews}
+                  onPress={(): void => {
+                    // if (this.userId !== this.projectUserId) {
+                    //   return;
+                    // }
+                    toProposal(item.id, this.showAcceptOnProposal);
                   }}
                 />
               );
@@ -215,14 +279,13 @@ export default class Details extends React.PureComponent<Props, State> {
     let showMore = '';
     if (str.length > 250 && !this.state.showMore) {
       str = this.state.about.slice(0, 250);
-      showMore = 'Show More';
+      showMore = 'show more';
     } else {
-      showMore = 'Show Less';
+      showMore = 'show less';
     }
 
     return (
       <View style={{ margin: 10 }}>
-        {/* <Text style={{ fontSize: 30, fontWeight: 'bold' }}>About</Text> */}
         <Text style={{ fontSize: 18 }}>{str}</Text>
         {this.state.about.length > 250 ? (
           <TouchableOpacity
@@ -238,7 +301,6 @@ export default class Details extends React.PureComponent<Props, State> {
                 fontWeight: 'bold',
                 color: Styles.PrimaryColor,
                 textAlign: 'right',
-                // fontSize: 'bold',
               }}
             >
               {showMore}
@@ -292,11 +354,13 @@ export default class Details extends React.PureComponent<Props, State> {
    * Main Render
    */
   render() {
+    const { isLoading } = this.state;
     return (
-      <View style={{ flex: 1 }}>
+      <>
         {this._renderDetailsView()}
         {this._renderStickyButton()}
-      </View>
+        <Loader visible={isLoading} />
+      </>
     );
   }
 }

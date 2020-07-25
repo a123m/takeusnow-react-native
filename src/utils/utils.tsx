@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import React from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 
 import APIService from './APIService';
 import Config from './Config';
@@ -48,5 +48,6 @@ export function GlobalErr(err: Error) {
     console.log('Global Error', err);
   } else {
     APIService.sendPostCall('global/error', err);
+    Alert.alert('Alert', 'Something went wrong. Please try again!');
   }
 }

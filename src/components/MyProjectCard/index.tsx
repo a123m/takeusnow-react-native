@@ -7,6 +7,8 @@ import {
   // TouchableNativeFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
+
 import AppCard from '../AppCard';
 // import LinearGradient from 'react-native-linear-gradient';
 
@@ -28,17 +30,17 @@ const MyProjectCard = (props: Props) => {
           <View style={{ flexDirection: 'row' }}>
             <View
               style={{
-                borderRadius: 5,
+                borderRadius: 20,
                 borderColor: Styles.PrimaryColor2,
                 borderWidth: 1,
                 margin: 4,
-                padding: 2,
+                padding: 5,
               }}
             >
               <Text
                 style={[
                   styles.textStyle,
-                  { fontSize: 10, color: Styles.PrimaryColor2 },
+                  { fontSize: 8, color: Styles.PrimaryColor2 },
                 ]}
               >
                 {props.status}
@@ -57,7 +59,7 @@ const MyProjectCard = (props: Props) => {
             <Icon name={'ios-timer'} size={16} color={styles.textStyle.color} />
             <Text style={{ color: 'silver' }}>
               {' '}
-              Posted On: {props.postedOn}
+              Posted On: {moment(props.postedOn).format('Do MMMM YYYY')}
             </Text>
           </View>
         </View>

@@ -1,30 +1,45 @@
 import React from 'react';
-import { Text, Alert, View, TouchableOpacity, StatusBar } from 'react-native';
+import { Text, Alert, View, TouchableOpacity, ScrollView } from 'react-native';
+import moment from 'moment';
+
+// eslint-disable-next-line no-unused-vars
+import { ProposalEntity, UserEntity } from '../../modals';
 
 import { Avatar, AppButton } from '../../components';
 import { GlobalErr } from '../../utils/utils';
 import APIService from '../../utils/APIService';
-import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
   proposalId: number;
   toProfile: any;
+  showAccept: boolean;
 }
 
 interface State {
-  name: string;
+  name: string | undefined;
   proposalText: string;
   userId: number;
+  userImage: string;
+  createdAt: string;
+  proposedAmount: number;
 }
 
+type ResponseType = ProposalEntity & UserEntity;
+
 export default class Proposal extends React.PureComponent<Props, State> {
+  showAccept = true;
   constructor(props: Props) {
     super(props);
     this.state = {
+      userId: 0,
+      proposedAmount: 0,
+
       name: '',
       proposalText: '',
-      userId: 0,
+      userImage: '',
+      createdAt: '',
     };
+    this.showAccept = this.props.showAccept;
   }
 
   componentDidMount() {
@@ -34,87 +49,88 @@ export default class Proposal extends React.PureComponent<Props, State> {
   setDefaultView = async () => {
     const { proposalId } = this.props;
     try {
-      const response = await APIService.sendGetCall(
+      const response: ResponseType = await APIService.sendGetCall(
         '/browse/category/proposal/' + proposalId
       );
-      if (response.status !== 200) {
-        Alert.alert('Alert', 'Something went wrong please try again');
-        return;
-      }
 
-      const resData = response.data;
+      const fullName = response.fname.concat(response.lname);
 
       this.setState({
-        name: resData.name,
-        proposalText: resData.proposalText,
-        userId: resData.userId,
+        name: fullName,
+        proposalText: response.proposal_text,
+        userId: response.user_id,
+        userImage: response.user_image,
+        createdAt: response.created_at,
       });
     } catch (err) {
       GlobalErr(err);
     }
   };
 
-  acceptHandler = () => {};
+  acceptHandler = () => {
+    Alert.alert(
+      'Alert',
+      `Are you sure! This will accept ${this.state.name} proposal.`
+    );
+
+    APIService.sendGetCall(`/browse/category/proposal/`);
+  };
 
   render() {
     const { toProfile } = this.props;
-    const { userId } = this.state;
+    const {
+      userId,
+      userImage,
+      name,
+      createdAt,
+      proposalText,
+      proposedAmount,
+    } = this.state;
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: 'white', padding: 10 }}>
-        <TouchableOpacity onPress={() => toProfile(userId)}>
-          <View style={{ padding: 5 }}>
-            <View style={{ flexDirection: 'row' }}>
-              <View
-                style={{
-                  flex: 0.15,
-                  justifyContent: 'center',
-                }}
-              >
-                <Avatar source={{ uri: '' }} size={'small'} />
-              </View>
-              <View style={{ flex: 0.85, justifyContent: 'center' }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ flex: 0.8, overflow: 'hidden', height: 20 }}>
-                    <Text style={{ fontSize: 16 }}>hulu</Text>
+      <View style={{ justifyContent: 'space-between', flex: 1 }}>
+        <ScrollView style={{ backgroundColor: 'white', padding: 10 }}>
+          <TouchableOpacity onPress={() => toProfile(userId)}>
+            <View style={{ padding: 5 }}>
+              <View style={{ flexDirection: 'row' }}>
+                <View
+                  style={{
+                    flex: 0.15,
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Avatar source={userImage} size={'small'} />
+                </View>
+                <View style={{ flex: 0.85, justifyContent: 'center' }}>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 0.8, overflow: 'hidden', height: 20 }}>
+                      <Text style={{ fontSize: 16 }}>{name}</Text>
+                    </View>
+                    <View style={{ flex: 0.2 }}>
+                      <Text style={{ fontSize: 16, textAlign: 'right' }}>
+                        ₹ {proposedAmount}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={{ flex: 0.2 }}>
-                    <Text style={{ fontSize: 16, textAlign: 'right' }}>
-                      ₹2000
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ color: 'silver' }}>
+                      At {moment(createdAt).fromNow()}
                     </Text>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  {/* <Rating
-                    readonly
-                    type="star"
-                    ratingCount={5}
-                    startingValue={4}
-                    imageSize={12}
-                  /> */}
-                  <Text style={{ color: 'silver' }}>
-                    At {new Date().toDateString()}
-                  </Text>
-                </View>
               </View>
             </View>
+          </TouchableOpacity>
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+              Description
+            </Text>
+            <Text style={{ fontSize: 16, marginTop: 5 }}>{proposalText}</Text>
           </View>
-        </TouchableOpacity>
-        <View style={{ marginTop: 10 }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Description</Text>
-          <Text style={{ fontSize: 16, marginTop: 5 }}>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-            repudiandae unde nostrum voluptate obcaecati fuga, dolorum
-            doloremque exercitationem beatae, omnis perferendis ad soluta, vel
-            deserunt delectus pariatur aut itaque iste. Lorem, ipsum dolor sit
-            amet consectetur adipisicing elit. Cum, veniam ab dignissimos unde
-            ipsa blanditiis excepturi quia quisquam. Nobis fugiat earum dolor,
-            nisi vel eveniet corrupti ullam nihil quibusdam? Facere....
-          </Text>
-        </View>
-        <AppButton style={{ marginTop: 20 }} onPress={this.acceptHandler}>
-          Accept
-        </AppButton>
-      </ScrollView>
+        </ScrollView>
+        {this.showAccept ? (
+          <AppButton onPress={this.acceptHandler}>Accept</AppButton>
+        ) : null}
+      </View>
     );
   }
 }

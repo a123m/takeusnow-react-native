@@ -1,68 +1,81 @@
 import React from 'react';
-import { ScrollView, Alert, View, StyleSheet, Text } from 'react-native';
+import { ScrollView, View, StyleSheet, Text } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
+// eslint-disable-next-line no-unused-vars
+import { ProjectEntity } from '../../modals';
 
 import { FAB, MyProjectCard } from '../../components';
-import AsyncStorage from '@react-native-community/async-storage';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 
 interface Props {
   toPostProject: any;
-  toProjectStatus: any;
+  toProjectStatus(
+    projectId: number,
+    projectStatus: string,
+    projectTitle: string,
+    acceptedProposalId: number | null | undefined
+  ): void;
 }
 
 interface State {
-  data: Array<Data>;
+  myProjects: Array<ProjectEntity>;
 }
 
-interface Data {
-  projectId: number;
-  status: string;
-  title: string;
-  postedOn: Date | string;
-  proposals: number;
-}
-
-const data: Array<Data> = [
+const responseDummy: ProjectEntity[] = [
   {
-    projectId: 23,
+    id: 23,
     status: 'IN PROGRESS',
-    title: 'Marrige Photograpy',
-    postedOn: new Date().toDateString(),
-    proposals: 0,
+    title: 'Marriage Photograph',
+    posted_on: '2020-07-23T16:28:54.976Z',
+    accepted_proposal_id: 0,
+  },
+  {
+    id: 2,
+    status: 'ACTIVE',
+    title: 'Marriage Photograph',
+    posted_on: '2020-07-23T16:28:54.976Z',
+    accepted_proposal_id: null,
+  },
+  {
+    id: 3,
+    status: 'CLOSE',
+    title: 'Marriage Photograph',
+    posted_on: '2020-07-23T16:28:54.976Z',
+    accepted_proposal_id: 3,
   },
 ];
 
 export default class Project extends React.PureComponent<Props, State> {
+  userId: Promise<string | null>;
+  role: Promise<string | null> | string;
   constructor(props: any) {
     super(props);
     this.state = {
-      data: [],
+      myProjects: [],
     };
+    this.role = AsyncStorage.getItem('role');
+    this.userId = AsyncStorage.getItem('userId');
   }
 
   componentDidMount() {
     // this.setDefaultView();
     this.setState({
-      data: data,
+      myProjects: responseDummy,
     });
   }
 
   setDefaultView = async () => {
-    const userId = AsyncStorage.getItem('userId');
-
     let params = {
-      userId: userId,
+      userId: this.userId,
     };
 
     try {
       const response = await APIService.sendPostCall('project/main', params);
-      if (response.status !== 200) {
-        Alert.alert('Alert', 'Something went wrong please try again');
-      }
 
       this.setState({
-        data: response.data,
+        myProjects: response,
       });
     } catch (err) {
       GlobalErr(err);
@@ -70,20 +83,27 @@ export default class Project extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { data } = this.state;
+    const { myProjects } = this.state;
     const { toPostProject, toProjectStatus } = this.props;
     return (
       <>
-        {data.length !== 0 ? (
+        {myProjects.length !== 0 ? (
           <ScrollView>
-            {data.map((item) => {
+            {myProjects.map((item) => {
               return (
                 <MyProjectCard
-                  key={item.projectId}
+                  key={item.id}
                   status={item.status}
                   title={item.title}
-                  postedOn={item.postedOn}
-                  onPress={() => toProjectStatus(item.projectId, item.title)}
+                  postedOn={item.posted_on}
+                  onPress={() =>
+                    toProjectStatus(
+                      item.id,
+                      item.status,
+                      item.title,
+                      item.accepted_proposal_id
+                    )
+                  }
                 />
               );
             })}
@@ -93,7 +113,7 @@ export default class Project extends React.PureComponent<Props, State> {
             <Text>No Projects!</Text>
           </View>
         )}
-        <FAB onPress={toPostProject} />
+        {this.role === 'work' ? <FAB onPress={toPostProject} /> : null}
       </>
     );
   }

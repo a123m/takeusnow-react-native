@@ -9,6 +9,8 @@ import {
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import LinearGradient from 'react-native-linear-gradient';
 
+import { BoxText } from '../';
+
 import { Styles } from '../../common';
 
 interface Props {
@@ -18,7 +20,7 @@ interface Props {
   proposals: Number;
   location: String;
   onPress: any;
-  skills: Array<String>;
+  skills: Array<string>;
 }
 
 const ProjectCard = (props: Props) => {
@@ -76,15 +78,15 @@ const ProjectCard = (props: Props) => {
                 return (
                   <View
                     style={{
-                      borderRadius: 5,
+                      borderRadius: 20,
                       borderColor: styles.textStyle.color,
                       borderWidth: 1,
                       margin: 4,
-                      padding: 2,
+                      padding: 4,
                     }}
                     key={index}
                   >
-                    <Text style={[styles.textStyle, { fontSize: 10 }]}>
+                    <Text style={[styles.textStyle, { fontSize: 8 }]}>
                       {item}
                     </Text>
                   </View>

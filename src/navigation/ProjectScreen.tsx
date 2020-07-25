@@ -19,10 +19,17 @@ export default class ProjectScreen extends React.PureComponent<Props> {
     const { navigation } = this.props;
     return (
       <Project
-        toProjectStatus={(projectId: number, projectTitle: string) =>
+        toProjectStatus={(
+          projectId: number,
+          projectStatus: string,
+          projectTitle: string,
+          acceptedProposalId: number
+        ) =>
           navigation.navigate('ProjectStatus', {
             projectId: projectId,
+            projectStatus: projectStatus,
             projectTitle: projectTitle,
+            acceptedProposalId: acceptedProposalId,
           })
         }
         toPostProject={() => navigation.navigate('PostProject')}

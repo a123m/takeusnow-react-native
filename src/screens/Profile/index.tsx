@@ -201,10 +201,9 @@ export default class Profile extends React.PureComponent<Props, State> {
             >
               <Avatar
                 size={'large'}
-                source={{
-                  uri:
-                    'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg',
-                }}
+                source={
+                  'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg'
+                }
               />
               <Text
                 style={{ fontSize: 22, fontWeight: 'bold', color: 'white' }}

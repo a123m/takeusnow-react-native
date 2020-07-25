@@ -19,6 +19,7 @@ export default class ProposalScreen extends React.PureComponent<Props> {
     return (
       <Proposal
         proposalId={navigation.getParam('proposalId')}
+        showAccept={navigation.getParam('showAccept')}
         toProfile={(userId: number) =>
           navigation.navigate('Profile', { userId: userId })
         }

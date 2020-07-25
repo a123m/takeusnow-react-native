@@ -3,14 +3,14 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-import Device from '../../utils/Device'
+import Device from '../../utils/Device';
 
 const SIZES = { SMALL: 'small', LARGE: 'large' };
 
 export const Mode = { normal: 'normal', full: 'full', overlay: 'overlay' };
 
 type Props = {
-  mode: string;
+  mode: 'normal' | 'full' | 'overlay';
   size: any;
   color: string;
 };
@@ -35,7 +35,7 @@ class Spinner extends React.PureComponent<Props> {
           color={color}
           style={[
             styles.wrapper,
-            { borderRadius: size == SIZES.SMALL ? 10 : 20 }
+            { borderRadius: size == SIZES.SMALL ? 10 : 20 },
           ]}
         />
       </View>
@@ -46,14 +46,14 @@ class Spinner extends React.PureComponent<Props> {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
-    elevation: 3
+    elevation: 3,
   },
   container_full_stretch: {
     flexGrow: 1,
     backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3
+    elevation: 3,
   },
   container_overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -67,12 +67,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 3,
     height: Device.ScreenHeight - 130,
-    width: Device.ScreenWidth
+    width: Device.ScreenWidth,
+    flex: 1,
   },
   wrapper: {
     backgroundColor: 'transparent',
-    zIndex: 100
-  }
+    zIndex: 100,
+  },
 });
 
 export default Spinner;
