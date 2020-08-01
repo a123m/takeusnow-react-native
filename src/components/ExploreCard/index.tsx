@@ -5,6 +5,7 @@ interface Props {
   onPress: any;
   name: string;
   category?: string;
+  image?: any;
 }
 
 const ExploreCard = (props: Props) => {
@@ -22,7 +23,7 @@ const ExploreCard = (props: Props) => {
       >
         <Image
           style={{ height: '80%', width: '98%' }}
-          source={require('../../Images/work.jpg')}
+          source={props.image ? props.image : require('../../Images/work.jpg')}
         />
         <View
           style={{

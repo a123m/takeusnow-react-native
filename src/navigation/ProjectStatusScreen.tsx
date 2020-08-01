@@ -21,6 +21,7 @@ export default class ProjectStatusScreen extends React.PureComponent<Props> {
     const { navigation } = this.props;
     return (
       <ProjectStatus
+        projectId={navigation.getParam('projectId')}
         projectStatus={navigation.getParam('projectStatus')}
         toDetails={() =>
           navigation.navigate('Details', {

@@ -1,7 +1,10 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+import { CheckBox, Rating } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+
+import { AppModal, AppButton, AppInput } from '../../components';
+import APIService from '../../utils/APIService';
 
 import { Styles } from '../../common';
 
@@ -9,9 +12,16 @@ interface Props {
   toDetails(): void;
   toProposal(): void;
   projectStatus: string;
+  projectId: number;
 }
 
-export default class ProjectStatus extends React.PureComponent<Props> {
+interface State {
+  showReviewModal: boolean;
+  reviewText: string;
+  selectedRating: number;
+}
+
+export default class ProjectStatus extends React.PureComponent<Props, State> {
   projectStatus = '';
   detailTick = false;
   proposalTick = false;
@@ -19,6 +29,14 @@ export default class ProjectStatus extends React.PureComponent<Props> {
   reviewTick = false;
   constructor(props: Props) {
     super(props);
+
+    this.state = {
+      showReviewModal: false,
+
+      selectedRating: 0,
+
+      reviewText: '',
+    };
 
     switch (this.props.projectStatus) {
       case 'ACTIVE':
@@ -148,7 +166,14 @@ export default class ProjectStatus extends React.PureComponent<Props> {
 
   _renderReview = () => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          if (this.reviewTick || !this.completionTick) {
+            return;
+          }
+          this.setState({ showReviewModal: true });
+        }}
+      >
         <View style={[styles.container]}>
           <View style={styles.smallContainer}>
             <CheckBox checked={this.reviewTick} checkedColor="green" />
@@ -167,9 +192,90 @@ export default class ProjectStatus extends React.PureComponent<Props> {
     );
   };
 
+  _renderReviewModal = () => {
+    return (
+      <AppModal
+        onRequestClose={() => this.setState({ showReviewModal: false })}
+        transparent={true}
+        visible={this.state.showReviewModal}
+      >
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+            backgroundColor: 'rgba(0,0,0,0.3)',
+          }}
+        >
+          <View
+            style={{
+              height: '50%',
+              width: '70%',
+              backgroundColor: 'white',
+              borderWidth: 2,
+              borderColor: 'silver',
+            }}
+          >
+            <View style={{ flex: 0.2, alignItems: 'center' }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                }}
+              >
+                Give Rating!!
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 3,
+                justifyContent: 'center',
+              }}
+            >
+              <Rating
+                startingValue={0}
+                onFinishRating={(selectedRating: number) => {
+                  this.setState({ selectedRating });
+                }}
+                showRating
+              />
+            </View>
+            <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+              <AppInput
+                placeholder={'Add a written review.'}
+                value={this.state.reviewText}
+                onChangeText={(reviewText: string) =>
+                  this.setState({ reviewText })
+                }
+              />
+            </View>
+            <AppButton
+              style={{ flex: 1 }}
+              onPress={() => {
+                const payload = {
+                  reviewText: this.state.reviewText,
+                  selectedRating: this.state.selectedRating,
+                };
+                this.reviewTick = true;
+                APIService.sendPostCall(
+                  `/project/${this.props.projectId}/review`,
+                  payload
+                );
+                this.setState({ showReviewModal: false });
+              }}
+            >
+              SUBMIT
+            </AppButton>
+          </View>
+        </View>
+      </AppModal>
+    );
+  };
+
   render() {
     return (
       <View style={styles.mainContainer}>
+        {this._renderReviewModal()}
         {this._renderProjectDetail()}
         {this._renderProposal()}
         {this._renderManagement()}

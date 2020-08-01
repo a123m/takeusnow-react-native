@@ -7,71 +7,78 @@ import {
   Image,
   FlatList,
   ScrollView,
-  Alert,
+  TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import * as Progress from 'react-native-progress';
 import LinearGradient from 'react-native-linear-gradient';
-import Moment from 'moment';
-
-// import Carousel from 'react-native-snap-carousel';
 
 import { ExploreCard, AppCard } from '../../components';
 import Socket from '../../utils/Socket';
 import APIService from '../../utils/APIService';
+import { GlobalErr } from '../../utils/utils';
+
+// eslint-disable-next-line no-unused-vars
+import { UserEntity } from '../../modals';
 
 import { Styles } from '../../common';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const data = [
-  { name: 'Photographers', category: 'animation', image: 'hululu' },
-  { name: 'Videographers', category: 'animation', image: 'hululu' },
-  { name: 'Wedding Planners', category: 'animation', image: 'hululu' },
-  // { name: 'Astrology', category: 'animation', image: 'hululu' },
-  { name: 'Makeup artist', category: 'animation', image: 'hululu' },
-  { name: 'Choreographer', category: 'animation', image: 'hululu' },
+  {
+    name: 'Photographers',
+    category: 'animation',
+    image: require('../../../assets/images/photography.jpg'),
+  },
+  {
+    name: 'Videographers',
+    category: 'animation',
+    image: require('../../../assets/images/videography.jpg'),
+  },
+  {
+    name: 'Wedding Planners',
+    category: 'animation',
+    image: require('../../../assets/images/planner.jpg'),
+  },
+  {
+    name: 'Astrology',
+    category: 'animation',
+    image: require('../../../assets/images/astrology.jpg'),
+  },
+  {
+    name: 'Makeup artist',
+    category: 'animation',
+    image: require('../../../assets/images/makeup.jpg'),
+  },
+  {
+    name: 'Choreographer',
+    category: 'animation',
+    image: require('../../../assets/images/art.jpg'),
+  },
 ];
 
-export default class Home extends React.PureComponent<any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      firstName: '',
-      profileCompletePercentage: 0.8,
-    };
-  }
+export default class Home extends React.PureComponent<any, any> {
+  userId = AsyncStorage.getItem('userId');
+  state = {
+    firstName: '',
+    profileCompletePercentage: 0.8,
+  };
+
   componentDidMount() {
-    console.log('component did mount');
     this.setDefaultView();
     Socket.init();
   }
 
   setDefaultView = async () => {
     try {
-      let userId: any = await AsyncStorage.getItem('userId');
-      userId = JSON.parse(userId);
-      const params = { id: userId };
-      const response = await APIService.sendPostCall('/home/main', params);
-      let firstName = response.fname;
-      this.setState({ firstName: firstName });
+      const response: UserEntity = await APIService.sendGetCall(
+        '/home/main' + this.userId
+      );
+      this.setState({ firstName: response.fname });
     } catch (err) {
-      console.log(err);
+      GlobalErr(err);
     }
   };
-
-  // _signOutAsync = async () => {
-  //   await AsyncStorage.clear();
-  //   this.props.onViewSignOut();
-  // };
-
-  _renderItem({ item, index }) {
-    return (
-      <View style={styles.slide}>
-        <Text style={styles.title}>{item.title}</Text>
-      </View>
-    );
-  }
 
   _renderWelcomeBanner = () => {
     const { upgradePressHandler } = this.props;
@@ -186,17 +193,9 @@ export default class Home extends React.PureComponent<any> {
         <View style={{ flex: 0.5 }}>
           <Image
             style={{ height: '100%', width: '100%' }}
-            source={require('../../Images/work.jpg')}
+            source={require('../../../assets/images/work.jpg')}
           />
         </View>
-        {/* <Carousel
-          layout={'default'}
-          ref={(c) => { this._carousel = c; }}
-          data={this.state.entries}
-          renderItem={this._renderItem}
-          sliderWidth={sliderWidth}
-          itemWidth={itemWidth}
-        /> */}
         {this._renderWelcomeBanner()}
         <AppCard style={{ flex: 0.1 }}>
           <Text style={styles.headingStyle}>Profile Completed</Text>
@@ -222,7 +221,8 @@ export default class Home extends React.PureComponent<any> {
             renderItem={({ item }) => (
               <ExploreCard
                 name={item.name}
-                onPress={() => toCategory(item.category)}
+                onPress={() => this.props.toCategory(item.category)}
+                image={item.image}
               />
             )}
           />

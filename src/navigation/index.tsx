@@ -57,6 +57,12 @@ const getTabBarIcon = (navigation: any, focused: any, tintColor: any) => {
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Category: CategoryScreen,
+  Details: DetailsScreen,
+  Proposal: ProposalScreen,
+  SendProposal: SendProposalScreen,
+  Profile: ProfileScreen,
+  Review: ReviewScreen,
   Plans: PlansScreen,
   Payment: PaymentScreen,
   Messenger: MessengerScreen,

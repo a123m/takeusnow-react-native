@@ -1,30 +1,25 @@
 import React from 'react';
-import { Modal, Alert, View, StyleSheet } from 'react-native';
+import { Modal } from 'react-native';
 
 interface Props {
   visible: boolean;
   children: Element;
+  transparent?: boolean;
+  animationType?: 'fade' | 'none' | 'slide';
+  onRequestClose?(): void;
 }
 
 const _renderModal = (props: Props) => {
   return (
     <Modal
-      animationType="slide"
-      transparent={false}
+      animationType={props.animationType ? props.animationType : 'slide'}
+      transparent={props.transparent ? props.transparent : false}
       visible={props.visible}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}
+      onRequestClose={props.onRequestClose}
     >
-      <View style={styles.container}>{props.children}</View>
+      {props.children}
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default _renderModal;

@@ -24,6 +24,7 @@ export default class HomeScreen extends React.PureComponent<any> {
       <Home
         onViewSignOut={() => this.props.navigation.navigate('Auth')}
         upgradePressHandler={() => this.props.navigation.navigate('Plans')}
+        toCategory={() => this.props.navigation.navigate('Category')}
       />
     );
   }

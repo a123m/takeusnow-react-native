@@ -45,6 +45,13 @@ const responseDummy: ProjectEntity[] = [
     posted_on: '2020-07-23T16:28:54.976Z',
     accepted_proposal_id: 3,
   },
+  {
+    id: 5,
+    status: 'CLOSE REQUEST',
+    title: 'Marriage Photograph',
+    posted_on: '2020-07-23T16:28:54.976Z',
+    accepted_proposal_id: 3,
+  },
 ];
 
 export default class Project extends React.PureComponent<Props, State> {
