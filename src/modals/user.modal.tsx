@@ -1,16 +1,31 @@
 export interface UserEntity {
-  id: number;
+  user_id: number;
   fname: string;
   lname: string;
   email: string;
-  password: string;
+  password_hash: string;
+  password_reset_token: string;
   user_image: string;
-  about: string;
+  gender: string;
   state: string;
   city: string;
-  DOB: string;
-  gender: string;
+  dob: string;
+  created_on: string;
+  updated_on: string;
   work_experience: string;
+  status: boolean;
+  deleted: boolean;
+  about: string;
+  projects_completed: number;
+  my_skills: string;
+  my_equipments: string;
+  plan_in_use: string;
+  allowed_bids: number;
+  mobile_num: string;
   able_to_travel: string;
-  portfolio: Array<object>;
+  languages_known: string;
+  account_type: string;
+  account_type_sub: string;
+  average_reviews: number;
+  total_reviews: number;
 }

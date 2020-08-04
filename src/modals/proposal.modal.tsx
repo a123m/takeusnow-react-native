@@ -1,9 +1,9 @@
 export interface ProposalEntity {
-  id: number;
-  proposal_text: string;
+  proposal_id: number;
   user_id: number;
   project_id: number;
-  created_at: string;
+  description: string;
+  created_on: string;
   proposed_amount: number;
   status: boolean;
 }

@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import * as Progress from 'react-native-progress';
 import LinearGradient from 'react-native-linear-gradient';
+import Splash from 'react-native-splash-screen';
 
 import { ExploreCard, AppCard } from '../../components';
 import Socket from '../../utils/Socket';
@@ -58,7 +59,7 @@ const data = [
 ];
 
 export default class Home extends React.PureComponent<any, any> {
-  userId = AsyncStorage.getItem('userId');
+  userId: string | null | undefined;
   state = {
     firstName: '',
     profileCompletePercentage: 0.8,
@@ -67,14 +68,30 @@ export default class Home extends React.PureComponent<any, any> {
   componentDidMount() {
     this.setDefaultView();
     Socket.init();
+    Splash.hide();
   }
 
   setDefaultView = async () => {
     try {
-      const response: UserEntity = await APIService.sendGetCall(
-        '/home/main' + this.userId
-      );
-      this.setState({ firstName: response.fname });
+      this.userId = await AsyncStorage.getItem('userId');
+      const response = await APIService.sendGetCall('/home/' + this.userId);
+
+      let profileCompletePercentage = 0;
+      for (let i in response) {
+        if (response[i] == null) {
+          profileCompletePercentage++;
+        }
+      }
+
+      profileCompletePercentage = 15 - profileCompletePercentage;
+      profileCompletePercentage = profileCompletePercentage / 15;
+      profileCompletePercentage =
+        Math.round(profileCompletePercentage * 10) / 10;
+
+      this.setState({
+        firstName: response.fname,
+        profileCompletePercentage: profileCompletePercentage,
+      });
     } catch (err) {
       GlobalErr(err);
     }
@@ -182,7 +199,8 @@ export default class Home extends React.PureComponent<any, any> {
   };
 
   profileCompletedPercentage = () => {
-    let profileCompletePercentage = this.state.profileCompletePercentage * 100;
+    const profileCompletePercentage =
+      this.state.profileCompletePercentage * 100;
     return profileCompletePercentage;
   };
 

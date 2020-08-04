@@ -9,7 +9,7 @@ import {
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-// import { Input } from 'react-native-elements';
+import Splash from 'react-native-splash-screen';
 
 import { AppButton, Spinner, FloatingLabelInput } from '../../components';
 import { ValidateEmail, GlobalErr } from '../../utils/utils';
@@ -38,6 +38,9 @@ export default class SignIn extends React.PureComponent<Props, State> {
     };
   }
 
+  componentDidMount() {
+    Splash.hide();
+  }
   _onSignUp = () => {
     const { onViewSignUp } = this.props;
     onViewSignUp();
@@ -61,17 +64,18 @@ export default class SignIn extends React.PureComponent<Props, State> {
 
     try {
       const response = await APIService.sendPostCall('/auth/login', params);
+      this.setState({
+        isLoading: false,
+      });
+      if (!response) {
+        return;
+      }
       /**
        * storing important information which will be used in other parts of the application
        */
       await AsyncStorage.setItem('userToken', response.token);
-      await AsyncStorage.setItem(
-        'userId',
-        JSON.stringify(response.value.user_id)
-      );
-      this.setState({
-        isLoading: false,
-      });
+      await AsyncStorage.setItem('userId', JSON.stringify(response.userId));
+      await AsyncStorage.setItem('accountType', response.accountType);
       this.props.onViewSignIn();
     } catch (err) {
       this.setState({

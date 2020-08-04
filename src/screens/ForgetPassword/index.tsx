@@ -43,26 +43,21 @@ export default class ForgetPassword extends React.PureComponent<Props, State> {
       isLoading: true,
     });
 
-    let params = { email: this.state.email };
+    const params = { email: this.state.email };
 
     try {
       const response = await APIService.sendPostCall(
         '/auth/forgetpassword',
         params
       );
-      /**
-       * storing important information which will be used in other parts of the application
-       */
-      if (response) {
-        Alert.alert('Alert', 'Please check your mail');
+      this.setState({
+        isLoading: false,
+      });
+      if (!response) {
+        return;
       }
-      this.setState({
-        isLoading: false,
-      });
+      Alert.alert('Alert', 'Please check your mail');
     } catch (err) {
-      this.setState({
-        isLoading: false,
-      });
       GlobalErr(err);
     }
   };

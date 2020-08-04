@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Alert,
   Picker,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
@@ -29,7 +29,7 @@ const skillList = [
   'Select Skill',
   'TickTock Photography',
   'Marriage Photography',
-  'Personal PhotoShoot'
+  'Personal PhotoShoot',
 ];
 
 export default class PostProject3 extends React.PureComponent<Props, State> {
@@ -39,7 +39,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
       detail: '',
       skillData: [],
       showSkillModal: false,
-      selectedSkill: 'Select Skill'
+      selectedSkill: 'Select Skill',
     };
   }
 
@@ -50,7 +50,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
   setDefaultView = () => {
     this.setState({
       detail: Globals.PostProject.detail,
-      skillData: Globals.PostProject.skills
+      skillData: Globals.PostProject.skills,
     });
   };
 
@@ -66,7 +66,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
                 borderColor: Styles.PrimaryColor2,
                 borderWidth: 1,
                 // margin: 4,
-                padding: 2
+                padding: 2,
               }}
               key={index}
             >
@@ -87,7 +87,6 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
     const { toPostProject4 } = this.props;
     const { detail, skillData } = this.state;
 
-    console.log(Globals.PostProject.title);
     if (detail.length < 15) {
       Alert.alert(
         'Alert',
@@ -121,7 +120,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
               }}
             >
               <Text style={styles.headingStyle}>Please Select Skill.</Text>
@@ -163,7 +162,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
 
                 this.setState({
                   skillData: [selectedSkill, ...this.state.skillData],
-                  selectedSkill: 'Select Skill'
+                  selectedSkill: 'Select Skill',
                 });
               }}
             >
@@ -185,7 +184,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
           style={{
             width: '75%',
             height: 4,
-            backgroundColor: Styles.PrimaryColor
+            backgroundColor: Styles.PrimaryColor,
           }}
         />
         {this._renderSkillModal()}
@@ -193,7 +192,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
           style={{
             height: Math.round(Dimensions.get('window').height) - 83,
             backgroundColor: 'white',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <View style={{ padding: 10 }}>
@@ -203,7 +202,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
                 padding: 8,
                 height: 140,
                 borderBottomColor: Styles.PrimaryColor2,
-                borderBottomWidth: 1
+                borderBottomWidth: 1,
               }}
             >
               <AppInput
@@ -224,7 +223,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}
               >
                 <Text style={styles.headingStyle}>
@@ -259,6 +258,6 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
   headingStyle: {
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });

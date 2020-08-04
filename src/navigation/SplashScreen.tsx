@@ -20,7 +20,7 @@ export default class SplashScreen extends React.PureComponent<Props> {
   });
 
   componentDidMount = () => {
-    Splash.hide();
+    // Splash.hide();
     this._userTokenHandler();
   };
 

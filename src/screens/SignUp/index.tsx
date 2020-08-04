@@ -79,7 +79,7 @@ export default class SignUp extends React.PureComponent<Props, State> {
     this.setState({
       isLoading: true,
     });
-    let params = {
+    const payload = {
       fname: fname,
       lname: lname,
       email: email,
@@ -91,7 +91,7 @@ export default class SignUp extends React.PureComponent<Props, State> {
     };
 
     try {
-      const response = await APIService.sendPostCall('/auth/signup', params);
+      const response = await APIService.sendPostCall('/auth/signup', payload);
 
       this.setState({
         isLoading: false,

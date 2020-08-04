@@ -5,7 +5,7 @@ import {
   View,
   Alert,
   Picker,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 
 import { AppInput, AppButton } from '../../components';
@@ -30,7 +30,7 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
     this.state = {
       title: '',
       state: '',
-      city: ''
+      city: '',
     };
   }
 
@@ -42,7 +42,7 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
     this.setState({
       title: Globals.PostProject.title,
       state: Globals.PostProject.state,
-      city: Globals.PostProject.city
+      city: Globals.PostProject.city,
     });
   };
   /**
@@ -68,7 +68,6 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
     Globals.PostProject.state = state;
     Globals.PostProject.city = city;
 
-    console.log(Globals.PostProject.title);
     toPostProject3();
   };
 
@@ -135,14 +134,14 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
           style={{
             width: '50%',
             height: 4,
-            backgroundColor: Styles.PrimaryColor
+            backgroundColor: Styles.PrimaryColor,
           }}
         />
         <View
           style={{
             height: Math.round(Dimensions.get('window').height) - 83,
             backgroundColor: 'white',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <View style={{ padding: 10 }}>
@@ -152,7 +151,7 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
                 padding: 8,
                 height: 60,
                 borderBottomColor: Styles.PrimaryColor2,
-                borderBottomWidth: 1
+                borderBottomWidth: 1,
               }}
             >
               <AppInput
@@ -172,7 +171,7 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
               </Text>
               <View
                 style={{
-                  padding: 10
+                  padding: 10,
                   // height: 60,
                 }}
               >
@@ -204,6 +203,6 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
   headingStyle: {
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });

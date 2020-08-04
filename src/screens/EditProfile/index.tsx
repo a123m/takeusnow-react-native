@@ -610,23 +610,23 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
             isLoading: true,
           },
           async () => {
-            const params = {
+            const payload = {
               about: about,
               state: state,
               city: city,
-              user_image: user_image,
+              userImage: user_image,
               // portfolio:portfolio,portfolio will have different API
               dateOfBirth: dateOfBirth,
               workExperience: workExperience,
               ableToTravel: ableToTravel,
-              sub_cat: selectedSubCat,
-              my_equipments: equipmentsData,
-              languages_known: languagesData,
+              mySkills: selectedSubCat,
+              myEquipments: equipmentsData,
+              languagesKnown: languagesData,
             };
 
             const response = await APIService.sendPatchCall(
               'profile/main/' + this.userId,
-              params
+              payload
             );
             if (response) {
               Alert.alert('Alert', 'Your data is saved');
