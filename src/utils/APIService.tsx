@@ -1,7 +1,7 @@
 import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Alert } from 'react-native';
+import { Alert, NativeModules } from 'react-native';
 
 import Config from '../utils/Config';
 import { GlobalErr } from './utils';
@@ -53,11 +53,16 @@ export default class APIService {
       const response = await axios.get(url, headerObj);
       return response.data;
     } catch (err) {
-      let errMessage = err.response.data.message;
+      let errMessage: string = err.response.data.message;
       if (!errMessage) {
         errMessage = 'Something Went wrong please try again!';
       }
       Alert.alert('Alert', errMessage);
+      if (errMessage.toUpperCase().includes('TOKEN')) {
+        await AsyncStorage.clear();
+        NativeModules.DevSettings.reload();
+      }
+
       GlobalErr(err);
     }
   }
@@ -100,6 +105,10 @@ export default class APIService {
         errMessage = 'Something Went wrong please try again!';
       }
       Alert.alert('Alert', errMessage);
+      if (errMessage.toUpperCase().includes('TOKEN')) {
+        await AsyncStorage.clear();
+        NativeModules.DevSettings.reload();
+      }
       GlobalErr(err);
     }
   }
@@ -139,6 +148,11 @@ export default class APIService {
         errMessage = 'Something Went wrong please try again!';
       }
       Alert.alert('Alert', errMessage);
+      if (errMessage.toUpperCase().includes('TOKEN')) {
+        await AsyncStorage.clear();
+        NativeModules.DevSettings.reload();
+      }
+      GlobalErr(err);
     }
   }
 

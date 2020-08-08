@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { AppButton } from '../../components';
 
 interface Props {
-  onViewSignOut: Function;
+  onViewSignOut(): void;
 }
 
 interface State {

@@ -43,6 +43,11 @@ export function _flatListItemSeparator() {
   );
 }
 
+export function completeImageUrl(url: string): string {
+  const baseURL = Config.Debug ? Config.LocalIP : Config.ServerIP;
+  return baseURL + '/' + url;
+}
+
 export function GlobalErr(err: Error) {
   if (Config.Debug) {
     console.log('Global Error', err);

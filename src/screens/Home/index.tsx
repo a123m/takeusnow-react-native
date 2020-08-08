@@ -62,13 +62,12 @@ export default class Home extends React.PureComponent<any, any> {
   userId: string | null | undefined;
   state = {
     firstName: '',
-    profileCompletePercentage: 0.8,
+    profileCompletePercentage: 0,
   };
 
   componentDidMount() {
     this.setDefaultView();
     Socket.init();
-    Splash.hide();
   }
 
   setDefaultView = async () => {
@@ -83,15 +82,15 @@ export default class Home extends React.PureComponent<any, any> {
         }
       }
 
-      profileCompletePercentage = 15 - profileCompletePercentage;
       profileCompletePercentage = profileCompletePercentage / 15;
       profileCompletePercentage =
-        Math.round(profileCompletePercentage * 10) / 10;
+        1 - Math.round(profileCompletePercentage * 10) / 10;
 
       this.setState({
         firstName: response.fname,
         profileCompletePercentage: profileCompletePercentage,
       });
+      Splash.hide();
     } catch (err) {
       GlobalErr(err);
     }

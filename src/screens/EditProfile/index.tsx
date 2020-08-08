@@ -30,11 +30,18 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
+// eslint-disable-next-line no-unused-vars
+import { UserEntity, PortfolioEntity } from '../../modals';
+
 import APIService from '../../utils/APIService';
 import RegionList from '../../utils/RegionList';
-import { GlobalErr } from '../../utils/utils';
+import { GlobalErr, completeImageUrl } from '../../utils/utils';
 
 import { Styles } from '../../common';
+
+interface Props {
+  toReview(userId: any): void;
+}
 
 interface State {
   fullName: string;
@@ -50,10 +57,10 @@ interface State {
   selectedSkill: string;
   selectedRating: number;
   isLoading: boolean;
-  user_image: any;
+  userImage: string;
   imageIndex: number;
   isImageViewVisible: boolean;
-  portfolio: Array<any>;
+  portfolio: Partial<PortfolioEntity>[];
   languagesData: Array<object>;
   ableToTravel: string;
   enteredLanguage: string;
@@ -67,25 +74,16 @@ interface State {
   selectedItems: Array<any>;
 }
 
-// interface Response {
-//   profile: ProfileData;
-// }
-
-// interface ProfileData {
-//   about: string;
-//   project_completed: string;
-//   repeated_hire: string;
-//   work_on_time: string;
-//   work_knowledge: string;
-//   my_skills: string;
-//   fname: string;
-//   lname: string;
-// }
-
 interface Data {
   value: string;
   rating: number;
 }
+
+type Portfolio = {
+  portfolio: PortfolioEntity[];
+};
+
+type Response = UserEntity & Portfolio;
 
 const getResponseData = {
   userId: 1,
@@ -98,30 +96,27 @@ const getResponseData = {
   gender: 'Male',
   work_experience: '1 year',
   able_to_travel: 'yes',
-  sub_cat: '[]',
-  user_image:
+  my_skills: '[]',
+  userImage:
     'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
   portfolio: [
     {
-      source: {
-        uri:
-          'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-      },
+      uri:
+        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
+
       title: 'Switzerland',
     },
 
     {
-      source: {
-        uri:
-          'https://i.pinimg.com/564x/a5/1b/63/a51b63c13c7c41fa333b302fc7938f06.jpg',
-      },
+      uri:
+        'https://i.pinimg.com/564x/a5/1b/63/a51b63c13c7c41fa333b302fc7938f06.jpg',
+
       title: 'USA',
     },
     {
-      source: {
-        uri:
-          'https://guidetoiceland.imgix.net/4935/x/0/top-10-beautiful-waterfalls-of-iceland-8?auto=compress%2Cformat&ch=Width%2CDPR&dpr=1&ixlib=php-2.1.1&w=883&s=1fb8e5e1906e1d18fc6b08108a9dde8d',
-      },
+      uri:
+        'https://guidetoiceland.imgix.net/4935/x/0/top-10-beautiful-waterfalls-of-iceland-8?auto=compress%2Cformat&ch=Width%2CDPR&dpr=1&ixlib=php-2.1.1&w=883&s=1fb8e5e1906e1d18fc6b08108a9dde8d',
+
       title: 'Iceland',
     },
   ],
@@ -152,78 +147,66 @@ const getResponseData = {
     '[{"value":"English","rating":5},{"value":"Hindi","rating":5}]',
 };
 
-const nature: Array<any> = [
-  {
-    source: {
-      uri:
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-    },
-    title: 'Switzerland',
-  },
-
-  {
-    source: {
-      uri:
-        'https://i.pinimg.com/564x/a5/1b/63/a51b63c13c7c41fa333b302fc7938f06.jpg',
-    },
-    title: 'USA',
-    width: 400,
-    height: 800,
-  },
-  {
-    source: {
-      uri:
-        'https://guidetoiceland.imgix.net/4935/x/0/top-10-beautiful-waterfalls-of-iceland-8?auto=compress%2Cformat&ch=Width%2CDPR&dpr=1&ixlib=php-2.1.1&w=883&s=1fb8e5e1906e1d18fc6b08108a9dde8d',
-    },
-    title: 'Iceland',
-    width: 880,
-    height: 590,
-  },
+const catData = [
+  { cat_id: 0, name: 'Select Category', status: 0 },
+  { cat_id: 1, name: 'Photography', status: 0 },
+  { cat_id: 2, name: 'Videography', status: 0 },
+  { cat_id: 3, name: 'Wedding Planning', status: 0 },
+  { cat_id: 4, name: 'Makeup Artist', status: 0 },
+  { cat_id: 5, name: 'Decoration', status: 0 },
+  { cat_id: 6, name: 'Choreography', status: 0 },
+  { cat_id: 7, name: 'Astrology', status: 0 },
+  { cat_id: 8, name: 'Entertainment', status: 0 },
+];
+const subCatData = [
+  { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
+  { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
+  { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
+  { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
+  { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
+  { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
+  { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
+  { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
 ];
 
-export default class ProfileEdit extends React.PureComponent<any, State> {
+export default class ProfileEdit extends React.PureComponent<Props, State> {
   private combinedCatData: any = [];
   private catData: any = [];
   private subCatData: any = [];
-  private userId: Promise<string | null>;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      fullName: 'Aman Chhabra',
-      user_image: '',
-      imageIndex: 0,
-      about: '',
-      state: 'Select State',
-      city: 'Select City',
-      selectedSkill: 'Select Skill',
-      selectedRating: 0,
-      ableToTravel: 'No',
-      enteredLanguage: '',
-      workExperience: '1 year',
-      gender: 'Male',
-      dateOfBirth: 'Nov 3, 1996',
-      enteredEquipment: '',
+  private userId: string | Promise<string | null> | null | undefined;
+  state = {
+    fullName: '',
+    userImage: '',
+    about: '',
+    state: 'Select State',
+    city: 'Select City',
+    selectedSkill: 'Select Skill',
+    ableToTravel: 'no',
+    enteredLanguage: '',
+    workExperience: '',
+    gender: 'Male',
+    dateOfBirth: 'Nov 3, 1996',
+    enteredEquipment: '',
 
-      showSkillModal: false,
-      allowEdit: false,
-      isLoading: false,
-      isImageViewVisible: false,
-      showDatePicker: false,
-      showEquipmentsModal: false,
-      showLanguagesModal: false,
+    showSkillModal: false,
+    allowEdit: false,
+    isLoading: true,
+    isImageViewVisible: false,
+    showDatePicker: false,
+    showEquipmentsModal: false,
+    showLanguagesModal: false,
 
-      skillData: [],
-      equipmentsData: [],
-      portfolio: [],
-      languagesData: [],
-      selectedItems: [],
-      selectedSubCat: [],
+    skillData: [],
+    equipmentsData: [],
+    portfolio: [],
+    languagesData: [],
+    selectedItems: [],
+    selectedSubCat: [],
 
-      height: 0,
-    };
-
-    this.userId = AsyncStorage.getItem('userId');
-  }
+    height: 0,
+    imageIndex: 0,
+    selectedRating: 0,
+  };
 
   componentDidMount() {
     this.setDefaultView();
@@ -231,8 +214,10 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
 
   setDefaultView = async () => {
     try {
-      // const response = await APIService.sendGetCall('/profile/main/' + this.userId);
-      const response = getResponseData;
+      this.userId = await AsyncStorage.getItem('userId');
+      const response: Response = await APIService.sendGetCall(
+        '/profile/' + this.userId
+      );
 
       const fullName: string = response.fname.concat(' ', response.lname);
 
@@ -245,13 +230,16 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         city = 'Select City';
       }
 
-      let user_image = response.user_image;
-      if (!user_image) {
-        user_image = '';
+      let userImage = response.user_image;
+      if (!userImage) {
+        userImage = '';
+      }
+      if (userImage.length > 0) {
+        userImage = completeImageUrl(userImage);
       }
 
-      this.catData = response.catData;
-      this.subCatData = response.subCatData;
+      this.catData = catData;
+      this.subCatData = subCatData;
 
       for (let i of this.catData) {
         let childrenArr = [];
@@ -279,8 +267,13 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       if (!portfolio) {
         portfolio = [];
       }
+      if (portfolio.length > 0) {
+        portfolio.forEach((item) => {
+          item.image_url = completeImageUrl(item.image_url);
+        });
+      }
 
-      let selectedSubCat = response.sub_cat;
+      let selectedSubCat = response.my_skills;
       if (!selectedSubCat || selectedSubCat === '') {
         selectedSubCat = '[]';
       }
@@ -295,24 +288,22 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         languagesData = '[]';
       }
 
-      setTimeout(() => {
-        this.setState({
-          fullName: fullName,
-          about: response.about,
-          state: state,
-          city: city,
-          user_image: user_image,
-          portfolio: portfolio,
-          dateOfBirth: response.DOB,
-          gender: response.gender,
-          workExperience: response.work_experience,
-          ableToTravel: response.able_to_travel,
-          selectedSubCat: JSON.parse(selectedSubCat),
-          equipmentsData: JSON.parse(equipmentsData),
-          languagesData: JSON.parse(languagesData),
-          isLoading: false,
-        });
-      }, 10000);
+      this.setState({
+        fullName: fullName,
+        about: response.about,
+        state: state,
+        city: city,
+        userImage: userImage,
+        portfolio: portfolio,
+        dateOfBirth: response.dob,
+        gender: response.gender,
+        workExperience: response.work_experience,
+        ableToTravel: response.able_to_travel,
+        selectedSubCat: JSON.parse(selectedSubCat),
+        equipmentsData: JSON.parse(equipmentsData),
+        languagesData: JSON.parse(languagesData),
+        isLoading: false,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -331,7 +322,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         path: 'images',
       },
     };
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, async (response) => {
       // console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -341,17 +332,32 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = response.uri;
-
-        console.log('response', response);
-        console.log('source', source);
-
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        this.setState({
-          user_image: source,
+        const payload = new FormData();
+        payload.append('userImage', {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
         });
+
+        try {
+          const apiResponse: UserEntity = await APIService.sendPostCall(
+            '/profile/userimage/' + this.userId,
+            payload
+          );
+
+          if (!apiResponse) {
+            return;
+          }
+
+          this.setState({
+            userImage: response.uri,
+          });
+        } catch (err) {
+          GlobalErr(err);
+        }
       }
     });
   };
@@ -363,13 +369,14 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
     }
     const options = {
       title: 'Select Portfolio Image',
+      noData: true,
       // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
       storageOptions: {
         skipBackup: true,
         path: 'images',
       },
     };
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, async (response) => {
       // console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -379,28 +386,49 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = response.uri;
-
-        console.log('response', response);
-        console.log('source', source);
-
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        let imageObj = {
-          source: { uri: source },
-          title: response.fileName,
-        };
-
-        this.setState({
-          portfolio: [imageObj, ...this.state.portfolio],
+        const payload = new FormData();
+        payload.append('portfolioImage', {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
         });
+        payload.append('userId', this.userId);
+
+        try {
+          const apiResponse: PortfolioEntity = await APIService.sendPostCall(
+            'http://192.168.43.116:8080/profile/portfolio',
+            payload
+          );
+
+          if (!apiResponse) {
+            Alert.alert(
+              'Alert',
+              'Image upload failed. Please try again later!'
+            );
+            return;
+          }
+
+          const imageObj = {
+            portfolio_id: apiResponse.portfolio_id,
+            image_url: completeImageUrl(apiResponse.image_url),
+            image_name: apiResponse.image_name,
+          };
+
+          this.setState({
+            portfolio: [imageObj, ...this.state.portfolio],
+          });
+        } catch (err) {
+          GlobalErr(err);
+        }
       }
     });
   };
 
   _renderProfileImage = () => {
-    const { allowEdit, user_image } = this.state;
+    const { allowEdit, userImage } = this.state;
     let buttonText = '';
     if (allowEdit) {
       buttonText = 'Save Profile';
@@ -418,10 +446,10 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         ]}
         style={{ flex: 1 }}
       >
-        <View style={{ justifyContent: 'center', height: 250 }}>
+        <View style={{ justifyContent: 'center', height: 290 }}>
           <View
             style={{
-              height: 200,
+              height: 260,
               paddingTop: 30,
               justifyContent: 'center',
               alignItems: 'center',
@@ -432,32 +460,41 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                 rounded
                 size={'xlarge'}
                 source={
-                  user_image === ''
+                  userImage === ''
                     ? require('../../Images/avatar.png')
-                    : { uri: user_image }
+                    : { uri: userImage }
                 }
                 showEditButton={allowEdit}
               />
             </TouchableWithoutFeedback>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: 'white',
+                paddingTop: 10,
+              }}
+            >
               {this.state.fullName}
             </Text>
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <TouchableOpacity onPress={this.saveHandler}>
-              <View
-                style={{
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: 'white',
-                  padding: 5,
-                  margin: 5,
-                }}
-              >
-                <Text style={{ color: 'white' }}>{buttonText}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+
+          <TouchableOpacity
+            style={{ alignItems: 'flex-end' }}
+            onPress={this.saveHandler}
+          >
+            <View
+              style={{
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: 'white',
+                padding: 5,
+                margin: 5,
+              }}
+            >
+              <Text style={{ color: 'white' }}>{buttonText}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
     );
@@ -468,9 +505,25 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
     if (portfolio.length === 0) {
       return (
         <>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 10 }}>
-            Portfolio
-          </Text>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
+            <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 10 }}>
+              Portfolio
+            </Text>
+            {allowEdit ? (
+              <TouchableOpacity
+                onPress={this._renderPortfolioUpload}
+                style={{ justifyContent: 'center', margin: 10 }}
+              >
+                <Icon
+                  name="cloud-upload"
+                  size={30}
+                  color={Styles.PrimaryColor}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
           <View
             style={{
               flex: 1,
@@ -505,7 +558,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
           data={portfolio}
           horizontal={true}
           keyExtractor={(item, index: number) => index.toString()}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }: any) => (
             <View>
               <TouchableOpacity
                 style={{ marginRight: 5 }}
@@ -520,17 +573,21 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                   {allowEdit ? (
                     <TouchableOpacity
                       onPress={async () => {
+                        this.setState({ isLoading: true });
                         const response = await APIService.sendDelCall(
-                          'portfolio/' + item.id
+                          '/profile/portfolio/' + item.portfolio_id
                         );
                         //Need testing for negative test
-                        if (response) {
-                          this.setState({
-                            portfolio: portfolio.filter(
-                              (newItem, newIndex) => index !== newIndex
-                            ),
-                          });
+                        console.log('resposne', response);
+                        if (!response) {
+                          return;
                         }
+                        this.setState({
+                          portfolio: portfolio.filter(
+                            (newItem, newIndex) => index !== newIndex
+                          ),
+                          isLoading: false,
+                        });
                       }}
                       style={[
                         styles.crossIconStyle,
@@ -549,7 +606,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                         borderRadius: 30,
                         marginRight: 15,
                       }}
-                      source={item.source}
+                      source={{ uri: item.image_url }}
                       resizeMode="cover"
                     />
                   ) : (
@@ -562,7 +619,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                             borderRadius: 30,
                             marginLeft: 20,
                           }}
-                          source={item.source}
+                          source={{ uri: item.image_url }}
                           resizeMode="cover"
                         />
                       ) : (
@@ -572,7 +629,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                             height: 200,
                             borderRadius: 30,
                           }}
-                          source={item.source}
+                          source={{ uri: item.image_uri }}
                           resizeMode="cover"
                         />
                       )}
@@ -590,12 +647,12 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   /**
    * async function for API call and save data to local and server
    */
-  saveHandler = () => {
+  saveHandler = async () => {
     const {
+      allowEdit,
       about,
       state,
       city,
-      user_image,
       dateOfBirth,
       workExperience,
       ableToTravel,
@@ -603,7 +660,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       equipmentsData,
       languagesData,
     } = this.state;
-    if (this.state.allowEdit) {
+    if (allowEdit) {
       try {
         this.setState(
           {
@@ -614,7 +671,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
               about: about,
               state: state,
               city: city,
-              userImage: user_image,
               // portfolio:portfolio,portfolio will have different API
               dateOfBirth: dateOfBirth,
               workExperience: workExperience,
@@ -625,17 +681,18 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
             };
 
             const response = await APIService.sendPatchCall(
-              'profile/main/' + this.userId,
+              'http://192.168.43.116:8080/profile/' + this.userId,
               payload
             );
-            if (response) {
-              Alert.alert('Alert', 'Your data is saved');
-            }
 
             this.setState({
               allowEdit: false,
               isLoading: false,
             });
+            if (!response) {
+              return;
+            }
+            Alert.alert('Alert', 'Your data is saved');
           }
         );
       } catch (err) {
@@ -856,19 +913,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
           >
             {filteredSubCat.map((item, index) => {
               return (
-                // <SkillBox
-                //   key={index}
-                //   value={item.value}
-                //   level={item.rating}
-                //   showCross={this.state.allowEdit}
-                //   onCrossPress={() => {
-                //     this.setState({
-                //       skillData: this.state.skillData.filter((item, newIndex) => {
-                //         return index !== newIndex;
-                //       }),
-                //     });
-                //   }}
-                // />
                 <BoxText
                   size={16}
                   key={item.sub_cat_id}
@@ -1092,19 +1136,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       </AppModal>
     );
   };
-
-  // _renderSaveButton = () => {
-  //   return (
-  //     <AppButton
-  //       style={styles.buttonStyle}
-  //       onPress={() => {
-  //         this.saveHandler;
-  //       }}
-  //     >
-  //       SAVE
-  //     </AppButton>
-  //   );
-  // };
 
   _renderOthers = () => {
     const {
@@ -1416,7 +1447,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         {this._renderLanguagesSection()}
         <ImageView
           glideAlways
-          images={nature}
+          images={this.state.portfolio}
           imageIndex={this.state.imageIndex}
           animationType="slide"
           isVisible={this.state.isImageViewVisible}
