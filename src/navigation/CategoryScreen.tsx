@@ -54,6 +54,7 @@ export default class CategoryScreen extends React.PureComponent<Props> {
         showFilterModal={this.state.showFilterModal}
         filterModalHandler={this.filterModalHandler}
         category={navigation.getParam('category')}
+        categoryId={navigation.getParam('categoryId')}
       />
     );
   }

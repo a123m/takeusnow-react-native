@@ -15,6 +15,11 @@ export default class SendProposalScreen extends React.PureComponent<Props> {
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
   });
   render() {
-    return <SendProposal title={this.props.navigation.getParam('title')} />;
+    return (
+      <SendProposal
+        projectId={this.props.navigation.getParam('projectId')}
+        title={this.props.navigation.getParam('title')}
+      />
+    );
   }
 }

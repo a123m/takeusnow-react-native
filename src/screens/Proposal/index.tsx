@@ -43,24 +43,24 @@ export default class Proposal extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    // this.setDefaultView();
+    this.setDefaultView();
   }
 
   setDefaultView = async () => {
     const { proposalId } = this.props;
     try {
       const response: ResponseType = await APIService.sendGetCall(
-        '/browse/category/proposal/' + proposalId
+        '/browse/proposal/' + proposalId
       );
 
       const fullName = response.fname.concat(response.lname);
 
       this.setState({
         name: fullName,
-        proposalText: response.proposal_text,
+        proposalText: response.proposal_description,
         userId: response.user_id,
         userImage: response.user_image,
-        createdAt: response.created_at,
+        createdAt: response.created_on,
       });
     } catch (err) {
       GlobalErr(err);
@@ -70,10 +70,22 @@ export default class Proposal extends React.PureComponent<Props, State> {
   acceptHandler = () => {
     Alert.alert(
       'Alert',
-      `Are you sure! This will accept ${this.state.name} proposal.`
+      `Are you sure! This will accept ${this.state.name} proposal.`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () =>
+            APIService.sendGetCall(
+              `/browse/proposal/accept/` + this.props.proposalId
+            ),
+        },
+      ],
+      { cancelable: false }
     );
-
-    APIService.sendGetCall(`/browse/category/proposal/`);
   };
 
   render() {

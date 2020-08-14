@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import moment from 'moment';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   ProjectCard,
@@ -24,10 +24,13 @@ import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 import RegionList from '../../utils/RegionList';
 
+// eslint-disable-next-line no-unused-vars
+import { ProjectEntity, UserEntity } from '../../modals';
+
 import { Styles } from '../../common';
-// import AsyncStorage from '@react-native-community/async-storage';
 
 interface Props {
+  categoryId: number;
   category: string;
   onProjectPress: any;
   showFilterModal: any;
@@ -37,19 +40,18 @@ interface Props {
 
 interface State {
   searchInput: string;
-  projectData: Data[];
-  userData: any[];
+  projectData: ProjectEntity[];
+  userData: UserEntity[];
   minBudget: number;
   maxBudget: number | undefined;
   state: string;
   city: string;
-  category: string;
   isLoading: boolean;
   isListEnd: boolean;
 }
 
 interface Data {
-  req_skills: string[];
+  req_skills: string;
   id: number;
   title: string;
   created_at: Date | string;
@@ -68,90 +70,15 @@ type HireResponseType = {
   total_reviews: number;
 };
 
-const responseDummyWork: Array<Data> = [
-  {
-    id: 1,
-    title: 'Need a marriage Planner',
-    created_at: moment().toISOString(),
-    budget: 200000,
-    proposals: 20,
-    location: 'Agra',
-    req_skills: ['Professional photographer', 'Editing experience'],
-    status: 'A',
-  },
-  {
-    id: 2,
-    title: 'Need a marriage Planner',
-    created_at: new Date(),
-    budget: 200000,
-    proposals: 20,
-    location: 'Agra',
-    req_skills: ['Professional photographer', 'Editing experience'],
-    status: 'A',
-  },
-  {
-    id: 3,
-    title: 'Need a marriage Planner',
-    created_at: new Date(),
-    budget: 200000,
-    proposals: 20,
-    location: 'Agra',
-    req_skills: ['Professional photographer', 'Editing experience'],
-    status: 'A',
-  },
-  {
-    id: 4,
-    title: 'Need a marriage Planner',
-    created_at: new Date(),
-    budget: 200000,
-    proposals: 20,
-    location: 'Agra',
-    req_skills: ['Professional photographer', 'Editing experience'],
-    status: 'A',
-  },
-  {
-    id: 5,
-    title: 'Need a marriage Planner',
-    created_at: new Date(),
-    budget: 200000,
-    proposals: 20,
-    location: 'Agra',
-    req_skills: ['Professional photographer', 'Editing experience'],
-    status: 'A',
-  },
-  {
-    id: 6,
-    title: 'My project',
-    created_at: new Date(),
-    budget: 200000,
-    proposals: 20,
-    location: 'Agra',
-    req_skills: ['Professional photographer', 'Editing experience'],
-    status: 'A',
-  },
-];
-
-const responseDummyHire: HireResponseType[] = [
-  {
-    userId: 1,
-    fname: 'Aman',
-    lname: 'Chhabra',
-    user_image:
-      'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-    average_reviews: 4,
-    total_reviews: 5,
-  },
-];
-
 export default class Category extends React.PureComponent<Props, State> {
-  completeResponseData = [];
+  completeResponseData: any = [];
   projectFilterParams = {
     minBudget: 0,
     state: '',
     city: '',
   };
   userFilterParams = {};
-  role: string | Promise<string | null>;
+  role: string | null = 'work';
   scrollY = new Animated.Value(0);
   startHeight = 70;
   endHeight = 0;
@@ -170,9 +97,9 @@ export default class Category extends React.PureComponent<Props, State> {
     outputRange: [-30, 0],
     extrapolate: 'clamp',
   });
-  categoryId: any;
-  page: any;
-  limit: any;
+  categoryId = this.props.categoryId;
+  page = 1;
+  limit = 10;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -184,14 +111,11 @@ export default class Category extends React.PureComponent<Props, State> {
 
       state: '',
       city: '',
-      category: '',
       searchInput: '',
 
       isLoading: true,
       isListEnd: false,
     };
-    // this.role = AsyncStorage.getItem('role');
-    this.role = 'work';
   }
 
   componentDidMount() {
@@ -199,39 +123,35 @@ export default class Category extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = async () => {
-    // const { category } = this.props;
-    // let params = { category: category };
-    let response: any;
+    this.role = await AsyncStorage.getItem('accountType');
     try {
-      if (this.role === 'hire') {
-        // response = await APIService.sendPostCall(
-        //   `browse/${this.categoryId}/hire?page=${this.page}&limit=${
-        //     this.limit
-        //   }`,
-        //   this.userFilterParams
-        // );
-        response = responseDummyHire;
+      if (this.role === 'work') {
+        const response: ProjectEntity[] = await APIService.sendPostCall(
+          `browse/${this.categoryId}?page=${this.page}&limit=${
+            this.limit
+          }&type=work`,
+          this.projectFilterParams
+        );
         this.completeResponseData = response;
+
+        this.setState({
+          projectData: response,
+          isLoading: false,
+        });
+      }
+      if (this.role === 'hire') {
+        const response: UserEntity[] = await APIService.sendPostCall(
+          `browse/${this.categoryId}?page=${this.page}&limit=${
+            this.limit
+          }&type=hire`,
+          this.userFilterParams
+        );
+        this.completeResponseData = response;
+
         this.setState({
           userData: response,
           isLoading: false,
         });
-      }
-      if (this.role === 'work') {
-        // response = await APIService.sendPostCall(
-        //   `browse/${this.categoryId}/work?page=${this.page}&limit=${
-        //     this.limit
-        //   }`,
-        //   this.projectFilterParams
-        // );
-        response = responseDummyWork;
-        this.completeResponseData = response;
-        setTimeout(() => {
-          this.setState({
-            projectData: response,
-            isLoading: false,
-          });
-        }, 10000);
       }
     } catch (err) {
       GlobalErr(err);
@@ -405,11 +325,13 @@ export default class Category extends React.PureComponent<Props, State> {
           width: '100%',
           // top: 0,
           // left: 0,
-          zIndex: 9999,
+          zIndex: 99,
         }}
       >
         <SearchBar
-          placeholder="Search Projects..."
+          placeholder={
+            this.role === 'work' ? 'Search Projects...' : 'Search Users...'
+          }
           onChangeText={(searchInput: string) => {
             this.setState({ searchInput }, () => {
               if (this.role === 'work') {
@@ -424,7 +346,7 @@ export default class Category extends React.PureComponent<Props, State> {
               }
               if (this.role === 'hire') {
                 const filteredData = this.completeResponseData.filter(
-                  (item: HireResponseType) => {
+                  (item: UserEntity) => {
                     return (
                       item.fname
                         .toLowerCase()
@@ -461,29 +383,29 @@ export default class Category extends React.PureComponent<Props, State> {
       //On click of Load More button We will call the web API again
       this.setState({ isLoading: true }, async () => {
         try {
-          let response: string | any[] = [];
+          let response: any;
+          this.page = this.page + 1;
 
           if (this.role === 'work') {
-            // response = await APIService.sendPostCall(
-            //   `browse/${this.categoryId}/work?page=${this.page}&limit=${
-            //     this.limit
-            //   }`,
-            //   this.filterParams
-            // );
+            response = await APIService.sendPostCall(
+              `browse/${this.categoryId}?page=${this.page}&limit=${
+                this.limit
+              }&type=work`,
+              this.projectFilterParams
+            );
           }
 
           if (this.role === 'hire') {
-            // response = await APIService.sendPostCall(
-            //   `browse/${this.categoryId}/hire?page=${this.page}&limit=${
-            //     this.limit
-            //   }`,
-            //   this.filterParams
-            // );
+            response = await APIService.sendPostCall(
+              `browse/${this.categoryId}?page=${this.page}&limit=${
+                this.limit
+              }&type=hire`,
+              this.userFilterParams
+            );
           }
 
           if (response.length > 0) {
             //Successful response from the API Call
-            this.page = this.page + 1;
             //After the response increasing the offset for the next API call.
             if (this.role === 'work') {
               this.setState({
@@ -529,7 +451,7 @@ export default class Category extends React.PureComponent<Props, State> {
           { nativeEvent: { contentOffset: { y: this.scrollY } } },
         ])}
         data={projectData}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.project_id.toString()}
         style={{ paddingTop: 70 }}
         ListFooterComponent={() => (
           <View style={styles.footer}>
@@ -546,13 +468,13 @@ export default class Category extends React.PureComponent<Props, State> {
         )}
         renderItem={({ item }) => (
           <ProjectCard
-            title={item.title}
-            createdAt={item.created_at}
+            title={item.project_title}
+            createdAt={item.created_on}
             budget={item.budget}
-            location={item.location}
-            onPress={() => onProjectPress(item.id)}
-            proposals={item.proposals}
-            skills={item.req_skills}
+            location={item.state}
+            onPress={() => onProjectPress(item.project_id)}
+            // proposals={item.proposals}
+            skills={JSON.parse(item.req_skills)}
           />
         )}
       />
@@ -568,7 +490,7 @@ export default class Category extends React.PureComponent<Props, State> {
           { nativeEvent: { contentOffset: { y: this.scrollY } } },
         ])}
         data={userData}
-        keyExtractor={(item) => item.userId.toString()}
+        keyExtractor={(item) => item.user_id.toString()}
         style={{ paddingTop: 70 }}
         ListFooterComponent={() => (
           <View style={styles.footer}>
@@ -590,7 +512,7 @@ export default class Category extends React.PureComponent<Props, State> {
             averageReviews={item.average_reviews}
             totalReviews={item.total_reviews}
             userImage={item.user_image}
-            onPress={() => onUserPress(item.userId)}
+            onPress={() => onUserPress(item.user_id)}
           />
         )}
       />

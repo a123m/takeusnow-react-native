@@ -85,68 +85,6 @@ type Portfolio = {
 
 type Response = UserEntity & Portfolio;
 
-const getResponseData = {
-  userId: 1,
-  fname: 'aman',
-  lname: 'chhabra',
-  about: 'Hey I am a snapper',
-  state: 'Uttar Pradesh (UP)',
-  city: 'Agra',
-  DOB: 'Nov 3, 1996',
-  gender: 'Male',
-  work_experience: '1 year',
-  able_to_travel: 'yes',
-  my_skills: '[]',
-  userImage:
-    'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-  portfolio: [
-    {
-      uri:
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-
-      title: 'Switzerland',
-    },
-
-    {
-      uri:
-        'https://i.pinimg.com/564x/a5/1b/63/a51b63c13c7c41fa333b302fc7938f06.jpg',
-
-      title: 'USA',
-    },
-    {
-      uri:
-        'https://guidetoiceland.imgix.net/4935/x/0/top-10-beautiful-waterfalls-of-iceland-8?auto=compress%2Cformat&ch=Width%2CDPR&dpr=1&ixlib=php-2.1.1&w=883&s=1fb8e5e1906e1d18fc6b08108a9dde8d',
-
-      title: 'Iceland',
-    },
-  ],
-  catData: [
-    { cat_id: 0, name: 'Select Category', status: 0 },
-    { cat_id: 1, name: 'Photography', status: 0 },
-    { cat_id: 2, name: 'Videography', status: 0 },
-    { cat_id: 3, name: 'Wedding Planning', status: 0 },
-    { cat_id: 4, name: 'Makeup Artist', status: 0 },
-    { cat_id: 5, name: 'Decoration', status: 0 },
-    { cat_id: 6, name: 'Choreography', status: 0 },
-    { cat_id: 7, name: 'Astrology', status: 0 },
-    { cat_id: 8, name: 'Entertainment', status: 0 },
-  ],
-  subCatData: [
-    { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
-    { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
-    { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
-    { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
-    { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
-    { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
-    { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
-    { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
-  ],
-  my_equipments:
-    '[{ "value": "Canon 350", "rating": 5 },{ "value": "Nikon 560", "rating": 5 }]',
-  languages_known:
-    '[{"value":"English","rating":5},{"value":"Hindi","rating":5}]',
-};
-
 const catData = [
   { cat_id: 0, name: 'Select Category', status: 0 },
   { cat_id: 1, name: 'Photography', status: 0 },
@@ -305,7 +243,10 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
         isLoading: false,
       });
     } catch (err) {
-      console.log(err);
+      this.setState({
+        isLoading: false,
+      });
+      GlobalErr(err);
     }
   };
 
@@ -449,7 +390,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
         <View style={{ justifyContent: 'center', height: 290 }}>
           <View
             style={{
-              height: 260,
+              height: 245,
               paddingTop: 30,
               justifyContent: 'center',
               alignItems: 'center',
@@ -692,7 +633,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
             if (!response) {
               return;
             }
-            Alert.alert('Alert', 'Your data is saved');
+            Alert.alert('Alert', response.message);
           }
         );
       } catch (err) {

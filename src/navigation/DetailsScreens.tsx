@@ -32,8 +32,11 @@ export default class DetailsScreen extends React.PureComponent<Props> {
             showAccept: showAccept,
           })
         }
-        onSendProposal={(title: String) =>
-          navigation.navigate('SendProposal', { title: title })
+        onSendProposal={(projectId: number, title: string) =>
+          navigation.navigate('SendProposal', {
+            projectId: projectId,
+            title: title,
+          })
         }
       />
     );

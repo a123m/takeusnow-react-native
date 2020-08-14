@@ -1,65 +1,13 @@
 import React from 'react';
-import {
-  FlatList,
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { FlatList, View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import moment from 'moment';
 
-import { ReviewCard } from '../../components';
+import { ReviewCard, Spinner } from '../../components';
 import APIService from '../../utils/APIService';
-import { GlobalErr } from '../../utils/utils';
+import { GlobalErr, completeImageUrl } from '../../utils/utils';
 // import APIService from '../../utils/APIService';
 
 import { Styles } from '../../common';
-
-const responseDummy: ResponseType = {
-  average_reviews: 4,
-  total_reviews: 5,
-  reviews: [
-    {
-      fname: 'mike',
-      lname: 'lulu',
-      user_image:
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-      review_text: 'well done bro!',
-      rating: 4,
-      createdAt: moment()
-        .subtract(7, 'd')
-        .toISOString(),
-    },
-    {
-      fname: 'mike',
-      lname: 'lulu',
-      user_image:
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-      review_text: 'well done bro!',
-      rating: 4,
-      createdAt: moment().toISOString(),
-    },
-    {
-      fname: 'mike',
-      lname: 'lulu',
-      user_image:
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-      review_text: 'well done bro!',
-      rating: 4,
-      createdAt: moment().toISOString(),
-    },
-    {
-      fname: 'mike',
-      lname: 'lulu',
-      user_image:
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-      review_text: 'well done bro!',
-      rating: 4,
-      createdAt: moment().toISOString(),
-    },
-  ],
-};
 
 type Props = {
   userId: string | null | undefined;
@@ -71,6 +19,7 @@ type State = {
   reviews: ReviewType[];
   isLoading: boolean;
   isListEnd: boolean;
+  noReviews: boolean;
 };
 
 type ResponseType = {
@@ -83,23 +32,24 @@ type ReviewType = {
   fname: string;
   lname: string;
   user_image: string;
-  review_text: string;
+  description: string;
   rating: number;
-  createdAt: Date | string;
+  created_at: Date | string;
 };
 
 export default class Review extends React.PureComponent<Props, State> {
-  protected userId: string | null | undefined;
-  protected page: number = 0;
-  protected limit: number = 10;
-  constructor(props: any) {
+  private userId: string | null | undefined;
+  private page = 2;
+  private limit = 10;
+  constructor(props: Props) {
     super(props);
     this.state = {
       averageReviews: 0,
       totalReviews: 0,
       reviews: [],
-      isLoading: false,
+      isLoading: true,
       isListEnd: false,
+      noReviews: false,
     };
   }
 
@@ -108,22 +58,40 @@ export default class Review extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = async () => {
-    const { userId } = this.props;
-    if (userId) {
-      this.userId = userId;
-    } else {
-      this.userId = await AsyncStorage.getItem('userId');
-    }
+    try {
+      const { userId } = this.props;
+      if (userId) {
+        this.userId = userId;
+      } else {
+        this.userId = await AsyncStorage.getItem('userId');
+      }
 
-    // const response = await APIService.sendGetCall(
-    //   'reviews/' + this.userId
-    // );
-    const response = responseDummy; //delete this line when API is connected
-    this.setState({
-      averageReviews: response.average_reviews,
-      totalReviews: response.total_reviews,
-      reviews: response.reviews,
-    });
+      const response: ResponseType = await APIService.sendGetCall(
+        '/reviews/' + this.userId
+      );
+
+      if (!response) {
+        return;
+      }
+      if (response.reviews.length === 0) {
+        this.setState({
+          noReviews: true,
+        });
+        return;
+      }
+      const reviews = response.reviews;
+      reviews.forEach((item) => {
+        item.user_image = completeImageUrl(item.user_image);
+      });
+      this.setState({
+        averageReviews: response.average_reviews,
+        totalReviews: response.total_reviews,
+        reviews: reviews,
+        isLoading: false,
+      });
+    } catch (err) {
+      GlobalErr(err);
+    }
   };
 
   _renderTopView = () => {
@@ -169,15 +137,19 @@ export default class Review extends React.PureComponent<Props, State> {
       //On click of Load More button We will call the web API again
       this.setState({ isLoading: true }, async () => {
         try {
-          const response = await APIService.sendGetCall(
-            `reviews/${this.userId}/more?page=${this.page}&limit=${this.limit}`
+          const response: ReviewType[] = await APIService.sendGetCall(
+            `reviews/${this.userId}?page=${this.page}&limit=${this.limit}`
           );
           if (response.length > 0) {
             //Successful response from the API Call
             this.page = this.page + 1;
             //After the response increasing the offset for the next API call.
+            const reviews = response;
+            reviews.forEach((item) => {
+              item.user_image = completeImageUrl(item.user_image);
+            });
             this.setState({
-              reviews: [...this.state.reviews, ...response],
+              reviews: [...this.state.reviews, ...reviews],
               //adding the new data with old one available
               isLoading: false,
               //updating the loading state to false
@@ -200,6 +172,9 @@ export default class Review extends React.PureComponent<Props, State> {
   };
 
   _renderDataView = () => {
+    if (this.state.noReviews) {
+      return this._renderEmptyView();
+    }
     return (
       <FlatList
         keyExtractor={(item, index) => index.toString()}
@@ -207,7 +182,9 @@ export default class Review extends React.PureComponent<Props, State> {
         ListFooterComponent={() => (
           <View style={styles.footer}>
             {this.state.isLoading ? (
-              <ActivityIndicator
+              <Spinner
+                mode="normal"
+                size="large"
                 color={Styles.PrimaryColor2}
                 style={{ margin: 40 }}
               />
@@ -218,21 +195,20 @@ export default class Review extends React.PureComponent<Props, State> {
         renderItem={({ item }) => (
           <ReviewCard
             name={item.fname}
-            value={item.review_text}
+            value={item.description}
             rating={item.rating}
-            createdAt={item.createdAt}
+            createdAt={item.created_at}
           />
         )}
       />
     );
   };
+
   render() {
     return (
       <>
         {this._renderTopView()}
-        {this.state.reviews.length === 0
-          ? this._renderEmptyView()
-          : this._renderDataView()}
+        {this._renderDataView()}
       </>
     );
   }

@@ -1,7 +1,8 @@
 /** @format */
 
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+// eslint-disable-next-line no-unused-vars
+import { View, ActivityIndicator, StyleSheet, ViewStyle } from 'react-native';
 
 import Device from '../../utils/Device';
 
@@ -13,6 +14,7 @@ type Props = {
   mode: 'normal' | 'full' | 'overlay';
   size: any;
   color: string;
+  style?: ViewStyle;
 };
 
 class Spinner extends React.PureComponent<Props> {
@@ -29,7 +31,7 @@ class Spinner extends React.PureComponent<Props> {
         break;
     }
     return (
-      <View style={containerStyle}>
+      <View style={[containerStyle, this.props.style]}>
         <ActivityIndicator
           size={size}
           color={color}
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 3,
-    height: Device.ScreenHeight - 130,
+    height: Device.ScreenHeight - 60,
     width: Device.ScreenWidth,
     flex: 1,
   },

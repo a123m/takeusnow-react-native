@@ -14,7 +14,7 @@ export default class BrowseScreen extends React.PureComponent<Props> {
   static navigationOptions = () => ({
     headerTitle: 'Browse Your Intrust',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
-    headerTintColor: Styles.AppHeaderStyle.headerTintColor
+    headerTintColor: Styles.AppHeaderStyle.headerTintColor,
     // headerRight: () => (
     //   <HeaderRight
     //     name={''}
@@ -28,8 +28,8 @@ export default class BrowseScreen extends React.PureComponent<Props> {
     const { navigate } = this.props.navigation;
     return (
       <Browse
-        _onTilePress={(category: string) => {
-          navigate('Category', { category: category });
+        _onTilePress={(categoryId: number, category: string) => {
+          navigate('Category', { categoryId: categoryId, category: category });
         }}
       />
     );

@@ -23,13 +23,13 @@ export default class ProjectScreen extends React.PureComponent<Props> {
           projectId: number,
           projectStatus: string,
           projectTitle: string,
-          acceptedProposalId: number
+          apId: number
         ) =>
           navigation.navigate('ProjectStatus', {
             projectId: projectId,
             projectStatus: projectStatus,
             projectTitle: projectTitle,
-            acceptedProposalId: acceptedProposalId,
+            apId: apId,
           })
         }
         toPostProject={() => navigation.navigate('PostProject')}

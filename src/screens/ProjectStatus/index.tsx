@@ -83,7 +83,13 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
 
   _renderProposal = () => {
     return (
-      <TouchableOpacity onPress={this.props.toProposal}>
+      <TouchableOpacity
+        onPress={() => {
+          if (this.proposalTick) {
+            this.props.toProposal();
+          }
+        }}
+      >
         <View style={[styles.container]}>
           <View style={styles.smallContainer}>
             <CheckBox checked={this.proposalTick} checkedColor="green" />

@@ -16,7 +16,6 @@ export interface UserEntity {
   status: boolean;
   deleted: boolean;
   about: string;
-  active_projects: number;
   my_skills: string;
   my_equipments: string;
   plan_in_use: string;

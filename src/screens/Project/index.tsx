@@ -1,13 +1,15 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 // eslint-disable-next-line no-unused-vars
 import { ProjectEntity } from '../../modals';
 
-import { FAB, MyProjectCard } from '../../components';
+import { FAB, MyProjectCard, Spinner } from '../../components';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
+
+import { Styles } from '../../common';
 
 interface Props {
   toPostProject: any;
@@ -15,74 +17,42 @@ interface Props {
     projectId: number,
     projectStatus: string,
     projectTitle: string,
-    acceptedProposalId: number | null | undefined
+    apId: number | null | undefined
   ): void;
 }
 
 interface State {
   myProjects: Array<ProjectEntity>;
+  isLoading: boolean;
 }
 
-const responseDummy: ProjectEntity[] = [
-  {
-    id: 23,
-    status: 'IN PROGRESS',
-    title: 'Marriage Photograph',
-    posted_on: '2020-07-23T16:28:54.976Z',
-    accepted_proposal_id: 0,
-  },
-  {
-    id: 2,
-    status: 'ACTIVE',
-    title: 'Marriage Photograph',
-    posted_on: '2020-07-23T16:28:54.976Z',
-    accepted_proposal_id: null,
-  },
-  {
-    id: 3,
-    status: 'CLOSE',
-    title: 'Marriage Photograph',
-    posted_on: '2020-07-23T16:28:54.976Z',
-    accepted_proposal_id: 3,
-  },
-  {
-    id: 5,
-    status: 'CLOSE REQUEST',
-    title: 'Marriage Photograph',
-    posted_on: '2020-07-23T16:28:54.976Z',
-    accepted_proposal_id: 3,
-  },
-];
-
 export default class Project extends React.PureComponent<Props, State> {
-  userId: Promise<string | null>;
-  role: Promise<string | null> | string;
-  constructor(props: any) {
+  userId: string | null | undefined;
+  role: string | null | undefined;
+  constructor(props: Props) {
     super(props);
     this.state = {
       myProjects: [],
+      isLoading: true,
     };
-    this.role = AsyncStorage.getItem('role');
-    this.userId = AsyncStorage.getItem('userId');
   }
 
   componentDidMount() {
-    // this.setDefaultView();
-    this.setState({
-      myProjects: responseDummy,
-    });
+    this.setDefaultView();
   }
 
   setDefaultView = async () => {
-    let params = {
-      userId: this.userId,
-    };
+    this.role = await AsyncStorage.getItem('role');
+    this.userId = await AsyncStorage.getItem('userId');
 
     try {
-      const response = await APIService.sendPostCall('project/main', params);
+      const response: ProjectEntity[] = await APIService.sendGetCall(
+        'project/' + this.userId
+      );
 
       this.setState({
         myProjects: response,
+        isLoading: false,
       });
     } catch (err) {
       GlobalErr(err);
@@ -90,36 +60,49 @@ export default class Project extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { myProjects } = this.state;
+    const { myProjects, isLoading } = this.state;
     const { toPostProject, toProjectStatus } = this.props;
+    if (myProjects.length === 0 && !isLoading) {
+      return (
+        <View style={styles.viewStyle}>
+          <Text>No Projects!</Text>
+        </View>
+      );
+    }
     return (
       <>
-        {myProjects.length !== 0 ? (
-          <ScrollView>
-            {myProjects.map((item) => {
-              return (
-                <MyProjectCard
-                  key={item.id}
-                  status={item.status}
-                  title={item.title}
-                  postedOn={item.posted_on}
-                  onPress={() =>
-                    toProjectStatus(
-                      item.id,
-                      item.status,
-                      item.title,
-                      item.accepted_proposal_id
-                    )
-                  }
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={myProjects}
+          ListFooterComponent={() => (
+            <View style={styles.footer}>
+              {isLoading ? (
+                <Spinner
+                  mode="normal"
+                  size="large"
+                  color={Styles.PrimaryColor2}
+                  style={{ margin: 40 }}
                 />
-              );
-            })}
-          </ScrollView>
-        ) : (
-          <View style={styles.viewStyle}>
-            <Text>No Projects!</Text>
-          </View>
-        )}
+              ) : null}
+            </View>
+          )}
+          renderItem={({ item }) => (
+            <MyProjectCard
+              key={item.project_id}
+              status={item.project_status}
+              title={item.project_title}
+              postedOn={item.created_on}
+              onPress={() =>
+                toProjectStatus(
+                  item.project_id,
+                  item.project_status,
+                  item.project_title,
+                  item.ap_id
+                )
+              }
+            />
+          )}
+        />
         {this.role === 'work' ? <FAB onPress={toPostProject} /> : null}
       </>
     );
@@ -131,5 +114,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  footer: {
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 });

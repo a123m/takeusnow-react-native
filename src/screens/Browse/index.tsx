@@ -15,11 +15,12 @@ import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 // import { Styles } from '../../common';
 
 interface Props {
-  _onTilePress: Function;
+  _onTilePress(categoryId: number, insideText: string): void;
 }
 
 export default class Browse extends React.PureComponent<Props> {
   _renderTileView = (
+    categoryId: number,
     insideText: string,
     iconName: string,
     iconType: string,
@@ -40,7 +41,7 @@ export default class Browse extends React.PureComponent<Props> {
 
     return (
       <TouchableNativeFeedback
-        onPress={() => this.props._onTilePress(insideText)}
+        onPress={() => this.props._onTilePress(categoryId, insideText)}
       >
         <View style={styles.container}>
           {myIcon}
@@ -56,8 +57,15 @@ export default class Browse extends React.PureComponent<Props> {
       <ScrollView>
         <View style={styles.mainContainer}>
           <View style={styles.rowContainer}>
-            {this._renderTileView('Photography', 'photograph', 'Fontisto', 30)}
             {this._renderTileView(
+              1,
+              'Photography',
+              'photograph',
+              'Fontisto',
+              30
+            )}
+            {this._renderTileView(
+              2,
               'Videography',
               'videocamera',
               'AntDesign',
@@ -66,12 +74,14 @@ export default class Browse extends React.PureComponent<Props> {
           </View>
           <View style={styles.rowContainer}>
             {this._renderTileView(
+              3,
               'Wedding Planner',
               'event',
               'SimpleLineIcons',
               30
             )}
             {this._renderTileView(
+              4,
               'Makeup Artist',
               'hourglass',
               'SimpleLineIcons',
@@ -79,8 +89,15 @@ export default class Browse extends React.PureComponent<Props> {
             )}
           </View>
           <View style={styles.rowContainer}>
-            {this._renderTileView('Decoration', 'badge', 'SimpleLineIcons', 30)}
             {this._renderTileView(
+              5,
+              'Decoration',
+              'badge',
+              'SimpleLineIcons',
+              30
+            )}
+            {this._renderTileView(
+              6,
               'Choreography',
               'people',
               'SimpleLineIcons',
@@ -89,12 +106,14 @@ export default class Browse extends React.PureComponent<Props> {
           </View>
           <View style={styles.rowContainer}>
             {this._renderTileView(
+              7,
               'Astrology',
               'pie-chart',
               'SimpleLineIcons',
               30
             )}
             {this._renderTileView(
+              8,
               'Entertainment',
               'playlist',
               'SimpleLineIcons',

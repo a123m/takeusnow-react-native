@@ -3,16 +3,13 @@ export interface ProjectEntity {
   project_title: string;
   project_description: string;
   project_status: string;
-  provider_id: number;
+  project_owner_id: number;
   created_on: string;
   updated_on: string;
-  budget: string;
-  location: string;
-  req_skills: string[];
+  req_skills: any;
   req_on: string;
-  user_id: number;
-  accepted_proposal_id: number | null;
   state: string;
   city: string;
-  category_id: number;
+  budget: number;
+  ap_id: number;
 }

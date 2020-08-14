@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { CheckBox } from 'react-native-elements';
-import Moment from 'moment'
+import Moment from 'moment';
 
 import { AppInput, AppButton } from '../../components';
 import Globals from '../../utils/Globals';
@@ -51,23 +51,23 @@ export default class PostProject4 extends React.PureComponent<Props, State> {
 
     Globals.PostProject.budget = budget;
 
-    let params = {
+    const payload = {
       title: Globals.PostProject.title,
       detail: Globals.PostProject.detail,
       category: Globals.PostProject.category,
       state: Globals.PostProject.state,
       city: Globals.PostProject.city,
       budget: parseInt(Globals.PostProject.budget),
-      validity: Moment().add(7,'d'),
+      validity: Moment().add(7, 'd'),
       status: Globals.PostProject.status,
       // type: Globals.PostProject.type,
       requireSkills: Globals.PostProject.skills,
       createdAt: Moment(),
     };
-    console.log('params', params);
+    console.log('payload', payload);
 
     try {
-      const response = APIService.sendPutCall('project/create', params);
+      const response = APIService.sendPutCall('project/create', payload);
       console.log('res', response);
       toProject();
     } catch (err) {
