@@ -11,6 +11,7 @@ export default class ProfileEditScreen extends React.PureComponent<any> {
     headerTitle: 'My Profile',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
+    headerStyle: Styles.AppHeaderStyle.headerStyle,
     headerRight: () => (
       <HeaderRight
         name={'settings'}

@@ -3,10 +3,8 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import { Styles } from '../common/index';
+import { Styles } from '../common';
 
 import SplashScreen from './SplashScreen';
 import SignInScreen from './SignInScreen';
@@ -86,6 +84,7 @@ const ProjectStack = createStackNavigator({
   Details: DetailsScreen,
   Proposal: ProposalScreen,
   Profile: ProfileScreen,
+  Review: ReviewScreen,
   PostProject: PostProjectScreen,
   PostProject2: PostProjectScreen2,
   PostProject3: PostProjectScreen3,
@@ -111,14 +110,6 @@ const BrowseStack = createStackNavigator({
   SendProposal: SendProposalScreen,
   Profile: ProfileScreen,
   Review: ReviewScreen,
-  // Profile: {
-  //   screen: _tabNavigator,
-  //   navigationOptions: ({ navigation }) => ({
-
-  //     headerTitle:navigation.getParam(''),
-  //     header: () => <ProfileScreen navigation={navigation} />,
-  //   }),
-  // },
 });
 
 BrowseStack.navigationOptions = ({ navigation }: any) => {
@@ -151,7 +142,7 @@ ProfileStack.navigationOptions = ({ navigation }: any) => {
 
 const AppTab = createBottomTabNavigator(
   {
-    Home: HomeStack,
+    Home: { screen: HomeStack, navigationOptions: { title: 'Header title' } },
     Project: ProjectStack,
     Browse: BrowseStack,
     Profile: ProfileStack,

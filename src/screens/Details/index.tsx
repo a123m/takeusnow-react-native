@@ -278,7 +278,7 @@ export default class Details extends React.PureComponent<Props, State> {
 
   _renderStickyButton = () => {
     const { onSendProposal, projectId } = this.props;
-    const { title } = this.state;
+    const { title, proposals } = this.state;
     return (
       <View
         style={{
@@ -297,7 +297,7 @@ export default class Details extends React.PureComponent<Props, State> {
           <Text>Proposals Send</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Icon name={'user'} />
-            <Text> 20</Text>
+            <Text> {proposals.length}</Text>
           </View>
         </View>
         <View

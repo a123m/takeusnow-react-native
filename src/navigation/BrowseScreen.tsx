@@ -15,6 +15,7 @@ export default class BrowseScreen extends React.PureComponent<Props> {
     headerTitle: 'Browse Your Intrust',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
+    headerStyle: Styles.AppHeaderStyle.headerStyle,
     // headerRight: () => (
     //   <HeaderRight
     //     name={''}

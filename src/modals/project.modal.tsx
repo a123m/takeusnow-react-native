@@ -3,7 +3,7 @@ export interface ProjectEntity {
   project_title: string;
   project_description: string;
   project_status: string;
-  project_owner_id: number;
+  owner_id: number;
   created_on: string;
   updated_on: string;
   req_skills: any;
@@ -11,5 +11,5 @@ export interface ProjectEntity {
   state: string;
   city: string;
   budget: number;
-  ap_id: number;
+  ap_id: number; //accepted_proposal_id
 }

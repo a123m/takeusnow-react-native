@@ -2,12 +2,12 @@ import React from 'react';
 import { Text, StyleSheet, View, Alert } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import { AppCard, AppInput, AppButton } from '../../components';
+import { AppCard, AppInput, AppButton, Spinner } from '../../components';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 
 // eslint-disable-next-line no-unused-vars
-import { UserEntity, ProposalEntity } from '../../modals';
+import { UserEntity } from '../../modals';
 
 import { Styles } from '../../common';
 
@@ -21,6 +21,7 @@ interface State {
   allowedBids: number;
   totalBids: number;
   budget: string;
+  isLoading: boolean;
 }
 
 export default class SendProposal extends React.PureComponent<Props, State> {
@@ -29,10 +30,12 @@ export default class SendProposal extends React.PureComponent<Props, State> {
     super(props);
     this.state = {
       input: '',
+      budget: '',
 
       allowedBids: 0,
       totalBids: 0,
-      budget: '',
+
+      isLoading: false,
     };
   }
 
@@ -69,25 +72,44 @@ export default class SendProposal extends React.PureComponent<Props, State> {
   };
 
   sendProposalHandler = async () => {
-    const { input, budget } = this.state;
+    const { input, budget, allowedBids } = this.state;
+    if (allowedBids === 0) {
+      Alert.alert('Alert', 'You have no proposals to send.');
+      return;
+    }
     if (input.length < 100) {
-      Alert.alert('Alert', 'Please write at least 100 words in you proposal');
+      Alert.alert('Alert', 'Please write at least 100 words in you proposal.');
       return;
     }
 
-    const payload: Partial<ProposalEntity> = {
-      user_id: this.userId,
-      project_id: this.props.projectId,
-      proposal_description: input,
-      proposed_amount: parseInt(budget),
+    if (parseInt(budget) < 500) {
+      Alert.alert('Alert', 'Minimum 500 budget is required.');
+      return;
+    }
+
+    this.setState({
+      isLoading: true,
+    });
+
+    const payload = {
+      userId: this.userId,
+      projectId: this.props.projectId,
+      proposalDescription: input,
+      proposedAmount: parseInt(budget),
     };
     try {
       const response = await APIService.sendPostCall(
-        'browse/proposal',
+        'browse/proposal/send',
         payload
       );
+      this.setState({
+        isLoading: false,
+      });
       if (response) {
         Alert.alert('Alert', 'Proposal is send!');
+        this.setState({
+          allowedBids: this.state.allowedBids - 1,
+        });
       }
     } catch (err) {
       GlobalErr(err);
@@ -184,6 +206,9 @@ export default class SendProposal extends React.PureComponent<Props, State> {
           </View>
         </View>
         <AppButton onPress={this.sendProposalHandler}>Send Proposal</AppButton>
+        {this.state.isLoading ? (
+          <Spinner mode="overlay" size="large" color="white" />
+        ) : null}
       </AppCard>
     );
   }

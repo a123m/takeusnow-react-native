@@ -50,18 +50,16 @@ export default class Settings extends React.PureComponent<Props, State> {
             <Text style={styles.textStyle}>Help</Text>
           </View>
           <View style={styles.smallContainer}>
-            <Text style={styles.textStyle}>Terms & Condotion</Text>
+            <Text style={styles.textStyle}>Terms & Condition</Text>
           </View>
           <View style={styles.smallContainer}>
             <Text style={styles.textStyle}>App Version</Text>
             <Text style={[styles.textStyle, { color: 'silver' }]}>1.0.0</Text>
           </View>
         </View>
-        <View style={[styles.containerStyle, { justifyContent: 'center' }]}>
-          <AppButton iconName="logout" onPress={this._signOutAsync}>
-            Sign Out
-          </AppButton>
-        </View>
+        <AppButton iconName="logout" onPress={this._signOutAsync}>
+          Sign Out
+        </AppButton>
       </View>
     );
   }

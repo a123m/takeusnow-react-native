@@ -1,7 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Splash from 'react-native-splash-screen';
 
 type Props = {
   navigation: any;

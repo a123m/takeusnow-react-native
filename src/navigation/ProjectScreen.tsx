@@ -13,6 +13,7 @@ export default class ProjectScreen extends React.PureComponent<Props> {
     headerTitle: 'My Projects',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
+    headerStyle: Styles.AppHeaderStyle.headerStyle,
   });
 
   render() {

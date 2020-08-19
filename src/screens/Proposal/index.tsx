@@ -5,8 +5,8 @@ import moment from 'moment';
 // eslint-disable-next-line no-unused-vars
 import { ProposalEntity, UserEntity } from '../../modals';
 
-import { Avatar, AppButton } from '../../components';
-import { GlobalErr } from '../../utils/utils';
+import { Avatar, AppButton, Spinner } from '../../components';
+import { GlobalErr, completeImageUrl } from '../../utils/utils';
 import APIService from '../../utils/APIService';
 
 interface Props {
@@ -22,6 +22,7 @@ interface State {
   userImage: string;
   createdAt: string;
   proposedAmount: number;
+  isLoading: boolean;
 }
 
 type ResponseType = ProposalEntity & UserEntity;
@@ -38,6 +39,8 @@ export default class Proposal extends React.PureComponent<Props, State> {
       proposalText: '',
       userImage: '',
       createdAt: '',
+
+      isLoading: true,
     };
     this.showAccept = this.props.showAccept;
   }
@@ -53,14 +56,16 @@ export default class Proposal extends React.PureComponent<Props, State> {
         '/browse/proposal/' + proposalId
       );
 
-      const fullName = response.fname.concat(response.lname);
+      const fullName = response.fname.concat(' ', response.lname);
 
       this.setState({
         name: fullName,
         proposalText: response.proposal_description,
         userId: response.user_id,
-        userImage: response.user_image,
+        userImage: completeImageUrl(response.user_image),
         createdAt: response.created_on,
+        proposedAmount: response.proposed_amount,
+        isLoading: false,
       });
     } catch (err) {
       GlobalErr(err);
@@ -119,7 +124,7 @@ export default class Proposal extends React.PureComponent<Props, State> {
                     </View>
                     <View style={{ flex: 0.2 }}>
                       <Text style={{ fontSize: 16, textAlign: 'right' }}>
-                        ₹ {proposedAmount}
+                        ₹{proposedAmount}
                       </Text>
                     </View>
                   </View>
@@ -141,6 +146,9 @@ export default class Proposal extends React.PureComponent<Props, State> {
         </ScrollView>
         {this.showAccept ? (
           <AppButton onPress={this.acceptHandler}>Accept</AppButton>
+        ) : null}
+        {this.state.isLoading ? (
+          <Spinner mode="overlay" size="large" color="white" />
         ) : null}
       </View>
     );

@@ -33,7 +33,7 @@ interface Props {
   categoryId: number;
   category: string;
   onProjectPress: any;
-  showFilterModal: any;
+  showFilterModal: boolean;
   filterModalHandler(): void;
   onUserPress(userId: number): void;
 }
@@ -173,7 +173,7 @@ export default class Category extends React.PureComponent<Props, State> {
       }
     }
     return (
-      <AppModal visible={showFilterModal}>
+      <AppModal onRequestClose={filterModalHandler} visible={showFilterModal}>
         <View style={styles.modalContainer}>
           <View>
             <View

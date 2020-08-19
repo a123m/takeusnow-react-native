@@ -75,7 +75,7 @@ export default class Browse extends React.PureComponent<Props> {
           <View style={styles.rowContainer}>
             {this._renderTileView(
               3,
-              'Wedding Planner',
+              'Wedding Planners',
               'event',
               'SimpleLineIcons',
               30

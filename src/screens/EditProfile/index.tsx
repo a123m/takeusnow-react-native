@@ -25,7 +25,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import ImagePicker from 'react-native-image-picker';
-import ImageView from 'react-native-image-view';
+import ImageView from 'react-native-image-viewing';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
@@ -201,13 +201,15 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
         this.combinedCatData.push(catObj);
       }
 
-      let portfolio = response.portfolio;
+      let portfolio: any = response.portfolio;
       if (!portfolio) {
         portfolio = [];
       }
+
       if (portfolio.length > 0) {
-        portfolio.forEach((item) => {
+        portfolio.forEach((item: any) => {
           item.image_url = completeImageUrl(item.image_url);
+          item.uri = item.image_url;
         });
       }
 
@@ -355,6 +357,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
           const imageObj = {
             portfolio_id: apiResponse.portfolio_id,
             image_url: completeImageUrl(apiResponse.image_url),
+            uri: completeImageUrl(apiResponse.image_url),
             image_name: apiResponse.image_name,
           };
 
@@ -478,7 +481,6 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
         </>
       );
     }
-    const portfolioLength = portfolio.length - 1;
     return (
       <AppCard style={{ overflow: 'visible' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -498,7 +500,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
           style={styles.portfolioStyle}
           data={portfolio}
           horizontal={true}
-          keyExtractor={(item, index: number) => index.toString()}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }: any) => (
             <View>
               <TouchableOpacity
@@ -518,8 +520,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                         const response = await APIService.sendDelCall(
                           '/profile/portfolio/' + item.portfolio_id
                         );
-                        //Need testing for negative test
-                        console.log('resposne', response);
+                        //Need negative testing
                         if (!response) {
                           return;
                         }
@@ -530,52 +531,20 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                           isLoading: false,
                         });
                       }}
-                      style={[
-                        styles.crossIconStyle,
-                        index === portfolioLength ? { marginRight: 20 } : {},
-                      ]}
+                      style={[styles.crossIconStyle]}
                     >
                       <Icon name="close" size={35} color="white" />
                     </TouchableOpacity>
                   ) : null}
-
-                  {index === portfolioLength ? (
-                    <Image
-                      style={{
-                        width: 300,
-                        height: 200,
-                        borderRadius: 30,
-                        marginRight: 15,
-                      }}
-                      source={{ uri: item.image_url }}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <View>
-                      {index === 0 ? (
-                        <Image
-                          style={{
-                            width: 300,
-                            height: 200,
-                            borderRadius: 30,
-                            marginLeft: 20,
-                          }}
-                          source={{ uri: item.image_url }}
-                          resizeMode="cover"
-                        />
-                      ) : (
-                        <Image
-                          style={{
-                            width: 300,
-                            height: 200,
-                            borderRadius: 30,
-                          }}
-                          source={{ uri: item.image_uri }}
-                          resizeMode="cover"
-                        />
-                      )}
-                    </View>
-                  )}
+                  <Image
+                    style={{
+                      width: 300,
+                      height: 200,
+                      borderRadius: 30,
+                    }}
+                    source={{ uri: item.image_url }}
+                    resizeMode="cover"
+                  />
                 </View>
               </TouchableOpacity>
             </View>
@@ -878,7 +847,10 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
   _renderSkillModal = () => {
     const { selectedSubCat } = this.state;
     return (
-      <AppModal visible={this.state.showSkillModal}>
+      <AppModal
+        onRequestClose={() => this.setState({ showSkillModal: false })}
+        visible={this.state.showSkillModal}
+      >
         <View style={styles.modalContainer}>
           <View>
             <View
@@ -988,7 +960,10 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
   _renderEquipmentsModal = () => {
     const { enteredEquipment, selectedRating } = this.state;
     return (
-      <AppModal visible={this.state.showEquipmentsModal}>
+      <AppModal
+        onRequestClose={() => this.setState({ showEquipmentsModal: false })}
+        visible={this.state.showEquipmentsModal}
+      >
         <View style={styles.modalContainer}>
           <View>
             <View
@@ -1017,6 +992,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                   this.setState({ enteredEquipment });
                 }}
                 placeholder="Enter Name of Equipment"
+                style={styles.modalInput}
               />
             </View>
 
@@ -1216,8 +1192,11 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
   _renderLanguagesModal = () => {
     const { enteredLanguage, selectedRating } = this.state;
     return (
-      <AppModal visible={this.state.showLanguagesModal}>
-        <AppCard>
+      <AppModal
+        onRequestClose={() => this.setState({ showLanguagesModal: false })}
+        visible={this.state.showLanguagesModal}
+      >
+        <View style={styles.modalContainer}>
           <View>
             <View
               style={{
@@ -1247,6 +1226,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                 }}
                 placeholder="Ex:- English."
                 maxLength={10}
+                style={styles.modalInput}
               />
             </View>
 
@@ -1276,59 +1256,35 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                 </View>
               </View>
             ) : null}
-            {selectedRating !== 0 && enteredLanguage !== '' ? (
-              <AppButton
-                style={{ margin: 10 }}
-                onPress={() => {
-                  if (this.state.languagesData.length === 3) {
-                    Alert.alert(
-                      'Alert',
-                      'Language selection limit has reached, Please remove old Languages to add new.'
-                    );
-                    return;
-                  }
-                  let languageObj = {
-                    value: this.state.enteredLanguage,
-                    rating: this.state.selectedRating,
-                  };
-
-                  this.setState({
-                    languagesData: [languageObj, ...this.state.languagesData],
-                    enteredLanguage: '',
-                    selectedRating: 0,
-                  });
-                }}
-              >
-                ADD
-              </AppButton>
-            ) : null}
           </View>
-        </AppCard>
+          {selectedRating !== 0 && enteredLanguage !== '' ? (
+            <AppButton
+              style={{ margin: 10 }}
+              onPress={() => {
+                if (this.state.languagesData.length === 3) {
+                  Alert.alert(
+                    'Alert',
+                    'Language selection limit has reached, Please remove old Languages to add new.'
+                  );
+                  return;
+                }
+                let languageObj = {
+                  value: this.state.enteredLanguage,
+                  rating: this.state.selectedRating,
+                };
+
+                this.setState({
+                  languagesData: [languageObj, ...this.state.languagesData],
+                  enteredLanguage: '',
+                  selectedRating: 0,
+                });
+              }}
+            >
+              ADD
+            </AppButton>
+          ) : null}
+        </View>
       </AppModal>
-    );
-  };
-
-  _renderLanguagesKnown = () => {
-    const { allowEdit, enteredLanguage } = this.state;
-    return (
-      <AppCard>
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-          Languages Known
-        </Text>
-        {allowEdit ? (
-          <AppInput
-            placeholder={'Ex:- English, Hindi'}
-            onChangeText={(enteredLanguage: string) => {
-              this.setState({ enteredLanguage });
-            }}
-            value={enteredLanguage}
-          />
-        ) : (
-          <View style={{ margin: 6 }}>
-            <Text>{enteredLanguage}</Text>
-          </View>
-        )}
-      </AppCard>
     );
   };
 
@@ -1372,7 +1328,14 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { isLoading, showDatePicker, dateOfBirth } = this.state;
+    const {
+      isLoading,
+      showDatePicker,
+      dateOfBirth,
+      portfolio,
+      imageIndex,
+      isImageViewVisible,
+    } = this.state;
     return (
       <ScrollView scrollEnabled={!isLoading}>
         {this._renderSkillModal()}
@@ -1387,15 +1350,11 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
         {this._renderOthers()}
         {this._renderLanguagesSection()}
         <ImageView
-          glideAlways
-          images={this.state.portfolio}
-          imageIndex={this.state.imageIndex}
+          images={portfolio}
+          imageIndex={imageIndex}
           animationType="slide"
-          isVisible={this.state.isImageViewVisible}
-          onClose={() => this.setState({ isImageViewVisible: false })}
-          // onImageChange={index => {
-          //     console.log(index);
-          // }}
+          visible={isImageViewVisible}
+          onRequestClose={() => this.setState({ isImageViewVisible: false })}
         />
         {showDatePicker && (
           <DateTimePicker
@@ -1449,13 +1408,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10,
     right: 0,
-    margin: 5,
+    margin: 10,
   },
   portfolioStyle: {
     height: 205,
-    marginLeft: '-4%',
-    marginRight: '-4%',
     marginTop: 5,
   },
   modalContainer: { padding: 10, flex: 1, justifyContent: 'space-between' },
+  modalInput: { textAlign: 'center' },
 });

@@ -51,7 +51,6 @@ export function completeImageUrl(url: string): string {
 export function GlobalErr(err: Error) {
   if (Config.Debug) {
     console.log('Global Error', err);
-    Alert.alert('Alert', err.message);
   } else {
     if (err.message.includes('_context.t0.response.data')) {
       Alert.alert(

@@ -27,34 +27,34 @@ import { Styles } from '../../common';
 
 const data = [
   {
-    name: 'Photographers',
-    category: 'animation',
+    name: 'Photography',
+    categoryId: 1,
     image: require('../../../assets/images/photography.jpg'),
   },
   {
-    name: 'Videographers',
-    category: 'animation',
+    name: 'Videography',
+    categoryId: 2,
     image: require('../../../assets/images/videography.jpg'),
   },
   {
     name: 'Wedding Planners',
-    category: 'animation',
+    categoryId: 3,
     image: require('../../../assets/images/planner.jpg'),
   },
   {
-    name: 'Astrology',
-    category: 'animation',
-    image: require('../../../assets/images/astrology.jpg'),
-  },
-  {
     name: 'Makeup artist',
-    category: 'animation',
+    categoryId: 4,
     image: require('../../../assets/images/makeup.jpg'),
   },
   {
-    name: 'Choreographer',
-    category: 'animation',
+    name: 'Choreography',
+    categoryId: 6,
     image: require('../../../assets/images/art.jpg'),
+  },
+  {
+    name: 'Astrology',
+    categoryId: 7,
+    image: require('../../../assets/images/astrology.jpg'),
   },
 ];
 
@@ -238,7 +238,9 @@ export default class Home extends React.PureComponent<any, any> {
             renderItem={({ item }) => (
               <ExploreCard
                 name={item.name}
-                onPress={() => this.props.toCategory(item.category)}
+                onPress={() =>
+                  this.props.toCategory(item.categoryId, item.name)
+                }
                 image={item.image}
               />
             )}

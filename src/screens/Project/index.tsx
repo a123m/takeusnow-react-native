@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import { NavigationEvents } from 'react-navigation';
 
 // eslint-disable-next-line no-unused-vars
 import { ProjectEntity } from '../../modals';
@@ -46,9 +47,12 @@ export default class Project extends React.PureComponent<Props, State> {
     this.userId = await AsyncStorage.getItem('userId');
 
     try {
-      const response: ProjectEntity[] = await APIService.sendGetCall(
+      let response: ProjectEntity[] = await APIService.sendGetCall(
         'project/' + this.userId
       );
+      if (!response) {
+        response = [];
+      }
 
       this.setState({
         myProjects: response,
@@ -71,6 +75,7 @@ export default class Project extends React.PureComponent<Props, State> {
     }
     return (
       <>
+        <NavigationEvents onDidFocus={this.setDefaultView} />
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={myProjects}
@@ -97,7 +102,7 @@ export default class Project extends React.PureComponent<Props, State> {
                   item.project_id,
                   item.project_status,
                   item.project_title,
-                  item.ap_id
+                  item.ap_id //accepted_proposal_id
                 )
               }
             />

@@ -29,7 +29,7 @@ type input = {
   numberOfLines?: any;
   onContentSizeChange?: any;
   placeholderTextColor?: any;
-  maxLength?:number | undefined;
+  maxLength?: number | undefined;
 };
 
 const AppInput = (props: input) => {
@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
   input: {
     // height: 40,
     textAlign: 'left',
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
     // paddingLeft: 15,
     // paddingRight: 15
-  }
+  },
 });
 
 export default AppInput;

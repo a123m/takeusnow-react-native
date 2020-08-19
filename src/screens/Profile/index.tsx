@@ -12,11 +12,12 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-import ImageView from 'react-native-image-view';
+import ImageView from 'react-native-image-viewing';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-import { Avatar, SkillBox, AppCard, BoxText } from '../../components';
-// import APIService from '../../utils/APIService';
+import { Avatar, SkillBox, AppCard, BoxText, Loader } from '../../components';
+import APIService from '../../utils/APIService';
+import { completeImageUrl, GlobalErr } from '../../utils/utils';
 
 import { Styles } from '../../common';
 
@@ -37,7 +38,7 @@ interface State {
   city: string;
   selectedSkill: string;
   selectedRating: number;
-  user_image: any;
+  userImage: any;
   imageIndex: number;
   portfolio: Array<any>;
   languagesData: Array<object>;
@@ -50,88 +51,30 @@ interface State {
   selectedItems: Array<any>;
   showMore: boolean;
   isImageViewVisible: boolean;
+  isLoading: boolean;
 }
 
-const getResponseData = {
-  id: 1,
-  fname: 'aman',
-  lname: 'chhabra',
-  about: 'Hey I am a snapper',
-  state: 'Uttar Pradesh (UP)',
-  city: 'Agra',
-  DOB: 'Nov 3, 1996',
-  gender: 'Male',
-  work_experience: '1 year',
-  able_to_travel: 'yes',
-  sub_cat: '[]',
-  user_image:
-    'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-  portfolio: [
-    {
-      source: {
-        uri:
-          'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-      },
-      title: 'Switzerland',
-    },
-
-    {
-      source: {
-        uri:
-          'https://i.pinimg.com/564x/a5/1b/63/a51b63c13c7c41fa333b302fc7938f06.jpg',
-      },
-      title: 'USA',
-    },
-    {
-      source: {
-        uri:
-          'https://guidetoiceland.imgix.net/4935/x/0/top-10-beautiful-waterfalls-of-iceland-8?auto=compress%2Cformat&ch=Width%2CDPR&dpr=1&ixlib=php-2.1.1&w=883&s=1fb8e5e1906e1d18fc6b08108a9dde8d',
-      },
-      title: 'Iceland',
-    },
-  ],
-  catData: [
-    { cat_id: 0, name: 'Select Category', status: 0 },
-    { cat_id: 1, name: 'Photography', status: 0 },
-    { cat_id: 2, name: 'Videography', status: 0 },
-    { cat_id: 3, name: 'Wedding Planning', status: 0 },
-    { cat_id: 4, name: 'Makeup Artist', status: 0 },
-    { cat_id: 5, name: 'Decoration', status: 0 },
-    { cat_id: 6, name: 'Choreography', status: 0 },
-    { cat_id: 7, name: 'Astrology', status: 0 },
-    { cat_id: 8, name: 'Entertainment', status: 0 },
-  ],
-  subCatData: [
-    { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
-    { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
-    { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
-    { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
-    { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
-    { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
-    { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
-    { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
-  ],
-  my_equipments:
-    '[{ "value": "Canon 350", "rating": 5 },{ "value": "Nikon 560", "rating": 5 }]',
-  languages_known:
-    '[{"value":"English","rating":5},{"value":"Hindi","rating":5}]',
-};
-
-interface Response {
-  profile: ProfileData;
-}
-
-interface ProfileData {
-  userId: number;
-  about: string;
-  project_completed: string;
-  repeated_hire: string;
-  work_on_time: string;
-  work_knowledge: string;
-  my_skills: string;
-  fname: string;
-  lname: string;
-}
+const catData = [
+  { cat_id: 0, name: 'Select Category', status: 0 },
+  { cat_id: 1, name: 'Photography', status: 0 },
+  { cat_id: 2, name: 'Videography', status: 0 },
+  { cat_id: 3, name: 'Wedding Planning', status: 0 },
+  { cat_id: 4, name: 'Makeup Artist', status: 0 },
+  { cat_id: 5, name: 'Decoration', status: 0 },
+  { cat_id: 6, name: 'Choreography', status: 0 },
+  { cat_id: 7, name: 'Astrology', status: 0 },
+  { cat_id: 8, name: 'Entertainment', status: 0 },
+];
+const subCatData = [
+  { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
+  { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
+  { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
+  { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
+  { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
+  { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
+  { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
+  { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
+];
 
 export default class Profile extends React.PureComponent<Props, State> {
   private combinedCatData: any = [];
@@ -157,14 +100,12 @@ export default class Profile extends React.PureComponent<Props, State> {
   });
   name = '';
   about = '';
-  constructor(props: any) {
+  userId = this.props.userId;
+  constructor(props: Props) {
     super(props);
-    this.name = 'Aman Chhabra';
-
     this.state = {
-      fullName: 'Aman Chhabra',
-      user_image: '',
-      imageIndex: 0,
+      fullName: '',
+      userImage: '',
       about: '',
       state: 'Select State',
       city: 'Select City',
@@ -172,9 +113,9 @@ export default class Profile extends React.PureComponent<Props, State> {
       selectedRating: 0,
       ableToTravel: 'No',
       enteredLanguage: '',
-      workExperience: '1 year',
+      workExperience: '',
       gender: 'Male',
-      dateOfBirth: 'Nov 3, 1996',
+      dateOfBirth: '',
       enteredEquipment: '',
 
       skillData: [],
@@ -185,25 +126,28 @@ export default class Profile extends React.PureComponent<Props, State> {
       selectedSubCat: [],
 
       height: 0,
+      imageIndex: 0,
+
       showMore: false,
       isImageViewVisible: false,
+      isLoading: true,
     };
   }
 
   componentDidMount() {
-    // this.setDefaultView();
-    // this.setState({
-    //   about: 'hello',
-    // });
+    this.setDefaultView();
   }
 
   setDefaultView = async () => {
     try {
-      // const response = await APIService.sendGetCall(
-      //   '/profile/main' + this.props.userId
-      // );
+      const response = await APIService.sendGetCall('/profile/' + this.userId);
+      if (!response) {
+        this.setState({ isLoading: false });
+        return;
+      }
 
-      const response = getResponseData;
+      const fullName: string = response.fname.concat(' ', response.lname);
+
       let state = response.state;
       let city = response.city;
       if (response.state === '' || response.state === null || !state) {
@@ -213,13 +157,16 @@ export default class Profile extends React.PureComponent<Props, State> {
         city = 'Select City';
       }
 
-      let user_image = response.user_image;
-      if (!user_image) {
-        user_image = '';
+      let userImage = response.user_image;
+      if (!userImage) {
+        userImage = '';
+      }
+      if (userImage.length > 0) {
+        userImage = completeImageUrl(userImage);
       }
 
-      this.catData = response.catData;
-      this.subCatData = response.subCatData;
+      this.catData = catData;
+      this.subCatData = subCatData;
 
       for (let i of this.catData) {
         let childrenArr = [];
@@ -247,8 +194,14 @@ export default class Profile extends React.PureComponent<Props, State> {
       if (!portfolio) {
         portfolio = [];
       }
+      if (portfolio.length > 0) {
+        portfolio.forEach((item: any) => {
+          item.image_url = completeImageUrl(item.image_url);
+          item.uri = item.image_url;
+        });
+      }
 
-      let selectedSubCat = response.sub_cat;
+      let selectedSubCat = response.my_skills;
       if (!selectedSubCat || selectedSubCat === '') {
         selectedSubCat = '[]';
       }
@@ -263,26 +216,24 @@ export default class Profile extends React.PureComponent<Props, State> {
         languagesData = '[]';
       }
 
-      setTimeout(() => {
-        this.setState({
-          fullName: fullName,
-          about: response.about,
-          state: state,
-          city: city,
-          user_image: user_image,
-          portfolio: portfolio,
-          dateOfBirth: response.DOB,
-          gender: response.gender,
-          workExperience: response.work_experience,
-          ableToTravel: response.able_to_travel,
-          selectedSubCat: JSON.parse(selectedSubCat),
-          equipmentsData: JSON.parse(equipmentsData),
-          languagesData: JSON.parse(languagesData),
-          isLoading: false,
-        });
-      }, 10000);
+      this.setState({
+        fullName: fullName,
+        about: response.about,
+        state: state,
+        city: city,
+        userImage: userImage,
+        portfolio: portfolio,
+        dateOfBirth: response.dob,
+        gender: response.gender,
+        workExperience: response.work_experience,
+        ableToTravel: response.able_to_travel,
+        selectedSubCat: JSON.parse(selectedSubCat),
+        equipmentsData: JSON.parse(equipmentsData),
+        languagesData: JSON.parse(languagesData),
+        isLoading: false,
+      });
     } catch (err) {
-      console.log(err);
+      GlobalErr(err);
     }
   };
 
@@ -335,7 +286,7 @@ export default class Profile extends React.PureComponent<Props, State> {
                 position: 'absolute',
               }}
             >
-              Aman Chhabra
+              {this.state.fullName}
             </Animated.Text>
             <Animated.View
               style={[
@@ -343,21 +294,17 @@ export default class Profile extends React.PureComponent<Props, State> {
                 { opacity: this.animatedOpacityHide },
               ]}
             >
-              <Avatar
-                size={'large'}
-                source={
-                  'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg'
-                }
-              />
+              <Avatar size={'large'} source={this.state.userImage} />
               <Text
                 style={{ fontSize: 22, fontWeight: 'bold', color: 'white' }}
               >
-                {/* {this.state.username} */}
-                Aman Chhabra
+                {this.state.fullName}
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Icon name="location-pin" color="white" size={16} />
-                <Text style={{ fontSize: 12, color: 'white' }}>Noida,UP</Text>
+                <Text style={{ fontSize: 12, color: 'white' }}>
+                  {this.state.city}, {this.state.state}
+                </Text>
               </View>
             </Animated.View>
           </LinearGradient>
@@ -387,7 +334,6 @@ export default class Profile extends React.PureComponent<Props, State> {
         </>
       );
     }
-    const portfolioLength = portfolio.length - 1;
     return (
       <AppCard style={{ overflow: 'visible' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -411,45 +357,15 @@ export default class Profile extends React.PureComponent<Props, State> {
                   });
                 }}
               >
-                <View>
-                  {index === portfolioLength ? (
-                    <Image
-                      style={{
-                        width: 300,
-                        height: 200,
-                        borderRadius: 30,
-                        marginRight: 15,
-                      }}
-                      source={item.source}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <View>
-                      {index === 0 ? (
-                        <Image
-                          style={{
-                            width: 300,
-                            height: 200,
-                            borderRadius: 30,
-                            marginLeft: 20,
-                          }}
-                          source={item.source}
-                          resizeMode="cover"
-                        />
-                      ) : (
-                        <Image
-                          style={{
-                            width: 300,
-                            height: 200,
-                            borderRadius: 30,
-                          }}
-                          source={item.source}
-                          resizeMode="cover"
-                        />
-                      )}
-                    </View>
-                  )}
-                </View>
+                <Image
+                  style={{
+                    width: 300,
+                    height: 200,
+                    borderRadius: 30,
+                  }}
+                  source={{ uri: item.image_url }}
+                  resizeMode="cover"
+                />
               </TouchableOpacity>
             </View>
           )}
@@ -461,18 +377,19 @@ export default class Profile extends React.PureComponent<Props, State> {
   _renderAboutSection = () => {
     let str = this.state.about;
     let showMore = '';
-    if (str.length > 250 && !this.state.showMore) {
-      str = this.state.about.slice(0, 250);
-      showMore = 'Show More';
+    const allowedStrLength = 250;
+    if (str.length > allowedStrLength && !this.state.showMore) {
+      str = this.state.about.slice(0, allowedStrLength);
+      showMore = 'show more';
     } else {
-      showMore = 'Show Less';
+      showMore = 'show less';
     }
 
     return (
       <View style={styles.cardStyle}>
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>About</Text>
         <Text>{str}</Text>
-        {this.state.about.length > 250 ? (
+        {this.state.about.length > allowedStrLength ? (
           <TouchableOpacity
             onPress={() => {
               str = this.state.about;
@@ -602,21 +519,9 @@ export default class Profile extends React.PureComponent<Props, State> {
               flexDirection: 'row',
             }}
           >
-            {filteredSubCat.map((item, index) => {
+            {filteredSubCat.map((item) => {
               return (
-                <BoxText
-                  size={16}
-                  key={item.sub_cat_id}
-                  text={item.name}
-                  showCross={allowEdit}
-                  onPress={() => {
-                    this.setState({
-                      selectedSubCat: this.state.selectedSubCat.filter(
-                        (newItem, newIndex) => newIndex !== index
-                      ),
-                    });
-                  }}
-                />
+                <BoxText size={16} key={item.sub_cat_id} text={item.name} />
               );
             })}
           </View>
@@ -647,20 +552,7 @@ export default class Profile extends React.PureComponent<Props, State> {
         ) : (
           equipmentsData.map((item: any, index: number) => {
             return (
-              <SkillBox
-                key={index}
-                value={item.value}
-                level={item.rating}
-                onCrossPress={() => {
-                  this.setState({
-                    equipmentsData: this.state.equipmentsData.filter(
-                      (item, newIndex) => {
-                        return index !== newIndex;
-                      }
-                    ),
-                  });
-                }}
-              />
+              <SkillBox key={index} value={item.value} level={item.rating} />
             );
           })
         )}
@@ -675,23 +567,23 @@ export default class Profile extends React.PureComponent<Props, State> {
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Others</Text>
         <View style={{ marginTop: 5 }}>
           <Text style={styles.headingStyle}>Date of Birth</Text>
-          <View style={{ margin: 6 }}>
-            <Text style={{ fontSize: 16 }}>{dateOfBirth}</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{dateOfBirth}</Text>
           </View>
-          <Text style={styles.headingStyle}>Gender</Text>
-          <View style={{ margin: 6 }}>
-            <Text style={{ fontSize: 16 }}>{gender}</Text>
-          </View>
-          <Text style={styles.headingStyle}>Work Experience</Text>
 
-          <View style={{ margin: 6 }}>
-            <Text style={{ fontSize: 16 }}>{workExperience}</Text>
+          <Text style={styles.headingStyle}>Gender</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{gender}</Text>
+          </View>
+
+          <Text style={styles.headingStyle}>Work Experience</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{workExperience}</Text>
           </View>
 
           <Text style={styles.headingStyle}>Able to Travel</Text>
-
-          <View style={{ margin: 6 }}>
-            <Text style={{ fontSize: 16 }}>{ableToTravel}</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{ableToTravel}</Text>
           </View>
         </View>
       </AppCard>
@@ -720,20 +612,7 @@ export default class Profile extends React.PureComponent<Props, State> {
         ) : (
           languagesData.map((item: any, index: number) => {
             return (
-              <SkillBox
-                key={index}
-                value={item.value}
-                level={item.rating}
-                onCrossPress={() => {
-                  this.setState({
-                    languagesData: this.state.languagesData.filter(
-                      (item, newIndex) => {
-                        return index !== newIndex;
-                      }
-                    ),
-                  });
-                }}
-              />
+              <SkillBox key={index} value={item.value} level={item.rating} />
             );
           })
         )}
@@ -810,7 +689,7 @@ export default class Profile extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <View>
+      <>
         <StatusBar
           backgroundColor="transparent"
           barStyle="light-content"
@@ -819,17 +698,15 @@ export default class Profile extends React.PureComponent<Props, State> {
         {this._renderHeaderSection()}
         {this._renderProfileSection()}
         <ImageView
-          glideAlways
           images={this.state.portfolio}
           imageIndex={this.state.imageIndex}
-          animationType="slide"
-          isVisible={this.state.isImageViewVisible}
-          onClose={() => this.setState({ isImageViewVisible: false })}
-          // onImageChange={index => {
-          //     console.log(index);
-          // }}
+          visible={this.state.isImageViewVisible}
+          onRequestClose={() => this.setState({ isImageViewVisible: false })}
         />
-      </View>
+        {this.state.isLoading ? (
+          <Loader visible={this.state.isLoading} />
+        ) : null}
+      </>
     );
   }
 }
@@ -839,8 +716,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // marginTop: 20
-    // backgroundColor: 'black',
   },
   cardStyle: {
     padding: 8,
@@ -856,9 +731,9 @@ const styles = StyleSheet.create({
   },
   portfolioStyle: {
     height: 205,
-    marginLeft: '-4%',
-    marginRight: '-4%',
     marginTop: 5,
   },
   headingStyle: { fontSize: 18 },
+  otherSectionContainer: { margin: 6 },
+  otherSectionText: { fontSize: 16 },
 });

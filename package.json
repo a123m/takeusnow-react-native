@@ -25,7 +25,7 @@
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.5.3",
     "react-native-image-picker": "^2.3.1",
-    "react-native-image-view": "^2.1.9",
+    "react-native-image-viewing": "^0.2.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-mask-loader": "^0.0.3",
     "react-native-phone-input": "^0.2.4",

@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { CheckBox, Rating } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { AppModal, AppButton, AppInput } from '../../components';
 import APIService from '../../utils/APIService';
@@ -19,14 +20,16 @@ interface State {
   showReviewModal: boolean;
   reviewText: string;
   selectedRating: number;
+  projectStatus: string;
 }
 
 export default class ProjectStatus extends React.PureComponent<Props, State> {
-  projectStatus = '';
   detailTick = false;
   proposalTick = false;
   completionTick = false;
   reviewTick = false;
+  role: string | null | undefined;
+  userId: string | null | undefined;
   constructor(props: Props) {
     super(props);
 
@@ -36,22 +39,28 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
       selectedRating: 0,
 
       reviewText: '',
+      projectStatus: this.props.projectStatus,
     };
 
-    switch (this.props.projectStatus) {
+    switch (this.state.projectStatus) {
       case 'ACTIVE':
         this.detailTick = true;
         break;
-      case 'IN PROGRESS':
+      case 'IN-PROGRESS':
         this.detailTick = true;
         this.proposalTick = true;
         break;
-      case 'CLOSE REQUEST':
+      case 'IN-REVIEW':
         this.detailTick = true;
         this.proposalTick = true;
         this.completionTick = true;
         break;
-      case 'CLOSE':
+      case 'CANCELLED':
+        this.detailTick = true;
+        this.proposalTick = true;
+        this.completionTick = true;
+        break;
+      case 'COMPLETED':
         this.detailTick = true;
         this.proposalTick = true;
         this.completionTick = true;
@@ -60,6 +69,11 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
       default:
         console.log(`Sorry, we are out of.`);
     }
+  }
+
+  async componentDidMount() {
+    this.role = await AsyncStorage.getItem('role');
+    this.userId = await AsyncStorage.getItem('userId');
   }
 
   _renderProjectDetail = () => {
@@ -120,7 +134,7 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
             <Text>Manage your project status.</Text>
           </View>
         </View>
-        {this.proposalTick ? (
+        {this.proposalTick && !this.completionTick ? (
           <View
             style={{
               flexDirection: 'row',
@@ -133,7 +147,24 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
               onPress={() => {
                 Alert.alert(
                   'Alert',
-                  'Are you sure you want to cancel the project!'
+                  'Are you sure you want to cancel the project!',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: () =>
+                        APIService.sendGetCall(
+                          `/project/update/${
+                            this.props.projectId
+                          }?status=CANCELLED`
+                        ),
+                    },
+                  ],
+                  { cancelable: false }
                 );
               }}
               style={{
@@ -150,7 +181,36 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                Alert.alert('Alert', 'Make sure your project is completed');
+                Alert.alert(
+                  'Alert',
+                  'Make sure your project is completed',
+                  [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: async () => {
+                        const response = await APIService.sendGetCall(
+                          `/project/update/${
+                            this.props.projectId
+                          }?status=IN-REVIEW`
+                        );
+                        if (response) {
+                          this.detailTick = true;
+                          this.proposalTick = true;
+                          this.completionTick = true;
+                          this.setState({
+                            projectStatus: 'IN-REVIEW',
+                          });
+                        }
+                      },
+                    },
+                  ],
+                  { cancelable: false }
+                );
               }}
               style={{
                 height: 35,
@@ -215,21 +275,22 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
         >
           <View
             style={{
-              height: '50%',
+              height: 300,
               width: '70%',
               backgroundColor: 'white',
               borderWidth: 2,
               borderColor: 'silver',
+              padding: 5,
             }}
           >
-            <View style={{ flex: 0.2, alignItems: 'center' }}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               <Text
                 style={{
                   fontSize: 20,
                   fontWeight: 'bold',
                 }}
               >
-                Give Rating!!
+                Give Rating.
               </Text>
             </View>
             <View
@@ -256,18 +317,23 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
               />
             </View>
             <AppButton
-              style={{ flex: 1 }}
               onPress={() => {
                 const payload = {
-                  reviewText: this.state.reviewText,
-                  selectedRating: this.state.selectedRating,
+                  projectId: this.props.projectId,
+                  reviewerUserId: this.userId,
+                  description: this.state.reviewText,
+                  rating: this.state.selectedRating,
                 };
                 this.reviewTick = true;
                 APIService.sendPostCall(
-                  `/project/${this.props.projectId}/review`,
+                  `/project/review?type=${this.role}`,
                   payload
                 );
-                this.setState({ showReviewModal: false });
+
+                this.setState({
+                  showReviewModal: false,
+                  projectStatus: 'COMPLETED',
+                });
               }}
             >
               SUBMIT
