@@ -60,9 +60,13 @@ const data = [
 
 export default class Home extends React.PureComponent<any, any> {
   userId: string | null | undefined;
+  accountType: string | null | undefined;
   state = {
     firstName: '',
+    planInUse: '',
+
     profileCompletePercentage: 0,
+    allowedBids: 0,
   };
 
   componentDidMount() {
@@ -73,7 +77,13 @@ export default class Home extends React.PureComponent<any, any> {
   setDefaultView = async () => {
     try {
       this.userId = await AsyncStorage.getItem('userId');
+      this.accountType = await AsyncStorage.getItem('accountType');
+
       const response = await APIService.sendGetCall('/home/' + this.userId);
+
+      if (!response) {
+        return;
+      }
 
       let profileCompletePercentage = 0;
       for (let i in response) {
@@ -89,6 +99,8 @@ export default class Home extends React.PureComponent<any, any> {
       this.setState({
         firstName: response.fname,
         profileCompletePercentage: profileCompletePercentage,
+        allowedBids: response.allowed_bids,
+        planInUse: response.plan_in_use,
       });
       Splash.hide();
     } catch (err) {
@@ -111,38 +123,37 @@ export default class Home extends React.PureComponent<any, any> {
         ]}
       >
         <View>
-          <Text>Snapper</Text>
+          <Text>Welcome</Text>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
             {this.state.firstName}
           </Text>
         </View>
         <View style={{ flexDirection: 'row' }}>
-          <Icon name={'hourglass'} size={38} />
-          <View>
-            <Text style={{ fontSize: 10 }}>Basic Plan</Text>
-            <Text style={{ fontSize: 10 }}>20 Bids Left</Text>
-            <TouchableOpacity onPress={upgradePressHandler}>
-              <Text
-                style={{
-                  fontSize: 10,
-                  fontWeight: 'bold',
-                  color: Styles.PrimaryColor2,
-                }}
-              >
-                Upgrade Now
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {this.accountType === 'work' ? (
+            <>
+              <Icon name={'hourglass'} size={38} />
+              <View>
+                <Text style={{ fontSize: 10 }}>
+                  {this.state.planInUse.toUpperCase()} Plan
+                </Text>
+                <Text style={{ fontSize: 10 }}>
+                  {this.state.allowedBids} Bids Left
+                </Text>
+                <TouchableOpacity onPress={upgradePressHandler}>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 'bold',
+                      color: Styles.PrimaryColor2,
+                    }}
+                  >
+                    Upgrade Now
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          ) : null}
         </View>
-      </View>
-    );
-  };
-
-  _renderProjectSection = () => {
-    return (
-      <View style={styles.cardContainer}>
-        <Text>My Projects</Text>
-        {/* <ProjectCard /> */}
       </View>
     );
   };

@@ -15,7 +15,7 @@ import RegionList from '../../utils/RegionList';
 import { Styles } from '../../common';
 
 interface Props {
-  toPostProject3: any;
+  toPostProject3(): void;
 }
 
 interface State {
@@ -52,7 +52,6 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
     const { toPostProject3 } = this.props;
     const { title, state, city } = this.state;
 
-    console.log(Globals.PostProject.title);
     if (title.length < 15) {
       Alert.alert(
         'Alert',

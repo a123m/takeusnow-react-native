@@ -28,7 +28,7 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
   proposalTick = false;
   completionTick = false;
   reviewTick = false;
-  role: string | null | undefined;
+  accountType: string | null | undefined;
   userId: string | null | undefined;
   constructor(props: Props) {
     super(props);
@@ -67,13 +67,14 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
         this.reviewTick = true;
         break;
       default:
-        console.log(`Sorry, we are out of.`);
+        console.log(`Sorry, nothing is changed.`);
     }
   }
 
   async componentDidMount() {
-    this.role = await AsyncStorage.getItem('role');
+    this.accountType = await AsyncStorage.getItem('accountType');
     this.userId = await AsyncStorage.getItem('userId');
+    this.setState({});
   }
 
   _renderProjectDetail = () => {
@@ -326,7 +327,7 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
                 };
                 this.reviewTick = true;
                 APIService.sendPostCall(
-                  `/project/review?type=${this.role}`,
+                  `/project/review?accountType=${this.accountType}`,
                   payload
                 );
 
@@ -351,7 +352,7 @@ export default class ProjectStatus extends React.PureComponent<Props, State> {
         {this._renderProjectDetail()}
         {this._renderProposal()}
         {this._renderManagement()}
-        {this._renderReview()}
+        {this.accountType === 'hire' ? this._renderReview() : null}
       </View>
     );
   }

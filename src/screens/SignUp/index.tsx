@@ -13,7 +13,7 @@ import { CheckBox } from 'react-native-elements';
 
 import { AppButton, Spinner, FloatingLabelInput } from '../../components';
 import APIService from '../../utils/APIService';
-import { ValidateEmail } from '../../utils/utils';
+import { ValidateEmail, GlobalErr } from '../../utils/utils';
 
 // import { Styles } from '../../common';
 
@@ -97,6 +97,10 @@ export default class SignUp extends React.PureComponent<Props, State> {
         isLoading: false,
       });
 
+      if (!response) {
+        return;
+      }
+
       Alert.alert('Congrats', response.message, [
         {
           text: 'Ok',
@@ -104,10 +108,7 @@ export default class SignUp extends React.PureComponent<Props, State> {
         },
       ]);
     } catch (err) {
-      this.setState({
-        isLoading: false,
-      });
-      console.log(err);
+      GlobalErr(err);
     }
   };
 

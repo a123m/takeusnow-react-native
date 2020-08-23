@@ -9,7 +9,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout-v21_notification_template_custom_big.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout-v21/notification_template_custom_big.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout-v21/notification_template_custom_big.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_abc_btn_switch_to_on_mtrl_00012.9.png.flat",
@@ -61,7 +61,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-hdpi-v4/notification_bg_normal_pressed.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-hdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_abc_ic_menu_copy_mtrl_am_alpha.png.flat",
@@ -113,7 +113,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_custom_dialog.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout/custom_dialog.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout/custom_dialog.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_tab_indicator_mtrl_alpha.9.png.flat",
@@ -365,7 +365,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout-v16_notification_template_custom_big.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout-v16/notification_template_custom_big.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout-v16/notification_template_custom_big.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_abc_textfield_search_material.xml.flat",
@@ -377,7 +377,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-xhdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_abc_btn_default_mtrl_shape.xml.flat",
@@ -425,7 +425,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_notification_bg_low.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable/notification_bg_low.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable/notification_bg_low.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_mtrl_ic_error.xml.flat",
@@ -529,7 +529,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout-v21_notification_action.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout-v21/notification_action.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout-v21/notification_action.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_abc_activity_chooser_view_list_item.xml.flat",
@@ -601,7 +601,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_notification_action.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout/notification_action.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout/notification_action.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_mtrl_picker_text_input_date_range.xml.flat",
@@ -713,7 +713,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-hdpi-v4/notification_bg_low_normal.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-hdpi-v4/notification_bg_low_normal.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_abc_screen_simple.xml.flat",
@@ -985,7 +985,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout-v21_notification_action_tombstone.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout-v21/notification_action_tombstone.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout-v21/notification_action_tombstone.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_mtrl_layout_snackbar.xml.flat",
@@ -1137,7 +1137,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-xhdpi-v4/notification_bg_low_normal.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-xhdpi-v4/notification_bg_low_normal.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-v21_design_password_eye.xml.flat",
@@ -1165,7 +1165,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-mdpi-v4/notification_bg_low_pressed.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-mdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_mtrl_calendar_year.xml.flat",
@@ -1185,7 +1185,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-xhdpi-v4/notification_bg_normal.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-xhdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout-sw600dp-v13_mtrl_layout_snackbar.xml.flat",
@@ -1197,7 +1197,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-v21_notification_action_background.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-v21/notification_action_background.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-v21/notification_action_background.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/color_mtrl_btn_text_color_selector.xml.flat",
@@ -1241,7 +1241,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_notification_template_icon_group.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout/notification_template_icon_group.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout/notification_template_icon_group.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_list_selector_disabled_holo_dark.9.png.flat",
@@ -1261,7 +1261,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-xhdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/color-v23_abc_tint_edittext.xml.flat",
@@ -1321,7 +1321,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-mdpi-v4/notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_design_ic_visibility_off.png.flat",
@@ -1357,7 +1357,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_notification_template_part_time.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout/notification_template_part_time.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout/notification_template_part_time.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_mtrl_dropdown_arrow.xml.flat",
@@ -1429,7 +1429,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_normal_pressed.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-mdpi-v4/notification_bg_normal_pressed.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-mdpi-v4/notification_bg_normal_pressed.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_abc_ic_menu_copy_mtrl_am_alpha.png.flat",
@@ -1493,7 +1493,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_low_normal.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-mdpi-v4/notification_bg_low_normal.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-mdpi-v4/notification_bg_low_normal.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_scrubber_control_off_mtrl_alpha.png.flat",
@@ -1505,7 +1505,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-xhdpi-v4/notify_panel_notification_icon_bg.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-xhdpi-v4/notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_ic_launcher_round.png.flat",
@@ -1553,7 +1553,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-hdpi-v4/notification_bg_normal.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-hdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_list_selector_disabled_holo_dark.9.png.flat",
@@ -1741,7 +1741,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_notification_tile_bg.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable/notification_tile_bg.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable/notification_tile_bg.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/anim_fragment_fast_out_extra_slow_in.xml.flat",
@@ -1797,7 +1797,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_notification_icon_background.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable/notification_icon_background.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable/notification_icon_background.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_design_ic_visibility.png.flat",
@@ -1841,7 +1841,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_notification_template_part_chronometer.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout/notification_template_part_chronometer.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout/notification_template_part_chronometer.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/anim_btn_checkbox_to_unchecked_icon_null_animation.xml.flat",
@@ -2137,7 +2137,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_notification_bg_normal.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-mdpi-v4/notification_bg_normal.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-mdpi-v4/notification_bg_normal.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_design_navigation_menu.xml.flat",
@@ -2257,11 +2257,11 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notify_panel_notification_icon_bg.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-hdpi-v4/notify_panel_notification_icon_bg.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout_notification_action_tombstone.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout/notification_action_tombstone.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout/notification_action_tombstone.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/color_switch_thumb_material_dark.xml.flat",
@@ -2273,7 +2273,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_low_pressed.9.png.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable-hdpi-v4/notification_bg_low_pressed.9.png"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable-hdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-v23_mtrl_popupmenu_background_dark.xml.flat",
@@ -2309,7 +2309,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/layout-v21_notification_template_icon_group.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/layout-v21/notification_template_icon_group.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/layout-v21/notification_template_icon_group.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_abc_ic_voice_search_api_material.xml.flat",
@@ -2413,7 +2413,7 @@
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable_notification_bg.xml.flat",
-        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/drawable/notification_bg.xml"
+        "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/drawable/notification_bg.xml"
     },
     {
         "merged": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_text_select_handle_left_mtrl_dark.png.flat",

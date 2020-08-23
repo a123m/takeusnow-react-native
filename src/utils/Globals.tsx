@@ -1,21 +1,21 @@
-let Globals: globals = {
+const Globals: globals | any = {
   PostProject: {
+    categoryId: 0,
     title: '',
     detail: '',
-    category: '',
     state: '',
     city: '',
     budget: '',
     validity: '',
-    status: 'created',
+    status: 'ACTIVE',
     type: '',
-    skills: []
+    skills: [],
   },
   clearPostProject() {
     for (let i in this.PostProject) {
       this.PostProject[i] = '';
     }
-  }
+  },
 };
 
 export default Globals;
@@ -26,9 +26,9 @@ interface globals {
 }
 
 interface postProject {
+  categoryId: number;
   title: string;
   detail: string;
-  category: string;
   state: string;
   city: string;
   budget: string;

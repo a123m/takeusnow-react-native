@@ -342,7 +342,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
 
         try {
           const apiResponse: PortfolioEntity = await APIService.sendPostCall(
-            'http://192.168.43.116:8080/profile/portfolio',
+            '/profile/portfolio',
             payload
           );
 
@@ -591,7 +591,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
             };
 
             const response = await APIService.sendPatchCall(
-              'http://192.168.43.116:8080/profile/' + this.userId,
+              '/profile/' + this.userId,
               payload
             );
 
@@ -779,7 +779,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
 
   _renderSkillSection = () => {
     const { allowEdit, selectedSubCat } = this.state;
-    let filteredSubCat = [];
+    const filteredSubCat = [];
     for (let i of selectedSubCat) {
       for (let j of this.subCatData) {
         if (j.sub_cat_id === i) {
@@ -1268,7 +1268,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                   );
                   return;
                 }
-                let languageObj = {
+                const languageObj = {
                   value: this.state.enteredLanguage,
                   rating: this.state.selectedRating,
                 };

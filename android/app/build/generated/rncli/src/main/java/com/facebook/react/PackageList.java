@@ -11,8 +11,8 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-import com.snaplancing.BuildConfig;
-import com.snaplancing.R;
+import com.takeusnow.BuildConfig;
+import com.takeusnow.R;
 
 // @react-native-community/art
 import com.reactnativecommunity.art.ARTPackage;

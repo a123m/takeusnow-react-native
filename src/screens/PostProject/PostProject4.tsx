@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
-import Moment from 'moment';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { AppInput, AppButton } from '../../components';
 import Globals from '../../utils/Globals';
@@ -20,6 +20,7 @@ interface State {
 }
 
 export default class PostProject4 extends React.PureComponent<Props, State> {
+  userId: any;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -32,7 +33,8 @@ export default class PostProject4 extends React.PureComponent<Props, State> {
     this.setDefaultView();
   }
 
-  setDefaultView = () => {
+  setDefaultView = async () => {
+    this.userId = await AsyncStorage.getItem('userId');
     this.setState({
       budget: Globals.PostProject.budget,
     });
@@ -52,24 +54,29 @@ export default class PostProject4 extends React.PureComponent<Props, State> {
     Globals.PostProject.budget = budget;
 
     const payload = {
-      title: Globals.PostProject.title,
-      detail: Globals.PostProject.detail,
-      category: Globals.PostProject.category,
+      categoryId: Globals.PostProject.categoryId,
+      projectTitle: Globals.PostProject.title,
+      projectDescription: Globals.PostProject.detail,
+      projectStatus: Globals.PostProject.status,
+      ownerId: parseInt(this.userId),
+      reqSkills: Globals.PostProject.skills,
+      // reqOn: Globals.PostProject.reqOn,
       state: Globals.PostProject.state,
       city: Globals.PostProject.city,
       budget: parseInt(Globals.PostProject.budget),
-      validity: Moment().add(7, 'd'),
-      status: Globals.PostProject.status,
-      // type: Globals.PostProject.type,
-      requireSkills: Globals.PostProject.skills,
-      createdAt: Moment(),
     };
-    console.log('payload', payload);
 
     try {
-      const response = APIService.sendPutCall('project/create', payload);
-      console.log('res', response);
-      toProject();
+      const response: any = APIService.sendPutCall('project/create', payload);
+      if (!response) {
+        return;
+      }
+      Alert.alert(
+        'Congrats!',
+        response.message,
+        [{ text: 'OK', onPress: () => toProject() }],
+        { cancelable: false }
+      );
     } catch (err) {
       GlobalErr(err);
     }

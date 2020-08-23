@@ -12,7 +12,7 @@ export default class Payment extends React.PureComponent<any> {
           }
         }}
         source={{
-          uri: 'http://192.168.43.116:8080/payment/paytm',
+          uri: '/payment/paytm',
           method: 'POST',
           body: 'userId=' + userId + '&TXN_AMOUNT=' + amount,
         }}

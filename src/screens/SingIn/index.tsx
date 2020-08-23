@@ -101,7 +101,7 @@ export default class SignIn extends React.PureComponent<Props, State> {
             alignItems: 'center',
           }}
         >
-          <Text style={styles.textStyle}>Welcome to SnapLancing</Text>
+          <Text style={styles.textStyle}>Welcome to TakeUsNow</Text>
           <View style={styles.container}>
             <View style={{ marginTop: 25 }}>
               <FloatingLabelInput

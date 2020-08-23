@@ -4,7 +4,7 @@
             "outputFile": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-cs/values-cs.xml",
             "map": [
                 {
-                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/res/values-cs/values-cs.xml",
+                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/values-cs/values-cs.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

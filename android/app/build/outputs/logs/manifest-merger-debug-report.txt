@@ -46,7 +46,7 @@ MERGED from [androidx.customview:customview:1.0.0] /Users/mac/.gradle/caches/tra
 MERGED from [androidx.transition:transition:1.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4ad4bc863e80046b9d01ca076c8c393a/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9bad5bd0eb3c1413253598af0769d802/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/40450e414ac50291add22e894a13cde2/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.core:core:1.5.0-alpha01] /Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:17:1-26:12
 MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c88b71f00285ddadd2e93410ded1a2e2/AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8671d2746eb14e656d3bab3f09f326f9/AndroidManifest.xml:17:1-22:12
@@ -63,7 +63,7 @@ INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidMani
 INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
 INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
 	package
-		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:2:3-28
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:2:3-26
 		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 	android:versionName
@@ -104,12 +104,12 @@ MERGED from [com.google.android.material:material:1.1.0] /Users/mac/.gradle/cach
 MERGED from [com.google.android.material:material:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/6746fa457539c872fd18a7e9e0a1efe4/AndroidManifest.xml:22:5-20
 MERGED from [com.facebook.soloader:soloader:0.6.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1c8dcf4bca237abec8ad9d8968857718/AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.soloader:soloader:0.6.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1c8dcf4bca237abec8ad9d8968857718/AndroidManifest.xml:11:5-20
-MERGED from [androidx.core:core:1.5.0-alpha01] /Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/AndroidManifest.xml:24:5-89
-MERGED from [androidx.core:core:1.5.0-alpha01] /Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:24:5-89
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:24:5-25:19
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.5.0-alpha01] /Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/AndroidManifest.xml:24:18-86
+		ADDED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:24:18-86
 	android:label
 		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:11:7-39
 	android:roundIcon
@@ -124,7 +124,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/
 		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:9:7-42
 	android:name
 		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:10:7-38
-activity#com.snaplancing.MainActivity
+activity#com.takeusnow.MainActivity
 ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:16:7-25:18
 	android:label
 		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:18:9-41
@@ -236,8 +236,8 @@ MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mac/.
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9bad5bd0eb3c1413253598af0769d802/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/40450e414ac50291add22e894a13cde2/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/40450e414ac50291add22e894a13cde2/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.5.0-alpha01] /Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.5.0-alpha01] /Users/mac/.gradle/caches/transforms-2/files-2.1/b80afc5f4a5909925fc239109486152f/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:20:5-22:41
 MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c88b71f00285ddadd2e93410ded1a2e2/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c88b71f00285ddadd2e93410ded1a2e2/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:20:5-22:41

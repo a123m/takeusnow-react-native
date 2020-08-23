@@ -1,25 +1,28 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-MERGED from [:react-native-vector-icons] /Users/mac/snaplancing-mobile/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-gesture-handler] /Users/mac/snaplancing-mobile/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
-MERGED from [:@react-native-community_art] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/art/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
-MERGED from [:@react-native-community_async-storage] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
-MERGED from [:@react-native-community_geolocation] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/geolocation/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
-MERGED from [:@react-native-community_masked-view] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
-MERGED from [:@react-native-community_netinfo] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-12:12
-MERGED from [:react-native-reanimated] /Users/mac/snaplancing-mobile/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-safe-area-context] /Users/mac/snaplancing-mobile/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-screens] /Users/mac/snaplancing-mobile/node_modules/react-native-screens/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-splash-screen] /Users/mac/snaplancing-mobile/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-14:12
-MERGED from [:react-native-svg] /Users/mac/snaplancing-mobile/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
-MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/db3ca80356cd261ac4fa657aa3ec4d9b/AndroidManifest.xml:2:1-13:12
-MERGED from [org.webkit:android-jsc:r245459] /Users/mac/.gradle/caches/transforms-2/files-2.1/e7cf850be2818d0fd7a4bbbd4c6923f0/AndroidManifest.xml:2:1-11:12
-MERGED from [:react-native-linear-gradient] /Users/mac/snaplancing-mobile/node_modules/react-native-linear-gradient/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
-MERGED from [com.google.android.material:material:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46a91bccf0c966d430908d3efbb528de/AndroidManifest.xml:17:1-24:12
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+MERGED from [:react-native-vector-icons] /Users/mac/takeusnow-react-native/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-community_art] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/art/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_async-storage] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_datetimepicker] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/datetimepicker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-13:12
+MERGED from [:react-native-community_geolocation] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/geolocation/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_masked-view] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-community_netinfo] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-12:12
+MERGED from [:react-native-gesture-handler] /Users/mac/takeusnow-react-native/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-21:12
+MERGED from [:react-native-reanimated] /Users/mac/takeusnow-react-native/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-safe-area-context] /Users/mac/takeusnow-react-native/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-screens] /Users/mac/takeusnow-react-native/node_modules/react-native-screens/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-splash-screen] /Users/mac/takeusnow-react-native/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-14:12
+MERGED from [:react-native-svg] /Users/mac/takeusnow-react-native/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-9:12
+MERGED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-23:12
+MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/6ab22be75dcf12ac5c2d4bd7465cdc03/AndroidManifest.xml:2:1-13:12
+MERGED from [org.webkit:android-jsc:r245459] /Users/mac/.gradle/caches/transforms-2/files-2.1/cfa0318a2940a6143cf818415dc0c66c/AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-linear-gradient] /Users/mac/takeusnow-react-native/node_modules/react-native-linear-gradient/android/build/intermediates/library_manifest/release/AndroidManifest.xml:2:1-11:12
+MERGED from [com.google.android.material:material:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/6746fa457539c872fd18a7e9e0a1efe4/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/524d018844086b7fae295036d031aaa4/AndroidManifest.xml:17:1-24:12
 MERGED from [com.facebook.fresco:fresco:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f5689d4f2ec5e79ff72dc69ee7d27c7f/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:imagepipeline-okhttp3:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/5866ecda2809f3fd3b673786905f79eb/AndroidManifest.xml:2:1-9:12
@@ -29,147 +32,164 @@ MERGED from [com.facebook.fresco:imagepipeline:2.0.0] /Users/mac/.gradle/caches/
 MERGED from [com.facebook.fresco:nativeimagetranscoder:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/d15cf4738947c8941221406cc81c41d1/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:imagepipeline-base:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/504bef12ff31e1747256fd5a4078f1b9/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.soloader:soloader:0.6.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1c8dcf4bca237abec8ad9d8968857718/AndroidManifest.xml:2:1-13:12
-MERGED from [androidx.transition:transition:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/25c6e24b299f27d11937492b580c4154/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1dc26ff3396ad1a068745c1e538ea0b5/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f8f36a85b47fbaf1e83e47e52a0c188f/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/be3fd7ccfe5b56fb03fb7e88453c867f/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.fragment:fragment:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/76b47d9c39c6de6eb85b306cbe20963f/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f3b4db972376747dc0344758ecfd2d10/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.fragment:fragment:1.2.1] /Users/mac/.gradle/caches/transforms-2/files-2.1/f07134038a0f7b2adc43db59b8fc48ef/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9ca5a36e4785ec15d82f407afbe7ee2b/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/5938783751cedfd19a1861931dcebf3d/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.appcompat:appcompat-resources:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/08281823151d59a9fafeca3939d82e28/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/ae420afacc0a2842b13fbcc68344303e/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/a9ca4df7d9bffb3468da58cd38366be7/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/935239b291f1dc61d6a3a8956d1ca689/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.customview:customview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/665c18f4ce2a80070eaaea7141f9e07f/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46d4447e7f95939bcef72fc574025a15/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.loader:loader:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/0ab086e444c323cbef42dae979b95984/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.activity:activity:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/b7c93e5b69b77c3632c35dd096c460e2/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8630c5589b4e784afbdeea8b9ef9d129/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4f86f917c84cfa5e531778b8cf91a677/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/665c18f4ce2a80070eaaea7141f9e07f/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4ad4bc863e80046b9d01ca076c8c393a/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9bad5bd0eb3c1413253598af0769d802/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/40450e414ac50291add22e894a13cde2/AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/5938783751cedfd19a1861931dcebf3d/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/2fb52ab34acae425e2350f24e3494e82/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.3.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/4052e92473897288980a59d77b12e8ec/AndroidManifest.xml:17:1-26:12
-MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/eb6aa33a51d07de7affd50f99e9cd63a/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:17:1-26:12
+MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c88b71f00285ddadd2e93410ded1a2e2/AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8671d2746eb14e656d3bab3f09f326f9/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.cardview:cardview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4c04242661c75291a596e26e5c09882b/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c7e2e54ec419324ec36425547da02dae/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/fe752bec9e9076d1e5698bff6696e9a1/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/d1637c20c81e3850987c8bd8e71a8d85/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/b83a435480c3ac32b704deb04365921a/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/aad91db8a332c4657fa37012ccdc1866/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.print:print:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c9acb8c32a0868290994a71542a37f67/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/3d222d4449e3bcff3e404d4630d9d435/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9dc406706c8f17e7fbdd187d5bc372d1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4c04242661c75291a596e26e5c09882b/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/0e05681ee5a2312f8c5774a0e14c48a6/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.savedstate:savedstate:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dc138a5bec183fa1b67f96c43a56ff4b/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/69920c4a702ab54fee8887777d2842ed/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8f86da08b50a97e60e0c5f23376c94f6/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/49ed072da2f20619bb79f58d90ad5f0b/AndroidManifest.xml:17:1-22:12
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/ff644685c4eec59789ed8e4a5356181f/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/98b483801e5d5b0d8d319af5d65912e1/AndroidManifest.xml:17:1-24:12
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
 	package
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:2:3-28
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:2:3-26
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 	android:versionName
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 	android:versionCode
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:1-26:12
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:1-29:12
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:1:11-69
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:1:11-69
 uses-permission#android.permission.INTERNET
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:4:5-67
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:4:5-67
 	android:name
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:4:22-64
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:4:22-64
+uses-permission#android.permission.CAMERA
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:5:5-65
+	android:name
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:5:22-62
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:6:5-81
+	android:name
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:6:22-78
 application
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:6:5-24:19
-MERGED from [:react-native-splash-screen] /Users/mac/snaplancing-mobile/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-12:19
-MERGED from [:react-native-splash-screen] /Users/mac/snaplancing-mobile/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-12:19
-MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/db3ca80356cd261ac4fa657aa3ec4d9b/AndroidManifest.xml:11:5-20
-MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/db3ca80356cd261ac4fa657aa3ec4d9b/AndroidManifest.xml:11:5-20
-MERGED from [com.google.android.material:material:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46a91bccf0c966d430908d3efbb528de/AndroidManifest.xml:22:5-20
-MERGED from [com.google.android.material:material:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46a91bccf0c966d430908d3efbb528de/AndroidManifest.xml:22:5-20
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:8:5-27:19
+MERGED from [:react-native-community_datetimepicker] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/datetimepicker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-20
+MERGED from [:react-native-community_datetimepicker] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/datetimepicker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-20
+MERGED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:9:5-19:19
+MERGED from [:react-native-splash-screen] /Users/mac/takeusnow-react-native/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-12:19
+MERGED from [:react-native-splash-screen] /Users/mac/takeusnow-react-native/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-12:19
+MERGED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-21:19
+MERGED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:5-21:19
+MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/6ab22be75dcf12ac5c2d4bd7465cdc03/AndroidManifest.xml:11:5-20
+MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/6ab22be75dcf12ac5c2d4bd7465cdc03/AndroidManifest.xml:11:5-20
+MERGED from [com.google.android.material:material:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/6746fa457539c872fd18a7e9e0a1efe4/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/6746fa457539c872fd18a7e9e0a1efe4/AndroidManifest.xml:22:5-20
 MERGED from [com.facebook.soloader:soloader:0.6.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1c8dcf4bca237abec8ad9d8968857718/AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.soloader:soloader:0.6.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1c8dcf4bca237abec8ad9d8968857718/AndroidManifest.xml:11:5-20
-MERGED from [androidx.core:core:1.3.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/4052e92473897288980a59d77b12e8ec/AndroidManifest.xml:24:5-89
-MERGED from [androidx.core:core:1.3.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/4052e92473897288980a59d77b12e8ec/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:24:5-89
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:24:5-25:19
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.3.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/4052e92473897288980a59d77b12e8ec/AndroidManifest.xml:24:18-86
+		ADDED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:24:18-86
 	android:label
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:8:7-39
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:11:7-39
 	android:roundIcon
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:10:7-52
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:13:7-52
 	android:icon
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:9:7-41
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:12:7-41
 	android:allowBackup
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:11:7-34
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:14:7-34
 	android:theme
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:12:7-38
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:15:7-38
+	android:usesCleartextTraffic
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:9:7-42
 	android:name
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:7:7-38
-activity#com.snaplancing.MainActivity
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:13:7-22:18
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:10:7-38
+activity#com.takeusnow.MainActivity
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:16:7-25:18
 	android:label
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:15:9-41
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:18:9-41
 	android:windowSoftInputMode
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:17:9-51
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:20:9-51
 	android:configChanges
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:16:9-79
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:19:9-79
 	android:name
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:14:9-37
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:17:9-37
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:18:9-21:25
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:21:9-24:25
 action#android.intent.action.MAIN
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:19:13-65
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:22:13-65
 	android:name
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:19:21-62
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:22:21-62
 category#android.intent.category.LAUNCHER
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:20:13-73
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:23:13-73
 	android:name
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:20:23-70
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:23:23-70
 activity#com.facebook.react.devsupport.DevSettingsActivity
-ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:23:7-84
+ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:26:7-84
 	android:name
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml:23:17-81
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml:26:17-81
 uses-sdk
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-MERGED from [:react-native-vector-icons] /Users/mac/snaplancing-mobile/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-vector-icons] /Users/mac/snaplancing-mobile/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-gesture-handler] /Users/mac/snaplancing-mobile/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-gesture-handler] /Users/mac/snaplancing-mobile/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:@react-native-community_art] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/art/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_art] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/art/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_async-storage] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_async-storage] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_geolocation] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/geolocation/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_geolocation] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/geolocation/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_masked-view] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_masked-view] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_netinfo] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:@react-native-community_netinfo] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-reanimated] /Users/mac/snaplancing-mobile/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-reanimated] /Users/mac/snaplancing-mobile/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-safe-area-context] /Users/mac/snaplancing-mobile/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-safe-area-context] /Users/mac/snaplancing-mobile/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-screens] /Users/mac/snaplancing-mobile/node_modules/react-native-screens/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-screens] /Users/mac/snaplancing-mobile/node_modules/react-native-screens/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-splash-screen] /Users/mac/snaplancing-mobile/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-splash-screen] /Users/mac/snaplancing-mobile/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-svg] /Users/mac/snaplancing-mobile/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-svg] /Users/mac/snaplancing-mobile/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
-MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/db3ca80356cd261ac4fa657aa3ec4d9b/AndroidManifest.xml:7:5-9:41
-MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/db3ca80356cd261ac4fa657aa3ec4d9b/AndroidManifest.xml:7:5-9:41
-MERGED from [org.webkit:android-jsc:r245459] /Users/mac/.gradle/caches/transforms-2/files-2.1/e7cf850be2818d0fd7a4bbbd4c6923f0/AndroidManifest.xml:7:5-9:41
-MERGED from [org.webkit:android-jsc:r245459] /Users/mac/.gradle/caches/transforms-2/files-2.1/e7cf850be2818d0fd7a4bbbd4c6923f0/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-linear-gradient] /Users/mac/snaplancing-mobile/node_modules/react-native-linear-gradient/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-linear-gradient] /Users/mac/snaplancing-mobile/node_modules/react-native-linear-gradient/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
-MERGED from [com.google.android.material:material:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46a91bccf0c966d430908d3efbb528de/AndroidManifest.xml:20:5-44
-MERGED from [com.google.android.material:material:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46a91bccf0c966d430908d3efbb528de/AndroidManifest.xml:20:5-44
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+MERGED from [:react-native-vector-icons] /Users/mac/takeusnow-react-native/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-vector-icons] /Users/mac/takeusnow-react-native/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-community_art] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/art/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_art] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/art/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_async-storage] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_async-storage] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/async-storage/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_datetimepicker] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/datetimepicker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-community_datetimepicker] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/datetimepicker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-community_geolocation] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/geolocation/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_geolocation] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/geolocation/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_masked-view] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_masked-view] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/masked-view/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_netinfo] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-community_netinfo] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-gesture-handler] /Users/mac/takeusnow-react-native/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-gesture-handler] /Users/mac/takeusnow-react-native/node_modules/react-native-gesture-handler/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-reanimated] /Users/mac/takeusnow-react-native/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-reanimated] /Users/mac/takeusnow-react-native/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-safe-area-context] /Users/mac/takeusnow-react-native/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-safe-area-context] /Users/mac/takeusnow-react-native/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-screens] /Users/mac/takeusnow-react-native/node_modules/react-native-screens/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-screens] /Users/mac/takeusnow-react-native/node_modules/react-native-screens/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-splash-screen] /Users/mac/takeusnow-react-native/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-splash-screen] /Users/mac/takeusnow-react-native/node_modules/react-native-splash-screen/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-svg] /Users/mac/takeusnow-react-native/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-svg] /Users/mac/takeusnow-react-native/node_modules/react-native-svg/android/build/intermediates/library_manifest/release/AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/6ab22be75dcf12ac5c2d4bd7465cdc03/AndroidManifest.xml:7:5-9:41
+MERGED from [com.facebook.react:react-native:0.61.5] /Users/mac/.gradle/caches/transforms-2/files-2.1/6ab22be75dcf12ac5c2d4bd7465cdc03/AndroidManifest.xml:7:5-9:41
+MERGED from [org.webkit:android-jsc:r245459] /Users/mac/.gradle/caches/transforms-2/files-2.1/cfa0318a2940a6143cf818415dc0c66c/AndroidManifest.xml:7:5-9:41
+MERGED from [org.webkit:android-jsc:r245459] /Users/mac/.gradle/caches/transforms-2/files-2.1/cfa0318a2940a6143cf818415dc0c66c/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-linear-gradient] /Users/mac/takeusnow-react-native/node_modules/react-native-linear-gradient/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-linear-gradient] /Users/mac/takeusnow-react-native/node_modules/react-native-linear-gradient/android/build/intermediates/library_manifest/release/AndroidManifest.xml:7:5-9:41
+MERGED from [com.google.android.material:material:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/6746fa457539c872fd18a7e9e0a1efe4/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/6746fa457539c872fd18a7e9e0a1efe4/AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/524d018844086b7fae295036d031aaa4/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/524d018844086b7fae295036d031aaa4/AndroidManifest.xml:20:5-22:41
 MERGED from [com.facebook.fresco:fresco:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f5689d4f2ec5e79ff72dc69ee7d27c7f/AndroidManifest.xml:5:5-7:41
@@ -188,85 +208,101 @@ MERGED from [com.facebook.fresco:imagepipeline-base:2.0.0] /Users/mac/.gradle/ca
 MERGED from [com.facebook.fresco:imagepipeline-base:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/504bef12ff31e1747256fd5a4078f1b9/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.soloader:soloader:0.6.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1c8dcf4bca237abec8ad9d8968857718/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.soloader:soloader:0.6.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1c8dcf4bca237abec8ad9d8968857718/AndroidManifest.xml:7:5-9:41
-MERGED from [androidx.transition:transition:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/25c6e24b299f27d11937492b580c4154/AndroidManifest.xml:20:5-44
-MERGED from [androidx.transition:transition:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/25c6e24b299f27d11937492b580c4154/AndroidManifest.xml:20:5-44
-MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1dc26ff3396ad1a068745c1e538ea0b5/AndroidManifest.xml:20:5-44
-MERGED from [androidx.recyclerview:recyclerview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/1dc26ff3396ad1a068745c1e538ea0b5/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f8f36a85b47fbaf1e83e47e52a0c188f/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f8f36a85b47fbaf1e83e47e52a0c188f/AndroidManifest.xml:20:5-44
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/be3fd7ccfe5b56fb03fb7e88453c867f/AndroidManifest.xml:20:5-44
-MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/be3fd7ccfe5b56fb03fb7e88453c867f/AndroidManifest.xml:20:5-44
-MERGED from [androidx.fragment:fragment:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/76b47d9c39c6de6eb85b306cbe20963f/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.fragment:fragment:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/76b47d9c39c6de6eb85b306cbe20963f/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f3b4db972376747dc0344758ecfd2d10/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.viewpager2:viewpager2:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/f3b4db972376747dc0344758ecfd2d10/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.2.1] /Users/mac/.gradle/caches/transforms-2/files-2.1/f07134038a0f7b2adc43db59b8fc48ef/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.2.1] /Users/mac/.gradle/caches/transforms-2/files-2.1/f07134038a0f7b2adc43db59b8fc48ef/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9ca5a36e4785ec15d82f407afbe7ee2b/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9ca5a36e4785ec15d82f407afbe7ee2b/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/5938783751cedfd19a1861931dcebf3d/AndroidManifest.xml:20:5-44
+MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/5938783751cedfd19a1861931dcebf3d/AndroidManifest.xml:20:5-44
 MERGED from [androidx.appcompat:appcompat-resources:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/08281823151d59a9fafeca3939d82e28/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.appcompat:appcompat-resources:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/08281823151d59a9fafeca3939d82e28/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/ae420afacc0a2842b13fbcc68344303e/AndroidManifest.xml:20:5-44
 MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/ae420afacc0a2842b13fbcc68344303e/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/a9ca4df7d9bffb3468da58cd38366be7/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/a9ca4df7d9bffb3468da58cd38366be7/AndroidManifest.xml:20:5-44
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/935239b291f1dc61d6a3a8956d1ca689/AndroidManifest.xml:20:5-44
-MERGED from [androidx.slidingpanelayout:slidingpanelayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/935239b291f1dc61d6a3a8956d1ca689/AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/665c18f4ce2a80070eaaea7141f9e07f/AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/665c18f4ce2a80070eaaea7141f9e07f/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46d4447e7f95939bcef72fc574025a15/AndroidManifest.xml:20:5-44
-MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/46d4447e7f95939bcef72fc574025a15/AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/0ab086e444c323cbef42dae979b95984/AndroidManifest.xml:20:5-44
 MERGED from [androidx.loader:loader:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/0ab086e444c323cbef42dae979b95984/AndroidManifest.xml:20:5-44
-MERGED from [androidx.activity:activity:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/b7c93e5b69b77c3632c35dd096c460e2/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.activity:activity:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/b7c93e5b69b77c3632c35dd096c460e2/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8630c5589b4e784afbdeea8b9ef9d129/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8630c5589b4e784afbdeea8b9ef9d129/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4f86f917c84cfa5e531778b8cf91a677/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.recyclerview:recyclerview:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4f86f917c84cfa5e531778b8cf91a677/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/665c18f4ce2a80070eaaea7141f9e07f/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/665c18f4ce2a80070eaaea7141f9e07f/AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4ad4bc863e80046b9d01ca076c8c393a/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4ad4bc863e80046b9d01ca076c8c393a/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9bad5bd0eb3c1413253598af0769d802/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9bad5bd0eb3c1413253598af0769d802/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/40450e414ac50291add22e894a13cde2/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/40450e414ac50291add22e894a13cde2/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/5938783751cedfd19a1861931dcebf3d/AndroidManifest.xml:20:5-44
-MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/5938783751cedfd19a1861931dcebf3d/AndroidManifest.xml:20:5-44
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/2fb52ab34acae425e2350f24e3494e82/AndroidManifest.xml:20:5-44
-MERGED from [androidx.asynclayoutinflater:asynclayoutinflater:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/2fb52ab34acae425e2350f24e3494e82/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.3.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/4052e92473897288980a59d77b12e8ec/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.core:core:1.3.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/4052e92473897288980a59d77b12e8ec/AndroidManifest.xml:20:5-22:41
-MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/eb6aa33a51d07de7affd50f99e9cd63a/AndroidManifest.xml:5:5-7:41
-MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/eb6aa33a51d07de7affd50f99e9cd63a/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.5.0-alpha02] /Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/AndroidManifest.xml:20:5-22:41
+MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c88b71f00285ddadd2e93410ded1a2e2/AndroidManifest.xml:5:5-7:41
+MERGED from [com.facebook.fresco:fbcore:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c88b71f00285ddadd2e93410ded1a2e2/AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dcd5bb7a363c5004ec92b56d53f88eaa/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8671d2746eb14e656d3bab3f09f326f9/AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8671d2746eb14e656d3bab3f09f326f9/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cardview:cardview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4c04242661c75291a596e26e5c09882b/AndroidManifest.xml:20:5-44
-MERGED from [androidx.cardview:cardview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4c04242661c75291a596e26e5c09882b/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c7e2e54ec419324ec36425547da02dae/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c7e2e54ec419324ec36425547da02dae/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/fe752bec9e9076d1e5698bff6696e9a1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/fe752bec9e9076d1e5698bff6696e9a1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/d1637c20c81e3850987c8bd8e71a8d85/AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/d1637c20c81e3850987c8bd8e71a8d85/AndroidManifest.xml:20:5-44
-MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/b83a435480c3ac32b704deb04365921a/AndroidManifest.xml:20:5-44
-MERGED from [androidx.documentfile:documentfile:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/b83a435480c3ac32b704deb04365921a/AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/aad91db8a332c4657fa37012ccdc1866/AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/aad91db8a332c4657fa37012ccdc1866/AndroidManifest.xml:20:5-44
-MERGED from [androidx.print:print:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c9acb8c32a0868290994a71542a37f67/AndroidManifest.xml:20:5-44
-MERGED from [androidx.print:print:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/c9acb8c32a0868290994a71542a37f67/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/3d222d4449e3bcff3e404d4630d9d435/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/3d222d4449e3bcff3e404d4630d9d435/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9dc406706c8f17e7fbdd187d5bc372d1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/9dc406706c8f17e7fbdd187d5bc372d1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4c04242661c75291a596e26e5c09882b/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/4c04242661c75291a596e26e5c09882b/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/0e05681ee5a2312f8c5774a0e14c48a6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/0e05681ee5a2312f8c5774a0e14c48a6/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.savedstate:savedstate:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dc138a5bec183fa1b67f96c43a56ff4b/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.savedstate:savedstate:1.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/dc138a5bec183fa1b67f96c43a56ff4b/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/69920c4a702ab54fee8887777d2842ed/AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/69920c4a702ab54fee8887777d2842ed/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8f86da08b50a97e60e0c5f23376c94f6/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/8f86da08b50a97e60e0c5f23376c94f6/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/49ed072da2f20619bb79f58d90ad5f0b/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/49ed072da2f20619bb79f58d90ad5f0b/AndroidManifest.xml:20:5-44
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/ff644685c4eec59789ed8e4a5356181f/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.2.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/ff644685c4eec59789ed8e4a5356181f/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/98b483801e5d5b0d8d319af5d65912e1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /Users/mac/.gradle/caches/transforms-2/files-2.1/98b483801e5d5b0d8d319af5d65912e1/AndroidManifest.xml:20:5-22:41
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-		ADDED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
-		INJECTED from /Users/mac/snaplancing-mobile/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+		ADDED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/mac/takeusnow-react-native/android/app/src/main/AndroidManifest.xml
 uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from [:@react-native-community_netinfo] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:9:5-79
+ADDED from [:react-native-community_netinfo] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:9:5-79
 	android:name
-		ADDED from [:@react-native-community_netinfo] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:9:22-76
+		ADDED from [:react-native-community_netinfo] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:9:22-76
 uses-permission#android.permission.ACCESS_WIFI_STATE
-ADDED from [:@react-native-community_netinfo] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:10:5-76
+ADDED from [:react-native-community_netinfo] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:10:5-76
 	android:name
-		ADDED from [:@react-native-community_netinfo] /Users/mac/snaplancing-mobile/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:10:22-73
+		ADDED from [:react-native-community_netinfo] /Users/mac/takeusnow-react-native/node_modules/@react-native-community/netinfo/android/build/intermediates/library_manifest/release/AndroidManifest.xml:10:22-73
+provider#com.imagepicker.FileProvider
+ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:10:9-18:20
+	android:grantUriPermissions
+		ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:14:13-47
+	android:authorities
+		ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:12:13-60
+	android:exported
+		ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:13:13-37
+	android:name
+		ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:11:13-56
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:15:13-17:58
+	android:resource
+		ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:17:17-55
+	android:name
+		ADDED from [:react-native-image-picker] /Users/mac/takeusnow-react-native/node_modules/react-native-image-picker/android/build/intermediates/library_manifest/release/AndroidManifest.xml:16:17-67
+provider#com.reactnativecommunity.webview.RNCWebViewFileProvider
+ADDED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:12:9-20:20
+	android:grantUriPermissions
+		ADDED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:16:13-47
+	android:authorities
+		ADDED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:14:13-64
+	android:exported
+		ADDED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:15:13-37
+	android:name
+		ADDED from [:react-native-webview] /Users/mac/takeusnow-react-native/node_modules/react-native-webview/android/build/intermediates/library_manifest/release/AndroidManifest.xml:13:13-83

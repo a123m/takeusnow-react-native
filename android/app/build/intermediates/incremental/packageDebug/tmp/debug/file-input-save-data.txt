@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Jul 07 16:32:49 IST 2020
+#Sun Aug 23 17:38:07 IST 2020
 60.set=NATIVE_RESOURCE
 52.set=NATIVE_RESOURCE
 53.base=/Users/mac/takeusnow-react-native/android/app/build/intermediates/transforms/mergeJniLibs/debug/0

@@ -29,7 +29,7 @@ interface State {
 
 export default class Project extends React.PureComponent<Props, State> {
   userId: string | null | undefined;
-  role: string | null | undefined;
+  accountType: string | null | undefined;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -43,8 +43,10 @@ export default class Project extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = async () => {
-    this.role = await AsyncStorage.getItem('role');
+    this.accountType = await AsyncStorage.getItem('accountType');
     this.userId = await AsyncStorage.getItem('userId');
+
+    console.log('type', this.accountType);
 
     try {
       let response: ProjectEntity[] = await APIService.sendGetCall(
@@ -70,6 +72,7 @@ export default class Project extends React.PureComponent<Props, State> {
       return (
         <View style={styles.viewStyle}>
           <Text>No Projects!</Text>
+          {this.accountType === 'hire' ? <FAB onPress={toPostProject} /> : null}
         </View>
       );
     }
@@ -108,7 +111,7 @@ export default class Project extends React.PureComponent<Props, State> {
             />
           )}
         />
-        {this.role === 'work' ? <FAB onPress={toPostProject} /> : null}
+        {this.accountType === 'hire' ? <FAB onPress={toPostProject} /> : null}
       </>
     );
   }
