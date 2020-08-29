@@ -7,6 +7,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Splash from 'react-native-splash-screen';
@@ -94,8 +95,8 @@ export default class SignIn extends React.PureComponent<Props, State> {
         style={{ width: '100%', height: '100%' }}
       >
         <StatusBar backgroundColor="rgb(60,	21,	98)" barStyle="light-content" />
-        <View
-          style={{
+        <ScrollView
+          contentContainerStyle={{
             flex: 1,
             marginTop: '20%',
             alignItems: 'center',
@@ -153,7 +154,7 @@ export default class SignIn extends React.PureComponent<Props, State> {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </ScrollView>
         {isLoading ? (
           <Spinner mode="overlay" size="large" color="white" />
         ) : null}

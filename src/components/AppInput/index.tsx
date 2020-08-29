@@ -1,8 +1,9 @@
 import React from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+// eslint-disable-next-line no-unused-vars
+import { TextInput, StyleSheet, TextStyle } from 'react-native';
 
 type input = {
-  style?: Object;
+  style?: TextStyle;
   placeholder?: string | undefined;
   onChangeText: any;
   value: string | undefined;

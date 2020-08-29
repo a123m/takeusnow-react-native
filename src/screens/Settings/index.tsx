@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Switch } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { AppButton } from '../../components';
+import Config from '../../utils/Config';
 
 interface Props {
   onViewSignOut(): void;
@@ -54,7 +55,9 @@ export default class Settings extends React.PureComponent<Props, State> {
           </View>
           <View style={styles.smallContainer}>
             <Text style={styles.textStyle}>App Version</Text>
-            <Text style={[styles.textStyle, { color: 'silver' }]}>1.0.0</Text>
+            <Text style={[styles.textStyle, { color: 'silver' }]}>
+              {Config.Version}
+            </Text>
           </View>
         </View>
         <AppButton iconName="logout" onPress={this._signOutAsync}>

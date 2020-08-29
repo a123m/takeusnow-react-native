@@ -28,8 +28,6 @@ const Styles = {
     textStyle: {
       fontSize: 18,
       fontWeight: 'bold',
-      textAlign: 'center',
-      alignSelf: 'center',
     },
     headerStyle: {
       ...Platform.select({

@@ -1,4 +1,4 @@
-const Globals: globals | any = {
+const Globals = {
   PostProject: {
     categoryId: 0,
     title: '',
@@ -6,34 +6,27 @@ const Globals: globals | any = {
     state: '',
     city: '',
     budget: '',
+    reqOn: '',
     validity: '',
     status: 'ACTIVE',
     type: '',
     skills: [],
   },
   clearPostProject() {
-    for (let i in this.PostProject) {
-      this.PostProject[i] = '';
-    }
+    this.PostProject = {
+      categoryId: 0,
+      title: '',
+      detail: '',
+      state: '',
+      city: '',
+      budget: '',
+      reqOn: '',
+      validity: '',
+      status: 'ACTIVE',
+      type: '',
+      skills: [],
+    };
   },
 };
 
 export default Globals;
-
-interface globals {
-  PostProject: postProject;
-  clearPostProject: any;
-}
-
-interface postProject {
-  categoryId: number;
-  title: string;
-  detail: string;
-  state: string;
-  city: string;
-  budget: string;
-  validity: string | Date | number;
-  status: string;
-  type: string;
-  skills: Array<string | object>;
-}

@@ -142,7 +142,7 @@ ProfileStack.navigationOptions = ({ navigation }: any) => {
 
 const AppTab = createBottomTabNavigator(
   {
-    Home: { screen: HomeStack, navigationOptions: { title: 'Header title' } },
+    Home: HomeStack,
     Project: ProjectStack,
     Browse: BrowseStack,
     Profile: ProfileStack,

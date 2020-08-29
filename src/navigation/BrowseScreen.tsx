@@ -12,10 +12,11 @@ type Props = {
 
 export default class BrowseScreen extends React.PureComponent<Props> {
   static navigationOptions = () => ({
-    headerTitle: 'Browse Your Intrust',
+    headerTitle: '',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
     headerStyle: Styles.AppHeaderStyle.headerStyle,
+    headerTransparent: true,
     // headerRight: () => (
     //   <HeaderRight
     //     name={''}

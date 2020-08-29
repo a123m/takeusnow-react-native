@@ -6,7 +6,7 @@ import { NavigationEvents } from 'react-navigation';
 // eslint-disable-next-line no-unused-vars
 import { ProjectEntity } from '../../modals';
 
-import { FAB, MyProjectCard, Spinner } from '../../components';
+import { FAB, MyProjectCard, Spinner, Header } from '../../components';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 
@@ -46,8 +46,6 @@ export default class Project extends React.PureComponent<Props, State> {
     this.accountType = await AsyncStorage.getItem('accountType');
     this.userId = await AsyncStorage.getItem('userId');
 
-    console.log('type', this.accountType);
-
     try {
       let response: ProjectEntity[] = await APIService.sendGetCall(
         'project/' + this.userId
@@ -78,6 +76,7 @@ export default class Project extends React.PureComponent<Props, State> {
     }
     return (
       <>
+        <Header title={'My Projects'} />
         <NavigationEvents onDidFocus={this.setDefaultView} />
         <FlatList
           keyExtractor={(item, index) => index.toString()}

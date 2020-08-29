@@ -12,6 +12,8 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 // import LinearGradient from 'react-native-linear-gradient';
 
+import { Header } from '../../components';
+
 // import { Styles } from '../../common';
 
 interface Props {
@@ -54,74 +56,77 @@ export default class Browse extends React.PureComponent<Props> {
   render() {
     // const { _onTilePress } = this.props;
     return (
-      <ScrollView>
-        <View style={styles.mainContainer}>
-          <View style={styles.rowContainer}>
-            {this._renderTileView(
-              1,
-              'Photography',
-              'photograph',
-              'Fontisto',
-              30
-            )}
-            {this._renderTileView(
-              2,
-              'Videography',
-              'videocamera',
-              'AntDesign',
-              30
-            )}
+      <>
+        <Header title={'Browse Your Intrust'} />
+        <ScrollView>
+          <View style={styles.mainContainer}>
+            <View style={styles.rowContainer}>
+              {this._renderTileView(
+                1,
+                'Photography',
+                'photograph',
+                'Fontisto',
+                30
+              )}
+              {this._renderTileView(
+                2,
+                'Videography',
+                'videocamera',
+                'AntDesign',
+                30
+              )}
+            </View>
+            <View style={styles.rowContainer}>
+              {this._renderTileView(
+                3,
+                'Wedding Planners',
+                'event',
+                'SimpleLineIcons',
+                30
+              )}
+              {this._renderTileView(
+                4,
+                'Makeup Artist',
+                'hourglass',
+                'SimpleLineIcons',
+                30
+              )}
+            </View>
+            <View style={styles.rowContainer}>
+              {this._renderTileView(
+                5,
+                'Decoration',
+                'badge',
+                'SimpleLineIcons',
+                30
+              )}
+              {this._renderTileView(
+                6,
+                'Choreography',
+                'people',
+                'SimpleLineIcons',
+                30
+              )}
+            </View>
+            <View style={styles.rowContainer}>
+              {this._renderTileView(
+                7,
+                'Astrology',
+                'pie-chart',
+                'SimpleLineIcons',
+                30
+              )}
+              {this._renderTileView(
+                8,
+                'Entertainment',
+                'playlist',
+                'SimpleLineIcons',
+                30
+              )}
+            </View>
           </View>
-          <View style={styles.rowContainer}>
-            {this._renderTileView(
-              3,
-              'Wedding Planners',
-              'event',
-              'SimpleLineIcons',
-              30
-            )}
-            {this._renderTileView(
-              4,
-              'Makeup Artist',
-              'hourglass',
-              'SimpleLineIcons',
-              30
-            )}
-          </View>
-          <View style={styles.rowContainer}>
-            {this._renderTileView(
-              5,
-              'Decoration',
-              'badge',
-              'SimpleLineIcons',
-              30
-            )}
-            {this._renderTileView(
-              6,
-              'Choreography',
-              'people',
-              'SimpleLineIcons',
-              30
-            )}
-          </View>
-          <View style={styles.rowContainer}>
-            {this._renderTileView(
-              7,
-              'Astrology',
-              'pie-chart',
-              'SimpleLineIcons',
-              30
-            )}
-            {this._renderTileView(
-              8,
-              'Entertainment',
-              'playlist',
-              'SimpleLineIcons',
-              30
-            )}
-          </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </>
     );
   }
 }

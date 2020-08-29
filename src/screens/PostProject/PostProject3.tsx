@@ -144,7 +144,10 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
   _renderSkillModal = () => {
     const { selectedSkillIds } = this.state;
     return (
-      <AppModal visible={this.state.showSkillModal}>
+      <AppModal
+        onRequestClose={() => this.setState({ showSkillModal: false })}
+        visible={this.state.showSkillModal}
+      >
         <View style={styles.modalContainer}>
           <View>
             <View

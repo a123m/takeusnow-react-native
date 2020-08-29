@@ -145,22 +145,22 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
         >
           <View style={{ padding: 10 }}>
             <Text style={styles.headingStyle}>Give title to your Project</Text>
-            <View
+
+            <AppInput
+              onChangeText={(title: string) => {
+                this.setState({ title });
+              }}
+              placeholder={'I need 2 professional photographers for an event'}
+              value={this.state.title}
               style={{
                 padding: 8,
-                height: 60,
+                height: 40,
+                marginTop: 10,
                 borderBottomColor: Styles.PrimaryColor2,
                 borderBottomWidth: 1,
               }}
-            >
-              <AppInput
-                onChangeText={(title: string) => {
-                  this.setState({ title });
-                }}
-                placeholder={'I need 2 professional photographers for an event'}
-                value={this.state.title}
-              />
-            </View>
+            />
+
             <Text style={{ color: 'silver' }}>
               At least 15 character in the the title.
             </Text>

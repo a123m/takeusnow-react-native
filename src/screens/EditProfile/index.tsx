@@ -20,6 +20,8 @@ import {
   AppCard,
   Loader,
   BoxText,
+  Header,
+  HeaderRight,
 } from '../../components';
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -41,6 +43,7 @@ import { Styles } from '../../common';
 
 interface Props {
   toReview(userId: any): void;
+  toSettings(): void;
 }
 
 interface State {
@@ -1337,45 +1340,53 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
       isImageViewVisible,
     } = this.state;
     return (
-      <ScrollView scrollEnabled={!isLoading}>
-        {this._renderSkillModal()}
-        {this._renderEquipmentsModal()}
-        {this._renderLanguagesModal()}
-        {this._renderProfileImage()}
-        {this._renderPortfolio()}
-        {this._renderAbout()}
-        {this._renderLocation()}
-        {this._renderSkillSection()}
-        {this._renderEquipmentsSection()}
-        {this._renderOthers()}
-        {this._renderLanguagesSection()}
-        <ImageView
-          images={portfolio}
-          imageIndex={imageIndex}
-          animationType="slide"
-          visible={isImageViewVisible}
-          onRequestClose={() => this.setState({ isImageViewVisible: false })}
+      <>
+        <Header
+          title={'My Profile'}
+          headerRight={
+            <HeaderRight name={'settings'} onPress={this.props.toSettings} />
+          }
         />
-        {showDatePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date(dateOfBirth)}
-            mode={'date'}
-            display="default"
-            onChange={(event, selectedDate) => {
-              if (event.type !== 'dismissed') {
-                this.setState({
-                  dateOfBirth: Moment(selectedDate).format('MMM DD, YYYY'),
-                  showDatePicker: false,
-                });
-              }
-              this.setState({ showDatePicker: false });
-            }}
+        <ScrollView scrollEnabled={!isLoading}>
+          {this._renderSkillModal()}
+          {this._renderEquipmentsModal()}
+          {this._renderLanguagesModal()}
+          {this._renderProfileImage()}
+          {this._renderPortfolio()}
+          {this._renderAbout()}
+          {this._renderLocation()}
+          {this._renderSkillSection()}
+          {this._renderEquipmentsSection()}
+          {this._renderOthers()}
+          {this._renderLanguagesSection()}
+          <ImageView
+            images={portfolio}
+            imageIndex={imageIndex}
+            animationType="slide"
+            visible={isImageViewVisible}
+            onRequestClose={() => this.setState({ isImageViewVisible: false })}
           />
-        )}
-        {this._renderCheckReviews()}
-        <Loader visible={isLoading} />
-      </ScrollView>
+          {showDatePicker && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={new Date(dateOfBirth)}
+              mode={'date'}
+              display="default"
+              onChange={(event, selectedDate) => {
+                if (event.type !== 'dismissed') {
+                  this.setState({
+                    dateOfBirth: Moment(selectedDate).format('MMM DD, YYYY'),
+                    showDatePicker: false,
+                  });
+                }
+                this.setState({ showDatePicker: false });
+              }}
+            />
+          )}
+          {this._renderCheckReviews()}
+          <Loader visible={isLoading} />
+        </ScrollView>
+      </>
     );
   }
 }

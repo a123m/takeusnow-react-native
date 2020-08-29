@@ -13,19 +13,14 @@ import { SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import {
-  ProjectCard,
-  AppModal,
-  // AppCard,
-  AppButton,
-  UserCard,
-} from '../../components';
+import { ProjectCard, AppModal, AppButton, UserCard } from '../../components';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 import RegionList from '../../utils/RegionList';
 
 // eslint-disable-next-line no-unused-vars
 import { ProjectEntity, UserEntity } from '../../modals';
+import { AccountType } from '../../enums';
 
 import { Styles } from '../../common';
 
@@ -61,15 +56,6 @@ interface Data {
   status: string;
 }
 
-type HireResponseType = {
-  userId: number;
-  fname: string;
-  lname: string;
-  user_image: string;
-  average_reviews: number;
-  total_reviews: number;
-};
-
 export default class Category extends React.PureComponent<Props, State> {
   completeResponseData: any = [];
   projectFilterParams = {
@@ -78,7 +64,7 @@ export default class Category extends React.PureComponent<Props, State> {
     city: '',
   };
   userFilterParams = {};
-  role: string | null = 'work';
+  accountType: string | null = AccountType.Work;
   scrollY = new Animated.Value(0);
   startHeight = 70;
   endHeight = 0;
@@ -123,9 +109,9 @@ export default class Category extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = async () => {
-    this.role = await AsyncStorage.getItem('accountType');
+    this.accountType = await AsyncStorage.getItem('accountType');
     try {
-      if (this.role === 'work') {
+      if (this.accountType === AccountType.Work) {
         const response: ProjectEntity[] = await APIService.sendPostCall(
           `browse/${this.categoryId}?page=${this.page}&limit=${
             this.limit
@@ -139,7 +125,7 @@ export default class Category extends React.PureComponent<Props, State> {
           isLoading: false,
         });
       }
-      if (this.role === 'hire') {
+      if (this.accountType === AccountType.Hire) {
         const response: UserEntity[] = await APIService.sendPostCall(
           `browse/${this.categoryId}?page=${this.page}&limit=${
             this.limit
@@ -280,7 +266,7 @@ export default class Category extends React.PureComponent<Props, State> {
     this.projectFilterParams.city = this.state.city;
     let response;
     try {
-      if (this.role === 'hire') {
+      if (this.accountType === 'hire') {
         response = await APIService.sendPostCall(
           `browse/${this.categoryId}/hire?page=${this.page}&limit=${
             this.limit
@@ -292,7 +278,7 @@ export default class Category extends React.PureComponent<Props, State> {
           isLoading: false,
         });
       }
-      if (this.role === 'work') {
+      if (this.accountType === 'work') {
         response = await APIService.sendPostCall(
           `browse/${this.categoryId}/work?page=${this.page}&limit=${
             this.limit
@@ -330,11 +316,13 @@ export default class Category extends React.PureComponent<Props, State> {
       >
         <SearchBar
           placeholder={
-            this.role === 'work' ? 'Search Projects...' : 'Search Users...'
+            this.accountType === 'work'
+              ? 'Search Projects...'
+              : 'Search Users...'
           }
           onChangeText={(searchInput: string) => {
             this.setState({ searchInput }, () => {
-              if (this.role === 'work') {
+              if (this.accountType === 'work') {
                 const filteredData = this.completeResponseData.filter(
                   (item: Data) => {
                     return item.title
@@ -344,7 +332,7 @@ export default class Category extends React.PureComponent<Props, State> {
                 );
                 this.setState({ projectData: filteredData });
               }
-              if (this.role === 'hire') {
+              if (this.accountType === 'hire') {
                 const filteredData = this.completeResponseData.filter(
                   (item: UserEntity) => {
                     return (
@@ -386,7 +374,7 @@ export default class Category extends React.PureComponent<Props, State> {
           let response: any;
           this.page = this.page + 1;
 
-          if (this.role === 'work') {
+          if (this.accountType === 'work') {
             response = await APIService.sendPostCall(
               `browse/${this.categoryId}?page=${this.page}&limit=${
                 this.limit
@@ -395,7 +383,7 @@ export default class Category extends React.PureComponent<Props, State> {
             );
           }
 
-          if (this.role === 'hire') {
+          if (this.accountType === 'hire') {
             response = await APIService.sendPostCall(
               `browse/${this.categoryId}?page=${this.page}&limit=${
                 this.limit
@@ -407,7 +395,7 @@ export default class Category extends React.PureComponent<Props, State> {
           if (response.length > 0) {
             //Successful response from the API Call
             //After the response increasing the offset for the next API call.
-            if (this.role === 'work') {
+            if (this.accountType === 'work') {
               this.setState({
                 projectData: [...this.state.projectData, ...response],
                 //adding the new data with old one available
@@ -416,7 +404,7 @@ export default class Category extends React.PureComponent<Props, State> {
               });
             }
 
-            if (this.role === 'hire') {
+            if (this.accountType === 'hire') {
               this.setState({
                 userData: [...this.state.userData, ...response],
                 //adding the new data with old one available
@@ -520,7 +508,7 @@ export default class Category extends React.PureComponent<Props, State> {
   };
 
   render() {
-    if (this.role === 'work') {
+    if (this.accountType === 'work') {
       return (
         <>
           {this._renderFilterModal()}
@@ -529,7 +517,7 @@ export default class Category extends React.PureComponent<Props, State> {
         </>
       );
     }
-    if (this.role === 'hire') {
+    if (this.accountType === 'hire') {
       return (
         <>
           {this._renderFilterModal()}

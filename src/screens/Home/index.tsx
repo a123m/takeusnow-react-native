@@ -15,7 +15,7 @@ import * as Progress from 'react-native-progress';
 import LinearGradient from 'react-native-linear-gradient';
 import Splash from 'react-native-splash-screen';
 
-import { ExploreCard, AppCard } from '../../components';
+import { ExploreCard, AppCard, Header } from '../../components';
 import Socket from '../../utils/Socket';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
@@ -216,48 +216,57 @@ export default class Home extends React.PureComponent<any, any> {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
-        <StatusBar backgroundColor="white" barStyle="dark-content" />
-        <View style={{ flex: 0.5 }}>
-          <Image
-            style={{ height: '100%', width: '100%' }}
-            source={require('../../../assets/images/work.jpg')}
-          />
-        </View>
-        {this._renderWelcomeBanner()}
-        <AppCard style={{ flex: 0.1 }}>
-          <Text style={styles.headingStyle}>Profile Completed</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Progress.Bar
-              style={{ flex: 0.9 }}
-              width={null}
-              progress={this.state.profileCompletePercentage}
-              color={Styles.PrimaryColor}
+      <>
+        <Header title={'Home'} />
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
+          <StatusBar backgroundColor="white" barStyle="dark-content" />
+          <View style={{ flex: 0.5 }}>
+            <Image
+              style={{ height: '100%', width: '100%' }}
+              source={require('../../../assets/images/work.jpg')}
             />
-            <View style={{ flex: 0.1 }}>
-              <Text> {this.profileCompletedPercentage()}%</Text>
-            </View>
           </View>
-        </AppCard>
-        <AppCard style={{ flex: 0.5 }}>
-          <Text style={styles.headingStyle}>Explore</Text>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            data={data}
-            horizontal={true}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <ExploreCard
-                name={item.name}
-                onPress={() =>
-                  this.props.toCategory(item.categoryId, item.name)
-                }
-                image={item.image}
+          {this._renderWelcomeBanner()}
+          <AppCard style={{ flex: 0.1 }}>
+            <Text style={styles.headingStyle}>Profile Completed</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Progress.Bar
+                style={{ flex: 0.9 }}
+                width={null}
+                progress={this.state.profileCompletePercentage}
+                color={Styles.PrimaryColor}
               />
-            )}
-          />
-        </AppCard>
-      </ScrollView>
+              <View
+                style={{
+                  flex: 0.12,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Text>{this.profileCompletedPercentage()}%</Text>
+              </View>
+            </View>
+          </AppCard>
+          <AppCard style={{ flex: 0.5 }}>
+            <Text style={styles.headingStyle}>Explore</Text>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={data}
+              horizontal={true}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <ExploreCard
+                  name={item.name}
+                  onPress={() =>
+                    this.props.toCategory(item.categoryId, item.name)
+                  }
+                  image={item.image}
+                />
+              )}
+            />
+          </AppCard>
+        </ScrollView>
+      </>
     );
   }
 }
