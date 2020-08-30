@@ -37,7 +37,12 @@ import { UserEntity, PortfolioEntity } from '../../modals';
 
 import APIService from '../../utils/APIService';
 import RegionList from '../../utils/RegionList';
-import { GlobalErr, completeImageUrl } from '../../utils/utils';
+import {
+  GlobalErr,
+  completeImageUrl,
+  catData,
+  subCatData,
+} from '../../utils/utils';
 
 import { Styles } from '../../common';
 
@@ -87,28 +92,6 @@ type Portfolio = {
 };
 
 type Response = UserEntity & Portfolio;
-
-const catData = [
-  { cat_id: 0, name: 'Select Category', status: 0 },
-  { cat_id: 1, name: 'Photography', status: 0 },
-  { cat_id: 2, name: 'Videography', status: 0 },
-  { cat_id: 3, name: 'Wedding Planning', status: 0 },
-  { cat_id: 4, name: 'Makeup Artist', status: 0 },
-  { cat_id: 5, name: 'Decoration', status: 0 },
-  { cat_id: 6, name: 'Choreography', status: 0 },
-  { cat_id: 7, name: 'Astrology', status: 0 },
-  { cat_id: 8, name: 'Entertainment', status: 0 },
-];
-const subCatData = [
-  { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
-  { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
-  { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
-  { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
-  { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
-  { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
-  { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
-  { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
-];
 
 export default class ProfileEdit extends React.PureComponent<Props, State> {
   private combinedCatData: any = [];
@@ -881,26 +864,32 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                 selectText="Choose Skill..."
                 showDropDowns={false}
                 readOnlyHeadings={true}
-                onSelectedItemsChange={(selectedSubCat) =>
-                  this.setState({ selectedSubCat })
-                }
+                onSelectedItemsChange={(selectedSubCat) => {
+                  if (selectedSubCat.length > 10) {
+                    Alert.alert(
+                      'Alert',
+                      'You can only select maximum 10 skills'
+                    );
+                    return;
+                  }
+                  this.setState({ selectedSubCat });
+                }}
                 selectedItems={this.state.selectedSubCat}
               />
             </View>
           </View>
 
-          {selectedSubCat.length !== 0 ? (
-            <AppButton
-              style={{ margin: 10 }}
-              onPress={() => {
-                this.setState({
-                  showSkillModal: false,
-                });
-              }}
-            >
-              DONE
-            </AppButton>
-          ) : null}
+          <AppButton
+            style={{ margin: 10 }}
+            disabled={selectedSubCat.length !== 0 ? false : true}
+            onPress={() => {
+              this.setState({
+                showSkillModal: false,
+              });
+            }}
+          >
+            DONE
+          </AppButton>
         </View>
       </AppModal>
     );
@@ -1026,32 +1015,33 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
               </View>
             ) : null}
           </View>
-          {selectedRating !== 0 && enteredEquipment !== '' ? (
-            <AppButton
-              style={{ margin: 10 }}
-              onPress={() => {
-                if (this.state.equipmentsData.length === 3) {
-                  Alert.alert(
-                    'Alert',
-                    'Equipment selection limit has reached, Please remove old equipment to add new.'
-                  );
-                  return;
-                }
-                let equipmentsObj = {
-                  value: this.state.enteredEquipment,
-                  rating: this.state.selectedRating,
-                };
+          <AppButton
+            style={{ margin: 10 }}
+            disabled={
+              selectedRating !== 0 && enteredEquipment !== '' ? false : true
+            }
+            onPress={() => {
+              if (this.state.equipmentsData.length === 3) {
+                Alert.alert(
+                  'Alert',
+                  'Equipment selection limit has reached, Please remove old equipment to add new.'
+                );
+                return;
+              }
+              let equipmentsObj = {
+                value: this.state.enteredEquipment,
+                rating: this.state.selectedRating,
+              };
 
-                this.setState({
-                  equipmentsData: [equipmentsObj, ...this.state.equipmentsData],
-                  enteredEquipment: '',
-                  selectedRating: 0,
-                });
-              }}
-            >
-              ADD
-            </AppButton>
-          ) : null}
+              this.setState({
+                equipmentsData: [equipmentsObj, ...this.state.equipmentsData],
+                enteredEquipment: '',
+                selectedRating: 0,
+              });
+            }}
+          >
+            ADD
+          </AppButton>
         </View>
       </AppModal>
     );
@@ -1263,6 +1253,9 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
           {selectedRating !== 0 && enteredLanguage !== '' ? (
             <AppButton
               style={{ margin: 10 }}
+              disabled={
+                selectedRating !== 0 && enteredLanguage !== '' ? false : true
+              }
               onPress={() => {
                 if (this.state.languagesData.length === 3) {
                   Alert.alert(

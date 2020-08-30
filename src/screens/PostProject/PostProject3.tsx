@@ -5,6 +5,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 import { AppInput, AppButton, AppModal, BoxText } from '../../components';
 import Globals from '../../utils/Globals';
+import { catData, subCatData } from '../../utils/utils';
 
 import { Styles } from '../../common';
 
@@ -18,28 +19,6 @@ interface State {
   showSkillModal: boolean;
   selectedSkillIds: any;
 }
-
-const catData = [
-  { cat_id: 0, name: 'Select Category', status: 0 },
-  { cat_id: 1, name: 'Photography', status: 0 },
-  { cat_id: 2, name: 'Videography', status: 0 },
-  { cat_id: 3, name: 'Wedding Planning', status: 0 },
-  { cat_id: 4, name: 'Makeup Artist', status: 0 },
-  { cat_id: 5, name: 'Decoration', status: 0 },
-  { cat_id: 6, name: 'Choreography', status: 0 },
-  { cat_id: 7, name: 'Astrology', status: 0 },
-  { cat_id: 8, name: 'Entertainment', status: 0 },
-];
-const subCatData = [
-  { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
-  { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
-  { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
-  { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
-  { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
-  { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
-  { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
-  { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
-];
 
 export default class PostProject3 extends React.PureComponent<Props, State> {
   private combinedCatData: any = [];
@@ -98,21 +77,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
         }}
       >
         {skillData.map((item: string, index: string | number | undefined) => {
-          return (
-            <BoxText
-              size={16}
-              key={index}
-              text={item}
-              onPress={() => {
-                this.setState({
-                  selectedSkillIds: this.state.selectedSkillIds.filter(
-                    (newItem: any, newIndex: string | number | undefined) =>
-                      newIndex !== index
-                  ),
-                });
-              }}
-            />
-          );
+          return <BoxText size={16} key={index} text={item} />;
         })}
       </View>
     );
@@ -175,9 +140,25 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
               selectText="Choose Skill..."
               showDropDowns={false}
               readOnlyHeadings={true}
-              onSelectedItemsChange={(selectedSkillIds) =>
-                this.setState({ selectedSkillIds })
-              }
+              onSelectedItemsChange={(selectedSkillIds) => {
+                if (selectedSkillIds.length > 5) {
+                  Alert.alert('Alert', 'You can only select maximum 5 skills');
+                  return;
+                }
+                const selectedSkills = [];
+                for (let i of selectedSkillIds) {
+                  for (let j of subCatData) {
+                    if (j.sub_cat_id === i) {
+                      selectedSkills.push(j.name);
+                    }
+                  }
+                }
+
+                this.setState({
+                  skillData: selectedSkills,
+                  selectedSkillIds: selectedSkillIds,
+                });
+              }}
               selectedItems={this.state.selectedSkillIds}
             />
           </View>
@@ -185,26 +166,12 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
           <AppButton
             disabled={selectedSkillIds.length !== 0 ? false : true}
             onPress={() => {
-              if (this.state.skillData.length === 10) {
-                Alert.alert('Alert', 'Skill selection limit has reached');
-                return;
-              }
-              const selectedSkills = [];
-              for (let i of this.state.selectedSkillIds) {
-                for (let j of subCatData) {
-                  if (j.sub_cat_id === i) {
-                    selectedSkills.push(j.name);
-                  }
-                }
-              }
-
               this.setState({
-                skillData: selectedSkills,
                 showSkillModal: false,
               });
             }}
           >
-            ADD
+            DONE
           </AppButton>
         </View>
       </AppModal>

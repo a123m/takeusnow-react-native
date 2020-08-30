@@ -7,7 +7,7 @@ import Config from '../utils/Config';
 import { GlobalErr } from './utils';
 
 axios.defaults.baseURL = Config.Debug ? Config.LocalIP : Config.ServerIP;
-axios.defaults.timeout = 10000;
+axios.defaults.timeout = 60000;
 if (Config.Debug) {
   axios.interceptors.request.use((request: any) => {
     console.log('=======request======\n', request.data);

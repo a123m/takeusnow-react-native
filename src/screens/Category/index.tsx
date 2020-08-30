@@ -264,10 +264,9 @@ export default class Category extends React.PureComponent<Props, State> {
     this.projectFilterParams.minBudget = this.state.minBudget;
     this.projectFilterParams.state = this.state.state;
     this.projectFilterParams.city = this.state.city;
-    let response;
     try {
       if (this.accountType === 'hire') {
-        response = await APIService.sendPostCall(
+        const response = await APIService.sendPostCall(
           `browse/${this.categoryId}/hire?page=${this.page}&limit=${
             this.limit
           }`,
@@ -279,10 +278,10 @@ export default class Category extends React.PureComponent<Props, State> {
         });
       }
       if (this.accountType === 'work') {
-        response = await APIService.sendPostCall(
-          `browse/${this.categoryId}/work?page=${this.page}&limit=${
+        const response: ProjectEntity[] = await APIService.sendPostCall(
+          `browse/${this.categoryId}?page=${this.page}&limit=${
             this.limit
-          }`,
+          }&type=work`,
           this.projectFilterParams
         );
         this.setState({
