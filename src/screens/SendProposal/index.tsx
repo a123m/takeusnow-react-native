@@ -7,13 +7,14 @@ import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 
 // eslint-disable-next-line no-unused-vars
-import { UserEntity } from '../../modals';
+import { UserEntity, Notification } from '../../models';
 
 import { Styles } from '../../common';
 
 interface Props {
   projectId: number;
-  title: String;
+  projectOwnerId: number;
+  title: string;
 }
 
 interface State {
@@ -105,12 +106,19 @@ export default class SendProposal extends React.PureComponent<Props, State> {
       this.setState({
         isLoading: false,
       });
-      if (response) {
-        Alert.alert('Alert', 'Proposal is send!');
-        this.setState({
-          allowedBids: this.state.allowedBids - 1,
-        });
+      if (!response) {
+        return;
       }
+      Alert.alert('Congratulations!', 'Proposal is send!');
+      this.setState({
+        allowedBids: this.state.allowedBids - 1,
+      });
+      const notification: Notification = {
+        userId: this.props.projectOwnerId,
+        title: 'Project Update',
+        body: `${this.props.title} received a proposal`,
+      };
+      APIService.sendPostCall('/notifications/send', notification);
     } catch (err) {
       GlobalErr(err);
     }

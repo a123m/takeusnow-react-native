@@ -10,7 +10,7 @@ axios.defaults.baseURL = Config.Debug ? Config.LocalIP : Config.ServerIP;
 axios.defaults.timeout = 60000;
 if (Config.Debug) {
   axios.interceptors.request.use((request: any) => {
-    console.log('=======request======\n', request.data);
+    console.log('=======request=======\n', request.data);
     return request;
   });
   axios.interceptors.response.use((response: any) => {
@@ -100,15 +100,6 @@ export default class APIService {
       const response = await axios.post(url, payload, headerObj);
       return response.data;
     } catch (err) {
-      let errMessage = err.response.data.message;
-      if (!errMessage) {
-        errMessage = 'Something Went wrong please try again!';
-      }
-      Alert.alert('Alert', errMessage);
-      if (errMessage.toUpperCase().includes('TOKEN')) {
-        await AsyncStorage.clear();
-        NativeModules.DevSettings.reload();
-      }
       GlobalErr(err);
     }
   }
@@ -143,15 +134,6 @@ export default class APIService {
       const response = await axios.patch(url, payload, headerObj);
       return response.data;
     } catch (err) {
-      let errMessage = err.response.data.message;
-      if (!errMessage) {
-        errMessage = 'Something Went wrong please try again!';
-      }
-      Alert.alert('Alert', errMessage);
-      if (errMessage.toUpperCase().includes('TOKEN')) {
-        await AsyncStorage.clear();
-        NativeModules.DevSettings.reload();
-      }
       GlobalErr(err);
     }
   }
@@ -187,11 +169,7 @@ export default class APIService {
       const response = await axios.put(url, payload, headerObj);
       return response.data;
     } catch (err) {
-      let errMessage = err.response.data.message;
-      if (!errMessage) {
-        errMessage = 'Something Went wrong please try again!';
-      }
-      Alert.alert('Alert', errMessage);
+      GlobalErr(err);
     }
   }
 
@@ -224,11 +202,7 @@ export default class APIService {
       const response = await axios.delete(url, headerObj);
       return response.data;
     } catch (err) {
-      let errMessage = err.response.data.message;
-      if (!errMessage) {
-        errMessage = 'Something Went wrong please try again!';
-      }
-      Alert.alert('Alert', errMessage);
+      GlobalErr(err);
     }
   }
 }

@@ -11,7 +11,7 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import { Avatar, Rating } from 'react-native-elements';
+import { Avatar, Rating, CheckBox } from 'react-native-elements';
 import {
   AppButton,
   AppModal,
@@ -20,8 +20,6 @@ import {
   AppCard,
   Loader,
   BoxText,
-  Header,
-  HeaderRight,
 } from '../../components';
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -30,18 +28,18 @@ import ImagePicker from 'react-native-image-picker';
 import ImageView from 'react-native-image-viewing';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 // eslint-disable-next-line no-unused-vars
-import { UserEntity, PortfolioEntity } from '../../modals';
+import { UserEntity, PortfolioEntity } from '../../models';
 
 import APIService from '../../utils/APIService';
-import RegionList from '../../utils/RegionList';
+// import RegionList from '../../utils/RegionList';
 import {
   GlobalErr,
   completeImageUrl,
   catData,
   subCatData,
+  combinedCatData,
 } from '../../utils/utils';
 
 import { Styles } from '../../common';
@@ -61,7 +59,9 @@ interface State {
   height: any;
   gender: string;
   state: string;
+  stateData: object[];
   city: string;
+  cityData: object[];
   selectedSkill: string;
   selectedRating: number;
   isLoading: boolean;
@@ -79,7 +79,8 @@ interface State {
   enteredEquipment: string;
   showLanguagesModal: boolean;
   selectedSubCat: Array<any>;
-  selectedItems: Array<any>;
+  selectedCatIds: Array<any>;
+  combinedCatData: any;
 }
 
 interface Data {
@@ -94,16 +95,16 @@ type Portfolio = {
 type Response = UserEntity & Portfolio;
 
 export default class ProfileEdit extends React.PureComponent<Props, State> {
-  private combinedCatData: any = [];
-  private catData: any = [];
+  private selectedSubCat: any = [];
+  private catData: Array<any> = [];
   private subCatData: any = [];
   private userId: string | Promise<string | null> | null | undefined;
   state = {
     fullName: '',
     userImage: '',
     about: '',
-    state: 'Select State',
-    city: 'Select City',
+    state: '',
+    city: '',
     selectedSkill: 'Select Skill',
     ableToTravel: 'no',
     enteredLanguage: '',
@@ -120,12 +121,15 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
     showEquipmentsModal: false,
     showLanguagesModal: false,
 
+    stateData: [],
+    cityData: [],
     skillData: [],
     equipmentsData: [],
     portfolio: [],
     languagesData: [],
-    selectedItems: [],
+    selectedCatIds: [],
     selectedSubCat: [],
+    combinedCatData: [],
 
     height: 0,
     imageIndex: 0,
@@ -139,53 +143,47 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
   setDefaultView = async () => {
     try {
       this.userId = await AsyncStorage.getItem('userId');
+
       const response: Response = await APIService.sendGetCall(
         '/profile/' + this.userId
       );
 
+      const stateData = await APIService.sendGetCall('/worlddata/state');
+
       const fullName: string = response.fname.concat(' ', response.lname);
 
-      let state = response.state;
-      let city = response.city;
-      if (response.state === '' || response.state === null || !state) {
-        state = 'Select State';
-      }
-      if (response.city === '' || response.city === null || !city) {
-        city = 'Select City';
+      let cityData = [];
+      if (response.state) {
+        cityData = await APIService.sendGetCall(
+          '/worlddata/city/' + response.state
+        );
       }
 
       let userImage = response.user_image;
       if (!userImage) {
         userImage = '';
       }
+
       if (userImage.length > 0) {
         userImage = completeImageUrl(userImage);
       }
 
+      let selectedSubCat: any[] = JSON.parse(response.my_skills);
+      if (!selectedSubCat) {
+        selectedSubCat = [];
+      }
+      this.selectedSubCat = selectedSubCat;
+
       this.catData = catData;
       this.subCatData = subCatData;
 
-      for (let i of this.catData) {
-        let childrenArr = [];
-        for (let j of this.subCatData) {
-          if (i.cat_id === j.cat_id) {
-            let subCatObj = {
-              id: j.sub_cat_id,
-              cat_id: j.cat_id,
-              name: j.name,
-              status: j.status,
-            };
-            childrenArr.push(subCatObj);
-          }
+      this.subCatData.forEach((item: { sub_cat_id: any; status: boolean }) => {
+        if (selectedSubCat.includes(item.sub_cat_id)) {
+          item.status = true;
         }
-        let catObj: any = {
-          id: i.cat_id,
-          name: i.name,
-          status: i.status,
-          children: childrenArr,
-        };
-        this.combinedCatData.push(catObj);
-      }
+      });
+
+      const combinedData = combinedCatData(this.catData, this.subCatData);
 
       let portfolio: any = response.portfolio;
       if (!portfolio) {
@@ -197,11 +195,6 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
           item.image_url = completeImageUrl(item.image_url);
           item.uri = item.image_url;
         });
-      }
-
-      let selectedSubCat = response.my_skills;
-      if (!selectedSubCat || selectedSubCat === '') {
-        selectedSubCat = '[]';
       }
 
       let equipmentsData = response.my_equipments;
@@ -217,18 +210,21 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
       this.setState({
         fullName: fullName,
         about: response.about,
-        state: state,
-        city: city,
+        state: response.state,
+        city: response.city,
         userImage: userImage,
         portfolio: portfolio,
         dateOfBirth: response.dob,
         gender: response.gender,
         workExperience: response.work_experience,
         ableToTravel: response.able_to_travel,
-        selectedSubCat: JSON.parse(selectedSubCat),
+        selectedSubCat: selectedSubCat,
         equipmentsData: JSON.parse(equipmentsData),
         languagesData: JSON.parse(languagesData),
         isLoading: false,
+        combinedCatData: combinedData,
+        stateData: stateData,
+        cityData: cityData,
       });
     } catch (err) {
       this.setState({
@@ -318,6 +314,9 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
+        this.setState({
+          isLoading: true,
+        });
         const payload = new FormData();
         payload.append('portfolioImage', {
           uri: response.uri,
@@ -348,6 +347,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
           };
 
           this.setState({
+            isLoading: false,
             portfolio: [imageObj, ...this.state.portfolio],
           });
         } catch (err) {
@@ -553,6 +553,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
       workExperience,
       ableToTravel,
       selectedSubCat,
+      selectedCatIds,
       equipmentsData,
       languagesData,
     } = this.state;
@@ -574,6 +575,10 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
               mySkills: selectedSubCat,
               myEquipments: equipmentsData,
               languagesKnown: languagesData,
+              myCategories:
+                selectedSubCat !== this.selectedSubCat
+                  ? selectedCatIds
+                  : undefined,
             };
 
             const response = await APIService.sendPatchCall(
@@ -634,134 +639,60 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
     );
   };
 
-  // _renderGender = () => {
-  // let male = false;
-  // let female = false;
-  // const { allowEdit, gender } = this.state;
-  // if (gender.toUpperCase() === 'MALE') {
-  //   male = true;
-  //   female = false;
-  // } else if (gender.toUpperCase() === 'FEMALE') {
-  //   male = false;
-  //   female = true;
-  // }
-  //   return (
-  //     <AppCard>
-  //       <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Gender</Text>
-
-  // <View style={{ flexDirection: 'row' }}>
-  //   <CheckBox
-  //     onPress={() => {
-  //       if (!allowEdit) {
-  //         return;
-  //       }
-  //       this.setState({
-  //         gender: 'male'
-  //       });
-  //     }}
-  //     title={'Male'}
-  //     checkedIcon="dot-circle-o"
-  //     uncheckedIcon="circle-o"
-  //     checked={male}
-  //   />
-  //   <CheckBox
-  //     onPress={() => {
-  //       if (!allowEdit) {
-  //         return;
-  //       }
-  //       this.setState({
-  //         gender: 'female'
-  //       });
-  //     }}
-  //     title={'Female'}
-  //     checkedIcon="dot-circle-o"
-  //     uncheckedIcon="circle-o"
-  //     checked={female}
-  //   />
-  // </View>
-  //     </AppCard>
-  //   );
-  // };
-
   _renderLocation = () => {
-    const { state, allowEdit, city } = this.state;
-    let onlyState: string[] = [];
-    for (let i in RegionList) {
-      onlyState.push(i);
-    }
-    let onlyCity = [];
-    for (let i in RegionList) {
-      if (i === state) {
-        onlyCity = RegionList[i];
-      }
-    }
+    const { state, allowEdit, city, stateData, cityData } = this.state;
     return (
       <AppCard>
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Location</Text>
         <View style={{ marginTop: 5 }}>
           <Text style={styles.headingStyle}>State</Text>
-          {allowEdit ? (
-            <Picker
-              selectedValue={state}
-              style={{ height: 50, width: 150 }}
-              onValueChange={(itemValue: any) =>
-                this.setState({ state: itemValue })
-              }
-              mode="dropdown"
-            >
-              {onlyState.map((item, index) => {
-                return <Picker.Item key={index} label={item} value={item} />;
-              })}
-            </Picker>
-          ) : (
-            <View style={{ margin: 6 }}>
-              <Text style={{ fontSize: 16 }}>{state}</Text>
-            </View>
-          )}
+          <Picker
+            selectedValue={state}
+            style={{ height: 50, width: 200 }}
+            onValueChange={async (itemValue: any) => {
+              const cityData = await APIService.sendGetCall(
+                `/worlddata/city/${itemValue}`
+              );
+              this.setState({ state: itemValue, cityData: cityData });
+            }}
+            mode="dropdown"
+            enabled={allowEdit}
+          >
+            {stateData.map((item: any, index) => {
+              return (
+                <Picker.Item
+                  key={index}
+                  label={item.state_name}
+                  value={item.state_id}
+                />
+              );
+            })}
+          </Picker>
 
           <Text style={styles.headingStyle}>City</Text>
-          {allowEdit ? (
-            <Picker
-              selectedValue={city}
-              style={{ height: 50, width: 150 }}
-              onValueChange={(itemValue: any) =>
-                this.setState({ city: itemValue })
-              }
-              mode="dropdown"
-            >
-              {onlyCity.map(
-                (item: string, index: string | number | undefined) => {
-                  return <Picker.Item key={index} label={item} value={item} />;
-                }
-              )}
-            </Picker>
-          ) : (
-            <View style={{ margin: 6 }}>
-              <Text style={{ fontSize: 16 }}>{city}</Text>
-            </View>
-          )}
+          <Picker
+            selectedValue={city}
+            style={{ height: 50, width: 200 }}
+            onValueChange={(itemValue: any) =>
+              this.setState({ city: itemValue })
+            }
+            mode="dropdown"
+            enabled={allowEdit}
+          >
+            {cityData.map((item: any) => {
+              return (
+                <Picker.Item
+                  key={item.id}
+                  label={item.city_name}
+                  value={item.id}
+                />
+              );
+            })}
+          </Picker>
         </View>
       </AppCard>
     );
   };
-
-  // _renderName = () => {
-  //   return (
-  //     <View style={styles.cardStyle}>
-  //       <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Location</Text>
-  //       <AppInput
-  //         style={styles.inputStyle}
-  //         editable={false}
-  //         value={this.state.fullName}
-  //         onChangeText={(name: string) => {
-  //           this.setState({
-  //             fullName: name
-  //           });
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // };
 
   _renderSkillSection = () => {
     const { allowEdit, selectedSubCat } = this.state;
@@ -784,7 +715,7 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
                 this.setState({ showSkillModal: true });
               }}
             >
-              ADD
+              EDIT
             </AppButton>
           ) : null}
         </View>
@@ -810,10 +741,9 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
             {filteredSubCat.map((item, index) => {
               return (
                 <BoxText
-                  size={16}
+                  size={14}
                   key={item.sub_cat_id}
                   text={item.name}
-                  showCross={allowEdit}
                   onPress={() => {
                     this.setState({
                       selectedSubCat: this.state.selectedSubCat.filter(
@@ -838,47 +768,100 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
         visible={this.state.showSkillModal}
       >
         <View style={styles.modalContainer}>
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.headingStyle}>Please Select Skill.</Text>
+            <AppButton
+              style={{ backgroundColor: 'white' }}
+              onPress={() => {
+                this.setState({ showSkillModal: false });
               }}
             >
-              <Text style={styles.headingStyle}>Please Select Skill.</Text>
-              <AppButton
-                style={{ backgroundColor: 'white' }}
-                onPress={() => {
-                  this.setState({ showSkillModal: false });
-                }}
-              >
-                <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
-              </AppButton>
-            </View>
-            <View>
-              <SectionedMultiSelect
-                items={this.combinedCatData}
-                uniqueKey="id"
-                subKey="children"
-                selectText="Choose Skill..."
-                showDropDowns={false}
-                readOnlyHeadings={true}
-                onSelectedItemsChange={(selectedSubCat) => {
-                  if (selectedSubCat.length > 10) {
-                    Alert.alert(
-                      'Alert',
-                      'You can only select maximum 10 skills'
-                    );
-                    return;
-                  }
-                  this.setState({ selectedSubCat });
-                }}
-                selectedItems={this.state.selectedSubCat}
-              />
-            </View>
+              <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
+            </AppButton>
           </View>
-
+          <FlatList
+            data={this.state.combinedCatData}
+            style={{ flex: 1 }}
+            keyExtractor={(item: any) => item.cat_id.toString()}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }: any) => (
+              <View>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                  {item.name}
+                </Text>
+                {item.children.map(
+                  (
+                    childItem: {
+                      name: React.ReactNode;
+                      status: boolean;
+                      sub_cat_id: number;
+                      cat_id: number;
+                    },
+                    childIndex: React.ReactText
+                  ) => (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                      key={childItem.sub_cat_id}
+                    >
+                      <Text
+                        style={{ fontSize: 16, color: 'grey', paddingLeft: 5 }}
+                      >
+                        {childItem.name}
+                      </Text>
+                      <CheckBox
+                        checkedColor="green"
+                        onPress={() => {
+                          const combinedCatData: any = [
+                            ...this.state.combinedCatData,
+                          ];
+                          combinedCatData[index].children[
+                            childIndex
+                          ].status = !childItem.status;
+                          if (
+                            combinedCatData[index].children[childIndex].status
+                          ) {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              selectedSubCat: [
+                                ...this.state.selectedSubCat,
+                                childItem.sub_cat_id,
+                              ],
+                              selectedCatIds: [
+                                ...this.state.selectedCatIds,
+                                childItem.cat_id,
+                              ],
+                            });
+                          } else {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              selectedSubCat: this.state.selectedSubCat.filter(
+                                (myItem) => myItem !== childItem.sub_cat_id
+                              ),
+                              selectedCatIds: [
+                                ...this.state.selectedCatIds,
+                                childItem.cat_id,
+                              ],
+                            });
+                          }
+                        }}
+                        checked={childItem.status}
+                      />
+                    </View>
+                  )
+                )}
+              </View>
+            )}
+          />
           <AppButton
             style={{ margin: 10 }}
             disabled={selectedSubCat.length !== 0 ? false : true}
@@ -1250,35 +1233,34 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
               </View>
             ) : null}
           </View>
-          {selectedRating !== 0 && enteredLanguage !== '' ? (
-            <AppButton
-              style={{ margin: 10 }}
-              disabled={
-                selectedRating !== 0 && enteredLanguage !== '' ? false : true
-              }
-              onPress={() => {
-                if (this.state.languagesData.length === 3) {
-                  Alert.alert(
-                    'Alert',
-                    'Language selection limit has reached, Please remove old Languages to add new.'
-                  );
-                  return;
-                }
-                const languageObj = {
-                  value: this.state.enteredLanguage,
-                  rating: this.state.selectedRating,
-                };
 
-                this.setState({
-                  languagesData: [languageObj, ...this.state.languagesData],
-                  enteredLanguage: '',
-                  selectedRating: 0,
-                });
-              }}
-            >
-              ADD
-            </AppButton>
-          ) : null}
+          <AppButton
+            style={{ margin: 10 }}
+            disabled={
+              selectedRating !== 0 && enteredLanguage !== '' ? false : true
+            }
+            onPress={() => {
+              if (this.state.languagesData.length === 3) {
+                Alert.alert(
+                  'Alert',
+                  'Language selection limit has reached, Please remove old Languages to add new.'
+                );
+                return;
+              }
+              const languageObj = {
+                value: this.state.enteredLanguage,
+                rating: this.state.selectedRating,
+              };
+
+              this.setState({
+                languagesData: [languageObj, ...this.state.languagesData],
+                enteredLanguage: '',
+                selectedRating: 0,
+              });
+            }}
+          >
+            ADD
+          </AppButton>
         </View>
       </AppModal>
     );
@@ -1334,12 +1316,6 @@ export default class ProfileEdit extends React.PureComponent<Props, State> {
     } = this.state;
     return (
       <>
-        <Header
-          title={'My Profile'}
-          headerRight={
-            <HeaderRight name={'settings'} onPress={this.props.toSettings} />
-          }
-        />
         <ScrollView scrollEnabled={!isLoading}>
           {this._renderSkillModal()}
           {this._renderEquipmentsModal()}
@@ -1418,6 +1394,10 @@ const styles = StyleSheet.create({
     height: 205,
     marginTop: 5,
   },
-  modalContainer: { padding: 10, flex: 1, justifyContent: 'space-between' },
+  modalContainer: {
+    padding: 10,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   modalInput: { textAlign: 'center' },
 });

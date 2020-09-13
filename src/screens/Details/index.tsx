@@ -15,13 +15,17 @@ import {
 } from '../../components';
 
 // eslint-disable-next-line no-unused-vars
-import { ProjectEntity, ProposalEntity, UserEntity } from '../../modals';
+import { ProjectEntity, ProposalEntity, UserEntity } from '../../models';
 
 import { Styles } from '../../common';
 
 interface Props {
   projectId: number;
-  onSendProposal(projectId: number, title: string): void;
+  onSendProposal(
+    projectId: number,
+    projectOwnerId: number,
+    title: string
+  ): void;
   toProposal(id: number | string, showAccept: boolean): void;
 }
 
@@ -49,7 +53,7 @@ type ResponseType = ProjectEntity & Proposal;
 
 export default class Details extends React.PureComponent<Props, State> {
   userId: string | number | null | undefined;
-  projectOwnerId: string | undefined | number;
+  projectOwnerId = 0;
   showAcceptOnProposal: boolean = false;
   accountType: string | null | undefined;
   constructor(props: any) {
@@ -85,7 +89,7 @@ export default class Details extends React.PureComponent<Props, State> {
         'browse/project/' + projectId
       );
 
-      this.projectOwnerId = response.project_owner_id;
+      this.projectOwnerId = response.owner_id;
       if (response.project_status.toUpperCase() === 'ACTIVE') {
         this.showAcceptOnProposal = true;
       } else {
@@ -96,7 +100,7 @@ export default class Details extends React.PureComponent<Props, State> {
         title: response.project_title,
         about: response.project_description,
         budget: response.budget,
-        location: response.city,
+        location: response.city_name,
         req_skills: JSON.parse(response.req_skills),
         postedOn: response.created_on,
         reqOn: response.req_on,
@@ -307,7 +311,11 @@ export default class Details extends React.PureComponent<Props, State> {
             margin: 10,
           }}
         >
-          <AppButton onPress={() => onSendProposal(projectId, title)}>
+          <AppButton
+            onPress={() =>
+              onSendProposal(projectId, this.projectOwnerId, title)
+            }
+          >
             Send Proposal
           </AppButton>
         </View>

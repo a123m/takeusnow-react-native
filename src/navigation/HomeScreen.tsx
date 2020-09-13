@@ -1,16 +1,14 @@
 import React from 'react';
 
 import Home from '../screens/Home';
-
 import { Styles } from '../common';
 
 export default class HomeScreen extends React.PureComponent<any> {
   static navigationOptions = () => ({
-    headerTitle: '',
+    headerTitle: 'Home',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
     headerStyle: Styles.AppHeaderStyle.headerStyle,
-    headerTransparent: true,
     // headerRight: () => (
     //   <HeaderRight
     //     name={'bubbles'}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import { FlatList, View, Text, StyleSheet, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { ReviewCard, Spinner } from '../../components';
@@ -207,6 +207,7 @@ export default class Review extends React.PureComponent<Props, State> {
   render() {
     return (
       <>
+        <StatusBar barStyle={'dark-content'} />
         {this._renderTopView()}
         {this._renderDataView()}
       </>

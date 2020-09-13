@@ -4,9 +4,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
 
 // eslint-disable-next-line no-unused-vars
-import { ProjectEntity } from '../../modals';
+import { ProjectEntity } from '../../models';
 
-import { FAB, MyProjectCard, Spinner, Header } from '../../components';
+import { FAB, MyProjectCard, Spinner } from '../../components';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 
@@ -76,7 +76,6 @@ export default class Project extends React.PureComponent<Props, State> {
     }
     return (
       <>
-        <Header title={'My Projects'} />
         <NavigationEvents onDidFocus={this.setDefaultView} />
         <FlatList
           keyExtractor={(item, index) => index.toString()}

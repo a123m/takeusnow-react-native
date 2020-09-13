@@ -35,7 +35,7 @@ const Styles = {
           height: 40,
         },
         android: {
-          height: 57,
+          height: 80,
         },
       }),
     },

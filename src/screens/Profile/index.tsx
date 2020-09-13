@@ -690,11 +690,7 @@ export default class Profile extends React.PureComponent<Props, State> {
   render() {
     return (
       <>
-        <StatusBar
-          backgroundColor="transparent"
-          barStyle="light-content"
-          translucent
-        />
+        <StatusBar backgroundColor="transparent" barStyle="light-content" />
         {this._renderHeaderSection()}
         {this._renderProfileSection()}
         <ImageView

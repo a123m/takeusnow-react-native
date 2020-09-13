@@ -1,13 +1,21 @@
 import React from 'react';
-import { Text, Alert, View, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  Text,
+  Alert,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  StatusBar,
+} from 'react-native';
 import moment from 'moment';
 
 // eslint-disable-next-line no-unused-vars
-import { ProposalEntity, UserEntity } from '../../modals';
+import { ProposalEntity, UserEntity, Notification } from '../../models';
 
 import { Avatar, AppButton, Spinner } from '../../components';
 import { GlobalErr, completeImageUrl } from '../../utils/utils';
 import APIService from '../../utils/APIService';
+import { NavigationEvents } from 'react-navigation';
 
 interface Props {
   proposalId: number;
@@ -83,10 +91,17 @@ export default class Proposal extends React.PureComponent<Props, State> {
         },
         {
           text: 'OK',
-          onPress: () =>
+          onPress: () => {
+            const notification: Notification = {
+              userId: this.state.userId,
+              title: `Congratulation!`,
+              body: `Your Proposal is accepted`,
+            };
             APIService.sendGetCall(
               `/browse/proposal/accept/` + this.props.proposalId
-            ),
+            );
+            APIService.sendPostCall('/notifications/send', notification);
+          },
         },
       ],
       { cancelable: false }
@@ -104,53 +119,64 @@ export default class Proposal extends React.PureComponent<Props, State> {
       proposedAmount,
     } = this.state;
     return (
-      <View style={{ justifyContent: 'space-between', flex: 1 }}>
-        <ScrollView style={{ backgroundColor: 'white', padding: 10 }}>
-          <TouchableOpacity onPress={() => toProfile(userId)}>
-            <View style={{ padding: 5 }}>
-              <View style={{ flexDirection: 'row' }}>
-                <View
-                  style={{
-                    flex: 0.15,
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Avatar source={userImage} size={'small'} />
-                </View>
-                <View style={{ flex: 0.85, justifyContent: 'center' }}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 0.8, overflow: 'hidden', height: 20 }}>
-                      <Text style={{ fontSize: 16 }}>{name}</Text>
+      <>
+        <NavigationEvents
+          onWillFocus={() => {
+            StatusBar.setBarStyle('dark-content');
+          }}
+        />
+        <View style={{ justifyContent: 'space-between', flex: 1 }}>
+          <ScrollView style={{ backgroundColor: 'white', padding: 10 }}>
+            <TouchableOpacity onPress={() => toProfile(userId)}>
+              <View style={{ padding: 5 }}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View
+                    style={{
+                      flex: 0.15,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Avatar source={userImage} size={'small'} />
+                  </View>
+                  <View style={{ flex: 0.85, justifyContent: 'center' }}>
+                    <View style={{ flexDirection: 'row' }}>
+                      <View
+                        style={{ flex: 0.8, overflow: 'hidden', height: 20 }}
+                      >
+                        <Text style={{ fontSize: 16 }}>{name}</Text>
+                      </View>
+                      <View style={{ flex: 0.2 }}>
+                        <Text style={{ fontSize: 16, textAlign: 'right' }}>
+                          ₹{proposedAmount}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={{ flex: 0.2 }}>
-                      <Text style={{ fontSize: 16, textAlign: 'right' }}>
-                        ₹{proposedAmount}
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <Text style={{ color: 'silver' }}>
+                        At {moment(createdAt).fromNow()}
                       </Text>
                     </View>
                   </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: 'silver' }}>
-                      At {moment(createdAt).fromNow()}
-                    </Text>
-                  </View>
                 </View>
               </View>
+            </TouchableOpacity>
+            <View style={{ marginTop: 10 }}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+                Description
+              </Text>
+              <Text style={{ fontSize: 16, marginTop: 5 }}>{proposalText}</Text>
             </View>
-          </TouchableOpacity>
-          <View style={{ marginTop: 10 }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-              Description
-            </Text>
-            <Text style={{ fontSize: 16, marginTop: 5 }}>{proposalText}</Text>
-          </View>
-        </ScrollView>
-        {this.showAccept ? (
-          <AppButton onPress={this.acceptHandler}>Accept</AppButton>
-        ) : null}
-        {this.state.isLoading ? (
-          <Spinner mode="overlay" size="large" color="white" />
-        ) : null}
-      </View>
+          </ScrollView>
+          {this.showAccept ? (
+            <AppButton onPress={this.acceptHandler}>Accept</AppButton>
+          ) : null}
+          {this.state.isLoading ? (
+            <Spinner mode="overlay" size="large" color="white" />
+          ) : null}
+        </View>
+      </>
     );
   }
 }

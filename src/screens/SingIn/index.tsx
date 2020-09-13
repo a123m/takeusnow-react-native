@@ -61,10 +61,10 @@ export default class SignIn extends React.PureComponent<Props, State> {
       isLoading: true,
     });
 
-    let params = { email: this.state.email, password: this.state.password };
+    const payload = { email: this.state.email, password: this.state.password };
 
     try {
-      const response = await APIService.sendPostCall('/auth/login', params);
+      const response = await APIService.sendPostCall('/auth/login', payload);
       this.setState({
         isLoading: false,
       });

@@ -10,7 +10,7 @@ import {
 
 import { AppInput, AppButton } from '../../components';
 import Globals from '../../utils/Globals';
-import RegionList from '../../utils/RegionList';
+import APIService from '../../utils/APIService';
 
 import { Styles } from '../../common';
 
@@ -20,8 +20,10 @@ interface Props {
 
 interface State {
   title: string;
-  state: string;
-  city: string;
+  state: number;
+  city: number;
+  stateData: object[];
+  cityData: object[];
 }
 
 export default class PostProject2 extends React.PureComponent<Props, State> {
@@ -29,8 +31,11 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
     super(props);
     this.state = {
       title: '',
-      state: '',
-      city: '',
+      state: 0,
+      city: 0,
+
+      stateData: [],
+      cityData: [],
     };
   }
 
@@ -39,10 +44,12 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = async () => {
+    const stateData = await APIService.sendGetCall('/worlddata/state');
     this.setState({
       title: Globals.PostProject.title,
       state: Globals.PostProject.state,
       city: Globals.PostProject.city,
+      stateData: stateData,
     });
   };
   /**
@@ -74,18 +81,7 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
    * Location View function
    */
   _renderLocation = () => {
-    const { state, city } = this.state;
-    let onlyState: string[] = [];
-    for (let i in RegionList) {
-      onlyState.push(i);
-    }
-    let onlyCity = [];
-    for (let i in RegionList) {
-      if (i === state) {
-        onlyCity = RegionList[i];
-      }
-    }
-
+    const { state, city, stateData, cityData } = this.state;
     return (
       <>
         <View style={{ marginTop: 5 }}>
@@ -93,13 +89,22 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
 
           <Picker
             selectedValue={state}
-            style={{ height: 50, width: 250 }}
-            onValueChange={(itemValue: any) =>
-              this.setState({ state: itemValue })
-            }
+            style={{ height: 50, width: 200 }}
+            onValueChange={async (itemValue: any) => {
+              const cityData = await APIService.sendGetCall(
+                `/worlddata/city/${itemValue}`
+              );
+              this.setState({ state: itemValue, cityData: cityData });
+            }}
           >
-            {onlyState.map((item, index) => {
-              return <Picker.Item key={index} label={item} value={item} />;
+            {stateData.map((item: any) => {
+              return (
+                <Picker.Item
+                  key={item.state_id}
+                  label={item.state_name}
+                  value={item.state_id}
+                />
+              );
             })}
           </Picker>
 
@@ -107,16 +112,20 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
 
           <Picker
             selectedValue={city}
-            style={{ height: 50, width: 250 }}
+            style={{ height: 50, width: 200 }}
             onValueChange={(itemValue: any) =>
               this.setState({ city: itemValue })
             }
           >
-            {onlyCity.map(
-              (item: string, index: string | number | undefined) => {
-                return <Picker.Item key={index} label={item} value={item} />;
-              }
-            )}
+            {cityData.map((item: any) => {
+              return (
+                <Picker.Item
+                  key={item.id}
+                  label={item.city_name}
+                  value={item.id}
+                />
+              );
+            })}
           </Picker>
         </View>
       </>
@@ -182,10 +191,8 @@ export default class PostProject2 extends React.PureComponent<Props, State> {
           <AppButton
             disabled={
               this.state.title !== '' &&
-              this.state.state !== 'Select State' &&
-              this.state.city !== 'Select City' &&
-              this.state.state !== '' &&
-              this.state.city !== ''
+              this.state.state !== 0 &&
+              this.state.city !== 0
                 ? false
                 : true
             }

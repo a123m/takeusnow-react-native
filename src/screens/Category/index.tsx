@@ -16,10 +16,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { ProjectCard, AppModal, AppButton, UserCard } from '../../components';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
-import RegionList from '../../utils/RegionList';
 
 // eslint-disable-next-line no-unused-vars
-import { ProjectEntity, UserEntity } from '../../modals';
+import { ProjectEntity, UserEntity } from '../../models';
 import { AccountType } from '../../enums';
 
 import { Styles } from '../../common';
@@ -43,6 +42,8 @@ interface State {
   city: string;
   isLoading: boolean;
   isListEnd: boolean;
+  stateData: object[];
+  cityData: object[];
 }
 
 interface Data {
@@ -91,6 +92,8 @@ export default class Category extends React.PureComponent<Props, State> {
     this.state = {
       projectData: [],
       userData: [],
+      stateData: [],
+      cityData: [],
 
       minBudget: 0,
       maxBudget: 0,
@@ -110,6 +113,7 @@ export default class Category extends React.PureComponent<Props, State> {
 
   setDefaultView = async () => {
     this.accountType = await AsyncStorage.getItem('accountType');
+    const stateData = await APIService.sendGetCall('/worlddata/state');
     try {
       if (this.accountType === AccountType.Work) {
         const response: ProjectEntity[] = await APIService.sendPostCall(
@@ -122,6 +126,7 @@ export default class Category extends React.PureComponent<Props, State> {
 
         this.setState({
           projectData: response,
+          stateData: stateData,
           isLoading: false,
         });
       }
@@ -136,6 +141,7 @@ export default class Category extends React.PureComponent<Props, State> {
 
         this.setState({
           userData: response,
+          stateData: stateData,
           isLoading: false,
         });
       }
@@ -145,19 +151,9 @@ export default class Category extends React.PureComponent<Props, State> {
   };
 
   _renderFilterModal = () => {
-    const { minBudget, state, city } = this.state;
+    const { minBudget, state, city, stateData, cityData } = this.state;
     const { showFilterModal, filterModalHandler } = this.props;
     // const { state, allowEdit, city } = this.state;
-    let onlyState: string[] = [];
-    for (let i in RegionList) {
-      onlyState.push(i);
-    }
-    let onlyCity = [];
-    for (let i in RegionList) {
-      if (i === state) {
-        onlyCity = RegionList[i];
-      }
-    }
     return (
       <AppModal onRequestClose={filterModalHandler} visible={showFilterModal}>
         <View style={styles.modalContainer}>
@@ -185,7 +181,9 @@ export default class Category extends React.PureComponent<Props, State> {
                 height: 100,
               }}
             >
-              <Text style={{ fontSize: 16 }}>Min Budget: {minBudget}</Text>
+              <Text style={styles.subHeadingStyle}>
+                Min Budget: {minBudget}
+              </Text>
               <Slider
                 value={minBudget}
                 maximumValue={30000}
@@ -197,8 +195,10 @@ export default class Category extends React.PureComponent<Props, State> {
                 style={{ margin: 15 }}
               />
             </View>
-            <Text style={{ fontSize: 16 }}>Location</Text>
-            <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.subHeadingStyle}>Location</Text>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
               <View
                 style={{
                   alignItems: 'stretch',
@@ -206,17 +206,25 @@ export default class Category extends React.PureComponent<Props, State> {
                   height: 100,
                 }}
               >
-                <Text>State</Text>
+                <Text style={styles.smallHeadingStyle}>State</Text>
                 <Picker
                   selectedValue={state}
-                  style={{ height: 50, width: 200 }}
-                  onValueChange={(itemValue: any) =>
-                    this.setState({ state: itemValue })
-                  }
+                  style={{ height: 50, width: 150 }}
+                  onValueChange={async (itemValue: any) => {
+                    const cityData = await APIService.sendGetCall(
+                      `/worlddata/city/${itemValue}`
+                    );
+                    this.setState({ state: itemValue, cityData: cityData });
+                  }}
+                  mode="dropdown"
                 >
-                  {onlyState.map((item, index) => {
+                  {stateData.map((item: any) => {
                     return (
-                      <Picker.Item key={index} label={item} value={item} />
+                      <Picker.Item
+                        key={item.state_id}
+                        label={item.state_name}
+                        value={item.state_id}
+                      />
                     );
                   })}
                 </Picker>
@@ -228,21 +236,24 @@ export default class Category extends React.PureComponent<Props, State> {
                   height: 100,
                 }}
               >
-                <Text>City</Text>
+                <Text style={styles.smallHeadingStyle}>City</Text>
                 <Picker
                   selectedValue={city}
-                  style={{ height: 50, width: 200 }}
+                  style={{ height: 50, width: 150 }}
                   onValueChange={(itemValue: any) =>
                     this.setState({ city: itemValue })
                   }
+                  mode="dropdown"
                 >
-                  {onlyCity.map(
-                    (item: string, index: string | number | undefined) => {
-                      return (
-                        <Picker.Item key={index} label={item} value={item} />
-                      );
-                    }
-                  )}
+                  {cityData.map((item: any) => {
+                    return (
+                      <Picker.Item
+                        key={item.id}
+                        label={item.city_name}
+                        value={item.id}
+                      />
+                    );
+                  })}
                 </Picker>
               </View>
             </View>
@@ -458,7 +469,7 @@ export default class Category extends React.PureComponent<Props, State> {
             title={item.project_title}
             createdAt={item.created_on}
             budget={item.budget}
-            location={item.state}
+            location={item.state_name}
             onPress={() => onProjectPress(item.project_id)}
             // proposals={item.proposals}
             skills={JSON.parse(item.req_skills)}
@@ -530,6 +541,8 @@ export default class Category extends React.PureComponent<Props, State> {
 
 const styles = StyleSheet.create({
   headingStyle: { fontSize: 16, fontWeight: 'bold' },
+  subHeadingStyle: { fontSize: 18 },
+  smallHeadingStyle: { fontSize: 16, paddingLeft: 5 },
   footer: {
     padding: 10,
     justifyContent: 'center',

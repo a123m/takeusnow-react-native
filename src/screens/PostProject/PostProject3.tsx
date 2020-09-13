@@ -1,13 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet, Alert, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  Dimensions,
+  FlatList,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 import { AppInput, AppButton, AppModal, BoxText } from '../../components';
 import Globals from '../../utils/Globals';
-import { catData, subCatData } from '../../utils/utils';
+import { catData, subCatData, combinedCatData } from '../../utils/utils';
 
 import { Styles } from '../../common';
+import { CheckBox } from 'react-native-elements';
 
 interface Props {
   toPostProject4: any;
@@ -17,18 +24,17 @@ interface State {
   detail: string;
   skillData: any;
   showSkillModal: boolean;
-  selectedSkillIds: any;
+  combinedCatData: Array<any>;
 }
 
 export default class PostProject3 extends React.PureComponent<Props, State> {
-  private combinedCatData: any = [];
   constructor(props: any) {
     super(props);
     this.state = {
       detail: '',
       skillData: [],
       showSkillModal: false,
-      selectedSkillIds: [],
+      combinedCatData: [],
     };
   }
 
@@ -37,32 +43,12 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = () => {
+    const combinedData = combinedCatData(catData, subCatData);
     this.setState({
       detail: Globals.PostProject.detail,
       skillData: Globals.PostProject.skills,
+      combinedCatData: combinedData,
     });
-
-    for (let i of catData) {
-      const childrenArr = [];
-      for (let j of subCatData) {
-        if (i.cat_id === j.cat_id) {
-          const subCatObj = {
-            id: j.sub_cat_id,
-            cat_id: j.cat_id,
-            name: j.name,
-            status: j.status,
-          };
-          childrenArr.push(subCatObj);
-        }
-      }
-      const catObj: any = {
-        id: i.cat_id,
-        name: i.name,
-        status: i.status,
-        children: childrenArr,
-      };
-      this.combinedCatData.push(catObj);
-    }
   };
 
   _renderSkill = () => {
@@ -77,15 +63,13 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
         }}
       >
         {skillData.map((item: string, index: string | number | undefined) => {
-          return <BoxText size={16} key={index} text={item} />;
+          return <BoxText size={14} key={index} text={item} />;
         })}
       </View>
     );
   };
 
-  /**
-   * handle the button request
-   */
+  // * handle the button request
   nextHandler = () => {
     const { toPostProject4 } = this.props;
     const { detail, skillData } = this.state;
@@ -103,68 +87,112 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
     toPostProject4();
   };
 
-  /**
-   * Skill Modal
-   */
+  // * Skill Modal
   _renderSkillModal = () => {
-    const { selectedSkillIds } = this.state;
+    const { skillData } = this.state;
     return (
       <AppModal
         onRequestClose={() => this.setState({ showSkillModal: false })}
         visible={this.state.showSkillModal}
       >
         <View style={styles.modalContainer}>
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.headingStyle}>Please Select Skill.</Text>
+            <AppButton
+              style={{ backgroundColor: 'white' }}
+              onPress={() => {
+                this.setState({ showSkillModal: false });
               }}
             >
-              <Text style={styles.headingStyle}>Please Select Skill.</Text>
-              <AppButton
-                style={{ backgroundColor: 'white' }}
-                onPress={() => {
-                  this.setState({ showSkillModal: false });
-                }}
-              >
-                <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
-              </AppButton>
-            </View>
-
-            <SectionedMultiSelect
-              items={this.combinedCatData}
-              uniqueKey="id"
-              subKey="children"
-              selectText="Choose Skill..."
-              showDropDowns={false}
-              readOnlyHeadings={true}
-              onSelectedItemsChange={(selectedSkillIds) => {
-                if (selectedSkillIds.length > 5) {
-                  Alert.alert('Alert', 'You can only select maximum 5 skills');
-                  return;
-                }
-                const selectedSkills = [];
-                for (let i of selectedSkillIds) {
-                  for (let j of subCatData) {
-                    if (j.sub_cat_id === i) {
-                      selectedSkills.push(j.name);
-                    }
-                  }
-                }
-
-                this.setState({
-                  skillData: selectedSkills,
-                  selectedSkillIds: selectedSkillIds,
-                });
-              }}
-              selectedItems={this.state.selectedSkillIds}
-            />
+              <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
+            </AppButton>
           </View>
+          <FlatList
+            data={this.state.combinedCatData}
+            style={{ flex: 1 }}
+            keyExtractor={(item: any) => item.cat_id.toString()}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }: any) => (
+              <View>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                  {item.name}
+                </Text>
+                {item.children.map(
+                  (
+                    childItem: {
+                      name: React.ReactNode;
+                      status: boolean;
+                      sub_cat_id: number;
+                      cat_id: number;
+                    },
+                    childIndex: React.ReactText
+                  ) => (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                      key={childItem.sub_cat_id}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: 'grey',
+                          paddingLeft: 5,
+                        }}
+                      >
+                        {childItem.name}
+                      </Text>
+                      <CheckBox
+                        checkedColor="green"
+                        onPress={() => {
+                          const combinedCatData: any = [
+                            ...this.state.combinedCatData,
+                          ];
+                          combinedCatData[index].children[
+                            childIndex
+                          ].status = !childItem.status;
+                          if (
+                            combinedCatData[index].children[childIndex].status
+                          ) {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              skillData: [
+                                ...this.state.skillData,
+                                combinedCatData[index].children[childIndex]
+                                  .name,
+                              ],
+                            });
+                          } else {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              skillData: this.state.skillData.filter(
+                                (item: any) =>
+                                  item !==
+                                  combinedCatData[index].children[childIndex]
+                                    .name
+                              ),
+                            });
+                          }
+                        }}
+                        checked={childItem.status}
+                      />
+                    </View>
+                  )
+                )}
+              </View>
+            )}
+          />
 
           <AppButton
-            disabled={selectedSkillIds.length !== 0 ? false : true}
+            disabled={skillData.length !== 0 ? false : true}
             onPress={() => {
               this.setState({
                 showSkillModal: false,
@@ -178,9 +206,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
     );
   };
 
-  /**
-   * main render
-   */
+  // * Main Render
   render() {
     return (
       <>

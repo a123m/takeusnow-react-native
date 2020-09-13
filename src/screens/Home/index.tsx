@@ -8,20 +8,22 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import * as Progress from 'react-native-progress';
 import LinearGradient from 'react-native-linear-gradient';
 import Splash from 'react-native-splash-screen';
+import firebase from 'react-native-firebase';
 
-import { ExploreCard, AppCard, Header } from '../../components';
+import { ExploreCard, AppCard } from '../../components';
 import Socket from '../../utils/Socket';
 import APIService from '../../utils/APIService';
 import { GlobalErr } from '../../utils/utils';
 
 // eslint-disable-next-line no-unused-vars
-import { UserEntity } from '../../modals';
+import { UserEntity } from '../../models';
 
 import { Styles } from '../../common';
 
@@ -60,7 +62,7 @@ const data = [
 
 export default class Home extends React.PureComponent<any, any> {
   userId: string | null | undefined;
-  accountType: string | null | undefined;
+  accountType: any;
   state = {
     firstName: '',
     planInUse: '',
@@ -70,16 +72,57 @@ export default class Home extends React.PureComponent<any, any> {
   };
 
   componentDidMount() {
+    this.createChannel();
+    this.notificationListener();
     this.setDefaultView();
     Socket.init();
   }
+
+  // * Channel for notifications
+  createChannel = () => {
+    const channel = new firebase.notifications.Android.Channel(
+      'channelId',
+      'channelName',
+      firebase.notifications.Android.Importance.Max
+    ).setDescription('Description');
+    firebase.notifications().android.createChannel(channel);
+  };
+
+  // * Foreground Notifications
+  notificationListener = () => {
+    firebase.notifications().onNotification((notification) => {
+      if (Platform.OS === 'android') {
+        const localNotification = new firebase.notifications.Notification()
+          .setNotificationId(notification.notificationId)
+          .setTitle(notification.title)
+          .setBody(notification.body)
+          .setData(notification.data)
+          .android.setChannelId('channelId')
+          .android.setPriority(firebase.notifications.Android.Priority.High);
+
+        firebase
+          .notifications()
+          .displayNotification(localNotification)
+          .catch((err) => GlobalErr(err));
+      }
+    });
+  };
 
   setDefaultView = async () => {
     try {
       this.userId = await AsyncStorage.getItem('userId');
       this.accountType = await AsyncStorage.getItem('accountType');
 
-      const response = await APIService.sendGetCall('/home/' + this.userId);
+      const firebaseToken = await firebase.messaging().getToken();
+
+      const payload = {
+        userId: this.userId,
+        firebaseToken: firebaseToken,
+      };
+
+      const response = await APIService.sendPostCall('/home', payload);
+
+      firebase.messaging().subscribeToTopic(this.accountType);
 
       if (!response) {
         return;
@@ -217,9 +260,12 @@ export default class Home extends React.PureComponent<any, any> {
   render() {
     return (
       <>
-        <Header title={'Home'} />
         <ScrollView contentContainerStyle={{ flex: 1 }}>
-          <StatusBar backgroundColor="white" barStyle="dark-content" />
+          <StatusBar
+            backgroundColor="white"
+            barStyle="dark-content"
+            translucent
+          />
           <View style={{ flex: 0.5 }}>
             <Image
               style={{ height: '100%', width: '100%' }}

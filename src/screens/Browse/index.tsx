@@ -12,8 +12,6 @@ import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 // import LinearGradient from 'react-native-linear-gradient';
 
-import { Header } from '../../components';
-
 // import { Styles } from '../../common';
 
 interface Props {
@@ -57,7 +55,6 @@ export default class Browse extends React.PureComponent<Props> {
     // const { _onTilePress } = this.props;
     return (
       <>
-        <Header title={'Browse Your Intrust'} />
         <ScrollView>
           <View style={styles.mainContainer}>
             <View style={styles.rowContainer}>

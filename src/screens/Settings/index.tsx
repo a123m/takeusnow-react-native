@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import firebase from 'react-native-firebase';
 
 import { AppButton } from '../../components';
 import Config from '../../utils/Config';
@@ -25,6 +26,7 @@ export default class Settings extends React.PureComponent<Props, State> {
    */
   _signOutAsync = async () => {
     await AsyncStorage.clear();
+    firebase.messaging().deleteToken();
     this.props.onViewSignOut();
   };
 

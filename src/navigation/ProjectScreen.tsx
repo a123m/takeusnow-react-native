@@ -10,11 +10,10 @@ interface Props {
 
 export default class ProjectScreen extends React.PureComponent<Props> {
   static navigationOptions = () => ({
-    headerTitle: '',
+    headerTitle: 'My Projects',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
     headerStyle: Styles.AppHeaderStyle.headerStyle,
-    headerTransparent: true,
   });
 
   render() {

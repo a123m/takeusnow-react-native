@@ -15,6 +15,7 @@ const header = (props: {
         paddingLeft: 16,
         paddingRight: 5,
         backgroundColor: 'white',
+        marginTop: 24,
       }}
     >
       <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{props.title}</Text>

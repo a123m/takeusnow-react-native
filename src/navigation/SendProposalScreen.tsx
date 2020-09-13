@@ -18,6 +18,7 @@ export default class SendProposalScreen extends React.PureComponent<Props> {
     return (
       <SendProposal
         projectId={this.props.navigation.getParam('projectId')}
+        projectOwnerId={this.props.navigation.getParam('projectOwnerId')}
         title={this.props.navigation.getParam('title')}
       />
     );
