@@ -2,9 +2,10 @@ import React from 'react';
 import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
+import AsyncStorage from '@react-native-community/async-storage';
 
-// import APIService from '../../utils/APIService';
-import { GlobalErr } from '../../utils/utils';
+import APIService from '../../utils/APIService';
+import { GlobalErr, completeImageUrl } from '../../utils/utils';
 import {
   AppButton,
   AppCard,
@@ -13,92 +14,48 @@ import {
   Loader,
 } from '../../components';
 
+// eslint-disable-next-line no-unused-vars
+import { ProjectEntity, ProposalEntity, UserEntity } from '../../models';
+
 import { Styles } from '../../common';
-import AsyncStorage from '@react-native-community/async-storage';
 
 interface Props {
   projectId: number;
-  onSendProposal: Function;
+  onSendProposal(
+    projectId: number,
+    projectOwnerId: number,
+    title: string
+  ): void;
   toProposal(id: number | string, showAccept: boolean): void;
 }
 
 interface State {
-  title: String;
+  title: string;
   about: String;
   budget: Number;
   location: String;
   postedOn: string;
   reqOn: string;
-  proposals: ProposalType[];
+  proposals: Array<UserEntity & ProposalEntity>;
   req_skills: Array<string>;
   showMore: boolean;
   isLoading: boolean;
+  projectStatus: string;
 }
 
-const dummyResponse: ProjectResponseType = {
-  title: 'I need a professional photographer',
-  about:
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus minus quibusdam quaerat alias rerum dolore quam nulla eveniet. Temporibus id delectus, vel vitae minima dolores praesentium recusandae possimus nisi aperiam. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus dolore impedit eligendi minima reprehenderit pariatur doloribus cumque dignissimos iste, natus accusamus deleniti eveniet aperiam. Itaque quae veritatis non odit suscipit.',
-  budget: 80000,
-  location: 'Agra',
-  req_skills: ['Still Photography'],
-  postedOn: moment().toISOString(),
-  reqOn: moment()
-    .add(7, 'd')
-    .toISOString(),
-  userId: 1,
-  status: 'IN',
-  proposals: [
-    {
-      id: 1,
-      sourceUri: '',
-      fullName: 'Aman Chhabra',
-      proposalOffer: 2000,
-      proposalText:
-        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit accusantium reiciendis commodi neque! Provident ipsum, hic tempore, vel similique ullam dignissimos quam laborum dolore error unde ut possimus facilis illo!',
-      totalReviews: 10,
-      averageReviews: 3.5,
-    },
-    {
-      id: 2,
-      sourceUri: '',
-      fullName: 'Aman Chhabra',
-      proposalOffer: 2000,
-      proposalText:
-        'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit accusantium reiciendis commodi neque! Provident ipsum, hic tempore, vel similique ullam dignissimos quam laborum dolore error unde ut possimus facilis illo!',
-      totalReviews: 10,
-      averageReviews: 5,
-    },
-  ],
+type Combine = UserEntity & ProposalEntity;
+
+type Proposal = {
+  proposals: Combine[];
 };
 
-type ProjectResponseType = {
-  title: string;
-  about: string;
-  budget: number;
-  location: string;
-  req_skills: string[];
-  postedOn: string;
-  reqOn: string;
-  proposals: ProposalType[];
-  userId: number;
-  status: string;
-};
-
-type ProposalType = {
-  id: number;
-  sourceUri: string;
-  fullName: string;
-  proposalOffer: number;
-  proposalText: string;
-  totalReviews: number;
-  averageReviews: number;
-};
+type ResponseType = ProjectEntity & Proposal;
 
 export default class Details extends React.PureComponent<Props, State> {
-  userId: string | Promise<string | null> | undefined;
-  projectUserId: string | undefined | number;
+  userId: string | number | null | undefined;
+  projectOwnerId = 0;
   showAcceptOnProposal: boolean = false;
+  accountType: string | null | undefined;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -107,6 +64,7 @@ export default class Details extends React.PureComponent<Props, State> {
       location: '',
       postedOn: '',
       reqOn: '',
+      projectStatus: '',
 
       budget: 0,
 
@@ -116,7 +74,6 @@ export default class Details extends React.PureComponent<Props, State> {
       showMore: false,
       isLoading: true,
     };
-    this.userId = AsyncStorage.getItem('userId');
   }
 
   componentDidMount() {
@@ -124,32 +81,33 @@ export default class Details extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = async () => {
-    // const { projectId } = this.props;
+    const { projectId } = this.props;
+    this.userId = await AsyncStorage.getItem('userId');
+    this.accountType = await AsyncStorage.getItem('accountType');
     try {
-      // const response = await APIService.sendGetCall(
-      //   'browse/category/' + projectId
-      // );
-      const response = dummyResponse;
-      this.projectUserId = response.userId;
-      if (response.status === 'ACTIVE') {
+      const response: ResponseType = await APIService.sendGetCall(
+        'browse/project/' + projectId
+      );
+
+      this.projectOwnerId = response.owner_id;
+      if (response.project_status.toUpperCase() === 'ACTIVE') {
         this.showAcceptOnProposal = true;
       } else {
         this.showAcceptOnProposal = false;
       }
 
-      setTimeout(() => {
-        this.setState({
-          title: response.title,
-          about: response.about,
-          budget: response.budget,
-          location: response.location,
-          req_skills: response.req_skills,
-          postedOn: response.postedOn,
-          reqOn: response.reqOn,
-          proposals: response.proposals,
-          isLoading: false,
-        });
-      }, 10000);
+      this.setState({
+        title: response.project_title,
+        about: response.project_description,
+        budget: response.budget,
+        location: response.city_name,
+        req_skills: JSON.parse(response.req_skills),
+        postedOn: response.created_on,
+        reqOn: response.req_on,
+        proposals: response.proposals,
+        projectStatus: response.project_status,
+        isLoading: false,
+      });
     } catch (err) {
       GlobalErr(err);
       this.setState({
@@ -242,34 +200,45 @@ export default class Details extends React.PureComponent<Props, State> {
             </View>
           </View>
         </AppCard>
-        {proposals.length !== 0 ? (
-          <AppCard>
-            <View style={{ margin: 5 }}>
-              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-                Proposals
-              </Text>
+
+        <AppCard>
+          <View style={{ margin: 5 }}>
+            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Proposals</Text>
+          </View>
+          {proposals.length !== 0 ? (
+            <View>
+              {proposals.map((item) => {
+                return (
+                  <AppProposal
+                    key={item.proposal_id.toString()}
+                    fname={item.fname}
+                    lname={item.lname}
+                    sourceUri={completeImageUrl(item.user_image)}
+                    proposalOffer={item.proposed_amount}
+                    proposalText={item.proposal_description}
+                    totalReviews={item.total_reviews}
+                    averageReviews={item.average_reviews}
+                    onPress={(): void => {
+                      if (this.userId === this.projectOwnerId) {
+                        toProposal(item.user_id, this.showAcceptOnProposal);
+                      }
+                    }}
+                  />
+                );
+              })}
             </View>
-            {proposals.map((item) => {
-              return (
-                <AppProposal
-                  key={item.id.toString()}
-                  fullName={item.fullName}
-                  sourceUri={item.sourceUri}
-                  proposalOffer={item.proposalOffer}
-                  proposalText={item.proposalText}
-                  totalReviews={item.totalReviews}
-                  averageReviews={item.averageReviews}
-                  onPress={(): void => {
-                    // if (this.userId !== this.projectUserId) {
-                    //   return;
-                    // }
-                    toProposal(item.id, this.showAcceptOnProposal);
-                  }}
-                />
-              );
-            })}
-          </AppCard>
-        ) : null}
+          ) : (
+            <View
+              style={{
+                height: 100,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text>No Proposals</Text>
+            </View>
+          )}
+        </AppCard>
       </ScrollView>
     );
   };
@@ -312,8 +281,8 @@ export default class Details extends React.PureComponent<Props, State> {
   };
 
   _renderStickyButton = () => {
-    const { onSendProposal } = this.props;
-    const { title } = this.state;
+    const { onSendProposal, projectId } = this.props;
+    const { title, proposals } = this.state;
     return (
       <View
         style={{
@@ -332,7 +301,7 @@ export default class Details extends React.PureComponent<Props, State> {
           <Text>Proposals Send</Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Icon name={'user'} />
-            <Text> 20</Text>
+            <Text> {proposals.length}</Text>
           </View>
         </View>
         <View
@@ -342,7 +311,11 @@ export default class Details extends React.PureComponent<Props, State> {
             margin: 10,
           }}
         >
-          <AppButton onPress={() => onSendProposal(title)}>
+          <AppButton
+            onPress={() =>
+              onSendProposal(projectId, this.projectOwnerId, title)
+            }
+          >
             Send Proposal
           </AppButton>
         </View>
@@ -354,11 +327,13 @@ export default class Details extends React.PureComponent<Props, State> {
    * Main Render
    */
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, projectStatus } = this.state;
     return (
       <>
         {this._renderDetailsView()}
-        {this._renderStickyButton()}
+        {this.accountType === 'work' && projectStatus.toUpperCase() === 'ACTIVE'
+          ? this._renderStickyButton()
+          : null}
         <Loader visible={isLoading} />
       </>
     );

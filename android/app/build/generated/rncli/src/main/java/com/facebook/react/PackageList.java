@@ -11,8 +11,8 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-import com.snaplancing.BuildConfig;
-import com.snaplancing.R;
+import com.takeusnow.BuildConfig;
+import com.takeusnow.R;
 
 // @react-native-community/art
 import com.reactnativecommunity.art.ARTPackage;
@@ -26,6 +26,8 @@ import com.reactnativecommunity.geolocation.GeolocationPackage;
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 // @react-native-community/netinfo
 import com.reactnativecommunity.netinfo.NetInfoPackage;
+// react-native-firebase
+import io.invertase.firebase.RNFirebasePackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // react-native-image-picker
@@ -97,6 +99,7 @@ public class PackageList {
       new GeolocationPackage(),
       new RNCMaskedViewPackage(),
       new NetInfoPackage(),
+      new RNFirebasePackage(),
       new RNGestureHandlerPackage(),
       new ImagePickerPackage(),
       new LinearGradientPackage(),

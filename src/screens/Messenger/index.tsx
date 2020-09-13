@@ -23,26 +23,26 @@ const data: Data = [
     fname: 'hulu',
     last_text: 'hows you',
     date: '2020-02-05T13:18:40.721Z',
-    roomId: 123
+    roomId: 123,
   },
   {
     fname: 'aman',
     last_text: 'hows you',
     date: '2020-02-05T13:18:40.721Z',
-    roomId: 234
+    roomId: 234,
   },
   {
     fname: 'kaushal',
     last_text: 'hy you',
     date: '2020-02-05T13:18:40.721Z',
-    roomId: 345
+    roomId: 345,
   },
   {
     fname: 'mikin',
     last_text: 'howsjhgjhgiiu yguyguygiuiuouoihiuuyguygohiojoihihojoj',
     date: '2020-02-05T13:18:40.721Z',
-    roomId: 456
-  }
+    roomId: 456,
+  },
 ];
 
 export default class Messenger extends React.PureComponent<any, State> {
@@ -50,16 +50,13 @@ export default class Messenger extends React.PureComponent<any, State> {
   constructor(props: any) {
     super(props);
     this.state = {
-      data: []
+      data: [],
     };
   }
   componentDidMount() {
     this.setDefaultView();
-    console.log('hello');
     this.socket.emit('join', { roomId: 123 });
-    this.socket.on('chat', (msgObj: object) => {
-      console.log('chat message received', msgObj);
-    });
+    this.socket.on('chat', (msgObj: object) => {});
   }
 
   /**
@@ -69,7 +66,7 @@ export default class Messenger extends React.PureComponent<any, State> {
     await AsyncStorage.setItem('messagesData', JSON.stringify(data));
     let messagesData: any = await AsyncStorage.getItem('messagesData');
     this.setState({
-      data: JSON.parse(messagesData)
+      data: JSON.parse(messagesData),
     });
   };
 

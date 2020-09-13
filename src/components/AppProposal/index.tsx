@@ -6,7 +6,8 @@ import { Avatar } from '../';
 
 interface Props {
   sourceUri: string;
-  fullName: string;
+  fname: string;
+  lname: string;
   proposalOffer: number;
   proposalText: string;
   onPress(): void;
@@ -36,7 +37,9 @@ const AppProposal = (props: Props) => {
           <View style={{ flex: 0.8, justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row' }}>
               <View style={{ flex: 0.8, overflow: 'hidden', height: 20 }}>
-                <Text style={{ fontSize: 16 }}>{props.fullName}</Text>
+                <Text style={{ fontSize: 16 }}>
+                  {props.fname} {props.lname}
+                </Text>
               </View>
               <View style={{ flex: 0.2 }}>
                 <Text style={{ fontSize: 16, textAlign: 'right' }}>

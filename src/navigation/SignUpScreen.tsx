@@ -27,12 +27,6 @@ export class SignUpScreen extends React.PureComponent<Props> {
   });
   render() {
     const { navigate } = this.props.navigation;
-    console.log(
-      'my props',
-      this.props.navigation.getParam('accountType'),
-      this.props.navigation.getParam('accountTypeSub'),
-      this.props.navigation.getParam('mobileNum')
-    );
     return (
       <SignUp
         onViewSignIn={() => {

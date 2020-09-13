@@ -10,7 +10,7 @@ import { Styles } from '../../common';
 
 const data: Array<object> = [
   { userId: 1, roomId: 123, createdAt: '12:10', text: 'some random text' },
-  { userId: 25, roomId: 123, createdAt: '12:10', text: 'some random text' }
+  { userId: 25, roomId: 123, createdAt: '12:10', text: 'some random text' },
   // { userId: 3, roomId: true, createdAt: '12:10', text: 'some random text' },
   // { userId: 25, roomId: false, createdAt: '12:10', text: 'some random text' },
   // { userId: 5, roomId: true, createdAt: '12:10', text: 'some random text' },
@@ -48,13 +48,12 @@ export default class Chat extends React.PureComponent<Props, State> {
     super(props);
     this.state = {
       input: '',
-      data: []
+      data: [],
     };
   }
 
   componentDidMount() {
     const { roomId } = this.props;
-    console.log('component did mount');
     this.socket.emit('join', { roomId: roomId });
 
     this.socket.on('chat', (msgObj: object) => {
@@ -69,7 +68,7 @@ export default class Chat extends React.PureComponent<Props, State> {
     arr.push(msgObj);
     console.log(arr);
     this.setState({
-      data: [msgObj, ...this.state.data]
+      data: [msgObj, ...this.state.data],
     });
   };
   /**
@@ -80,7 +79,7 @@ export default class Chat extends React.PureComponent<Props, State> {
     this.userId = parseInt(this.userId);
     try {
       this.setState({
-        data: data
+        data: data,
       });
     } catch (err) {
       console.log(err);
@@ -101,11 +100,11 @@ export default class Chat extends React.PureComponent<Props, State> {
         userId: this.userId,
         roomId: roomId,
         text: this.state.input,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
       this.setState({
         data: [params, ...this.state.data],
-        input: ''
+        input: '',
       });
       // const response = await APIService.sendPostCall('/messages/main', params);
       // this.socket.emit('join', { roomId: 123 });
@@ -125,7 +124,7 @@ export default class Chat extends React.PureComponent<Props, State> {
       <>
         <FlatList
           inverted
-          ref={ref => (this.flatList = ref)}
+          ref={(ref) => (this.flatList = ref)}
           // onContentSizeChange={() =>
           //   this.flatList.scrollToEnd({ animated: true })
           // }
@@ -143,7 +142,7 @@ export default class Chat extends React.PureComponent<Props, State> {
         <KeyboardAvoidingView
           behavior="height"
           style={{
-            flexDirection: 'row'
+            flexDirection: 'row',
             // backgroundColor: 'white'
           }}
         >
@@ -183,7 +182,7 @@ const styles = StyleSheet.create({
   messageInputContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
-    height: 40
+    height: 40,
   },
   inputStyle: {
     flex: 1,
@@ -194,20 +193,20 @@ const styles = StyleSheet.create({
     margin: 5,
     marginBottom: 8,
     paddingLeft: 5,
-    paddingRight: 5
+    paddingRight: 5,
   },
   inputStyleUpdated: {
     flex: 1,
     borderWidth: 2,
     borderColor: Styles.PrimaryColor,
     margin: 5,
-    marginBottom: 8
+    marginBottom: 8,
   },
   leftButton: {
     borderRadius: 100,
     marginLeft: 10,
     margin: 5,
-    marginBottom: 8
+    marginBottom: 8,
   },
   rightButton: {
     backgroundColor: 'silver',
@@ -215,7 +214,7 @@ const styles = StyleSheet.create({
     margin: 5,
     marginRight: 10,
     marginBottom: 8,
-    borderRadius: 20
+    borderRadius: 20,
   },
   rightButtonUpdated: {
     backgroundColor: Styles.PrimaryColor2,
@@ -223,9 +222,9 @@ const styles = StyleSheet.create({
     margin: 5,
     marginRight: 10,
     marginBottom: 8,
-    borderRadius: 20
+    borderRadius: 20,
   },
   iconStyle: {
-    color: Styles.PrimaryColor
-  }
+    color: Styles.PrimaryColor,
+  },
 });

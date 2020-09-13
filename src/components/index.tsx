@@ -1,6 +1,7 @@
 import AppInput from './AppInput';
 import AppButton from './AppButton';
 import Spinner from './Spinner';
+import Header from './Header';
 import HeaderRight from './HeaderRight';
 import Avatar from './Avatar';
 import Chatter from './Chatter';
@@ -23,6 +24,7 @@ export {
   AppInput,
   AppButton,
   Spinner,
+  Header,
   HeaderRight,
   Avatar,
   Chatter,

@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import firebase from 'react-native-firebase';
 
 import { AppButton } from '../../components';
+import Config from '../../utils/Config';
 
 interface Props {
-  onViewSignOut: Function;
+  onViewSignOut(): void;
 }
 
 interface State {
@@ -24,6 +26,7 @@ export default class Settings extends React.PureComponent<Props, State> {
    */
   _signOutAsync = async () => {
     await AsyncStorage.clear();
+    firebase.messaging().deleteToken();
     this.props.onViewSignOut();
   };
 
@@ -50,18 +53,18 @@ export default class Settings extends React.PureComponent<Props, State> {
             <Text style={styles.textStyle}>Help</Text>
           </View>
           <View style={styles.smallContainer}>
-            <Text style={styles.textStyle}>Terms & Condotion</Text>
+            <Text style={styles.textStyle}>Terms & Condition</Text>
           </View>
           <View style={styles.smallContainer}>
             <Text style={styles.textStyle}>App Version</Text>
-            <Text style={[styles.textStyle, { color: 'silver' }]}>1.0.0</Text>
+            <Text style={[styles.textStyle, { color: 'silver' }]}>
+              {Config.Version}
+            </Text>
           </View>
         </View>
-        <View style={[styles.containerStyle, { justifyContent: 'center' }]}>
-          <AppButton iconName="logout" onPress={this._signOutAsync}>
-            Sign Out
-          </AppButton>
-        </View>
+        <AppButton iconName="logout" onPress={this._signOutAsync}>
+          Sign Out
+        </AppButton>
       </View>
     );
   }

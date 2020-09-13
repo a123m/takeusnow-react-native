@@ -7,7 +7,7 @@ import { Styles } from '../../common';
 
 type button = {
   style?: object;
-  children: string | Element | undefined | object;
+  children: any;
   onPress: any;
   type?: 'solid' | 'clear' | 'outline' | undefined;
   loading?: boolean;

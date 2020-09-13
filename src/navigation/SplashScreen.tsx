@@ -1,7 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import Splash from 'react-native-splash-screen';
 
 type Props = {
   navigation: any;
@@ -20,7 +19,7 @@ export default class SplashScreen extends React.PureComponent<Props> {
   });
 
   componentDidMount = () => {
-    Splash.hide();
+    // Splash.hide();
     this._userTokenHandler();
   };
 

@@ -1,39 +1,32 @@
-let Globals: globals = {
+const Globals = {
   PostProject: {
+    categoryId: 0,
     title: '',
     detail: '',
-    category: '',
-    state: '',
-    city: '',
+    state: 0,
+    city: 0,
     budget: '',
+    reqOn: '',
     validity: '',
-    status: 'created',
+    status: 'ACTIVE',
     type: '',
-    skills: []
+    skills: [],
   },
   clearPostProject() {
-    for (let i in this.PostProject) {
-      this.PostProject[i] = '';
-    }
-  }
+    this.PostProject = {
+      categoryId: 0,
+      title: '',
+      detail: '',
+      state: 0,
+      city: 0,
+      budget: '',
+      reqOn: '',
+      validity: '',
+      status: 'ACTIVE',
+      type: '',
+      skills: [],
+    };
+  },
 };
 
 export default Globals;
-
-interface globals {
-  PostProject: postProject;
-  clearPostProject: any;
-}
-
-interface postProject {
-  title: string;
-  detail: string;
-  category: string;
-  state: string;
-  city: string;
-  budget: string;
-  validity: string | Date | number;
-  status: string;
-  type: string;
-  skills: Array<string | object>;
-}

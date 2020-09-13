@@ -9,15 +9,13 @@ import {
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { BoxText } from '../';
-
 import { Styles } from '../../common';
 
 interface Props {
   title: String;
   createdAt?: string | Date;
-  budget: Number;
-  proposals: Number;
+  budget: number;
+  proposals?: number;
   location: String;
   onPress: any;
   skills: Array<string>;
@@ -59,10 +57,16 @@ const ProjectCard = (props: Props) => {
                 />
                 <Text style={styles.textStyle}> ₹{props.budget}</Text>
               </View>
-              <View style={{ flexDirection: 'row', marginLeft: 80 }}>
-                <Icon name={'user'} size={16} color={styles.textStyle.color} />
-                <Text style={styles.textStyle}> {props.proposals}</Text>
-              </View>
+              {props.proposals ? (
+                <View style={{ flexDirection: 'row', marginLeft: 80 }}>
+                  <Icon
+                    name={'user'}
+                    size={16}
+                    color={styles.textStyle.color}
+                  />
+                  <Text style={styles.textStyle}> {props.proposals}</Text>
+                </View>
+              ) : null}
             </View>
             <View style={styles.innerStyle}>
               <Icon

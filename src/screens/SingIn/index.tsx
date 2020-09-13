@@ -7,9 +7,10 @@ import {
   StatusBar,
   TouchableOpacity,
   Alert,
+  ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-// import { Input } from 'react-native-elements';
+import Splash from 'react-native-splash-screen';
 
 import { AppButton, Spinner, FloatingLabelInput } from '../../components';
 import { ValidateEmail, GlobalErr } from '../../utils/utils';
@@ -38,6 +39,9 @@ export default class SignIn extends React.PureComponent<Props, State> {
     };
   }
 
+  componentDidMount() {
+    Splash.hide();
+  }
   _onSignUp = () => {
     const { onViewSignUp } = this.props;
     onViewSignUp();
@@ -57,21 +61,22 @@ export default class SignIn extends React.PureComponent<Props, State> {
       isLoading: true,
     });
 
-    let params = { email: this.state.email, password: this.state.password };
+    const payload = { email: this.state.email, password: this.state.password };
 
     try {
-      const response = await APIService.sendPostCall('/auth/login', params);
+      const response = await APIService.sendPostCall('/auth/login', payload);
+      this.setState({
+        isLoading: false,
+      });
+      if (!response) {
+        return;
+      }
       /**
        * storing important information which will be used in other parts of the application
        */
       await AsyncStorage.setItem('userToken', response.token);
-      await AsyncStorage.setItem(
-        'userId',
-        JSON.stringify(response.value.user_id)
-      );
-      this.setState({
-        isLoading: false,
-      });
+      await AsyncStorage.setItem('userId', JSON.stringify(response.userId));
+      await AsyncStorage.setItem('accountType', response.accountType);
       this.props.onViewSignIn();
     } catch (err) {
       this.setState({
@@ -90,14 +95,14 @@ export default class SignIn extends React.PureComponent<Props, State> {
         style={{ width: '100%', height: '100%' }}
       >
         <StatusBar backgroundColor="rgb(60,	21,	98)" barStyle="light-content" />
-        <View
-          style={{
+        <ScrollView
+          contentContainerStyle={{
             flex: 1,
             marginTop: '20%',
             alignItems: 'center',
           }}
         >
-          <Text style={styles.textStyle}>Welcome to SnapLancing</Text>
+          <Text style={styles.textStyle}>Welcome to TakeUsNow</Text>
           <View style={styles.container}>
             <View style={{ marginTop: 25 }}>
               <FloatingLabelInput
@@ -149,7 +154,7 @@ export default class SignIn extends React.PureComponent<Props, State> {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </ScrollView>
         {isLoading ? (
           <Spinner mode="overlay" size="large" color="white" />
         ) : null}

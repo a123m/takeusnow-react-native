@@ -4,7 +4,7 @@
             "outputFile": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-large-v4/values-large-v4.xml",
             "map": [
                 {
-                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/6746fa457539c872fd18a7e9e0a1efe4/res/values-large-v4/values-large-v4.xml",
+                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/b87e48e53a8c73ddf512effa8528bd3c/res/values-large-v4/values-large-v4.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/524d018844086b7fae295036d031aaa4/res/values-large-v4/values-large-v4.xml",
+                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/d7bb6b8dae7dc06cdd3b9a9f85e1c12a/res/values-large-v4/values-large-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10",
                         "startColumns": "4,4,4,4,4,4,4,4,4",

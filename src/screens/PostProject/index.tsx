@@ -4,25 +4,52 @@ import {
   View,
   StyleSheet,
   TouchableNativeFeedback,
-  Text
+  Text,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import IconFontisto from 'react-native-vector-icons/Fontisto';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+// import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+
+import Globals from '../../utils/Globals';
 
 import { Styles } from '../../common';
 
 interface Props {
-  toPostProject2: any;
+  toPostProject2(): void;
 }
 
 export default class Project extends React.PureComponent<Props> {
-  _renderTileView = (iconName: string, category: string) => {
+  _renderTileView = (
+    categoryId: number,
+    insideText: string,
+    iconName: string,
+    iconType: string,
+    iconSize: number
+  ) => {
+    let myIcon;
+    switch (iconType) {
+      case 'Fontisto':
+        myIcon = <IconFontisto name={iconName} size={iconSize} />;
+        break;
+      case 'AntDesign':
+        myIcon = <IconAntDesign name={iconName} size={iconSize} />;
+        break;
+      case 'SimpleLineIcons':
+        myIcon = <IconSimpleLineIcons name={iconName} size={iconSize} />;
+        break;
+    }
+
     return (
       <TouchableNativeFeedback
-        onPress={() => this.props.toPostProject2(category)}
+        onPress={() => {
+          Globals.PostProject.categoryId = categoryId;
+          this.props.toPostProject2();
+        }}
       >
         <View style={styles.container}>
-          <Icon name={iconName} size={24} />
-          <Text>{category}</Text>
+          {myIcon}
+          <Text style={{ fontSize: 16, margin: 5 }}>{insideText}</Text>
         </View>
       </TouchableNativeFeedback>
     );
@@ -35,7 +62,7 @@ export default class Project extends React.PureComponent<Props> {
           style={{
             width: '25%',
             height: 4,
-            backgroundColor: Styles.PrimaryColor
+            backgroundColor: Styles.PrimaryColor,
           }}
         />
         <ScrollView>
@@ -46,20 +73,68 @@ export default class Project extends React.PureComponent<Props> {
               </Text>
             </View>
             <View style={styles.rowContainer}>
-              {this._renderTileView('bell', 'search')}
-              {this._renderTileView('hourglass', 'search')}
+              {this._renderTileView(
+                1,
+                'Photography',
+                'photograph',
+                'Fontisto',
+                30
+              )}
+              {this._renderTileView(
+                2,
+                'Videography',
+                'videocamera',
+                'AntDesign',
+                30
+              )}
             </View>
             <View style={styles.rowContainer}>
-              {this._renderTileView('badge', 'search')}
-              {this._renderTileView('anchor', 'search')}
+              {this._renderTileView(
+                3,
+                'Wedding Planners',
+                'event',
+                'SimpleLineIcons',
+                30
+              )}
+              {this._renderTileView(
+                4,
+                'Makeup Artist',
+                'hourglass',
+                'SimpleLineIcons',
+                30
+              )}
             </View>
             <View style={styles.rowContainer}>
-              {this._renderTileView('present', 'search')}
-              {this._renderTileView('globe-alt', 'search')}
+              {this._renderTileView(
+                5,
+                'Decoration',
+                'badge',
+                'SimpleLineIcons',
+                30
+              )}
+              {this._renderTileView(
+                6,
+                'Choreography',
+                'people',
+                'SimpleLineIcons',
+                30
+              )}
             </View>
             <View style={styles.rowContainer}>
-              {this._renderTileView('present', 'search')}
-              {this._renderTileView('globe-alt', 'search')}
+              {this._renderTileView(
+                7,
+                'Astrology',
+                'pie-chart',
+                'SimpleLineIcons',
+                30
+              )}
+              {this._renderTileView(
+                8,
+                'Entertainment',
+                'playlist',
+                'SimpleLineIcons',
+                30
+              )}
             </View>
           </View>
         </ScrollView>
@@ -73,13 +148,13 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10,
     backgroundColor: 'white',
-    elevation: 2
+    elevation: 2,
   },
   rowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
   },
   container: {
     height: 150,
@@ -87,7 +162,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgb(247, 247, 247)'
+    backgroundColor: 'rgb(247, 247, 247)',
   },
-  headingStyle: { fontSize: 18, fontWeight: 'bold' }
+  headingStyle: { fontSize: 18, fontWeight: 'bold' },
 });

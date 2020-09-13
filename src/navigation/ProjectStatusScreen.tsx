@@ -21,6 +21,7 @@ export default class ProjectStatusScreen extends React.PureComponent<Props> {
     const { navigation } = this.props;
     return (
       <ProjectStatus
+        projectId={navigation.getParam('projectId')}
         projectStatus={navigation.getParam('projectStatus')}
         toDetails={() =>
           navigation.navigate('Details', {
@@ -28,8 +29,8 @@ export default class ProjectStatusScreen extends React.PureComponent<Props> {
           })
         }
         toProposal={(): void => {
-          const acceptedProposalId = navigation.getParam('acceptedProposalId');
-          if (acceptedProposalId == null) {
+          const apId = navigation.getParam('apId');
+          if (!apId) {
             Alert.alert(
               'Alert',
               'No proposal is accepted. Please accept proposal for your project.'
@@ -37,7 +38,7 @@ export default class ProjectStatusScreen extends React.PureComponent<Props> {
             return;
           }
           navigation.navigate('Proposal', {
-            proposalId: navigation.getParam('proposalId'),
+            proposalId: apId,
             showAccept: false,
           });
         }}

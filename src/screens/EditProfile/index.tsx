@@ -11,7 +11,7 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import { Avatar, Rating } from 'react-native-elements';
+import { Avatar, Rating, CheckBox } from 'react-native-elements';
 import {
   AppButton,
   AppModal,
@@ -25,16 +25,29 @@ import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import ImagePicker from 'react-native-image-picker';
-import ImageView from 'react-native-image-view';
+import ImageView from 'react-native-image-viewing';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+
+// eslint-disable-next-line no-unused-vars
+import { UserEntity, PortfolioEntity } from '../../models';
 
 import APIService from '../../utils/APIService';
-import RegionList from '../../utils/RegionList';
-import { GlobalErr } from '../../utils/utils';
+// import RegionList from '../../utils/RegionList';
+import {
+  GlobalErr,
+  completeImageUrl,
+  catData,
+  subCatData,
+  combinedCatData,
+} from '../../utils/utils';
 
 import { Styles } from '../../common';
+
+interface Props {
+  toReview(userId: any): void;
+  toSettings(): void;
+}
 
 interface State {
   fullName: string;
@@ -46,14 +59,16 @@ interface State {
   height: any;
   gender: string;
   state: string;
+  stateData: object[];
   city: string;
+  cityData: object[];
   selectedSkill: string;
   selectedRating: number;
   isLoading: boolean;
-  user_image: any;
+  userImage: string;
   imageIndex: number;
   isImageViewVisible: boolean;
-  portfolio: Array<any>;
+  portfolio: Partial<PortfolioEntity>[];
   languagesData: Array<object>;
   ableToTravel: string;
   enteredLanguage: string;
@@ -64,166 +79,62 @@ interface State {
   enteredEquipment: string;
   showLanguagesModal: boolean;
   selectedSubCat: Array<any>;
-  selectedItems: Array<any>;
+  selectedCatIds: Array<any>;
+  combinedCatData: any;
 }
-
-// interface Response {
-//   profile: ProfileData;
-// }
-
-// interface ProfileData {
-//   about: string;
-//   project_completed: string;
-//   repeated_hire: string;
-//   work_on_time: string;
-//   work_knowledge: string;
-//   my_skills: string;
-//   fname: string;
-//   lname: string;
-// }
 
 interface Data {
   value: string;
   rating: number;
 }
 
-const getResponseData = {
-  userId: 1,
-  fname: 'aman',
-  lname: 'chhabra',
-  about: 'Hey I am a snapper',
-  state: 'Uttar Pradesh (UP)',
-  city: 'Agra',
-  DOB: 'Nov 3, 1996',
-  gender: 'Male',
-  work_experience: '1 year',
-  able_to_travel: 'yes',
-  sub_cat: '[]',
-  user_image:
-    'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-  portfolio: [
-    {
-      source: {
-        uri:
-          'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-      },
-      title: 'Switzerland',
-    },
-
-    {
-      source: {
-        uri:
-          'https://i.pinimg.com/564x/a5/1b/63/a51b63c13c7c41fa333b302fc7938f06.jpg',
-      },
-      title: 'USA',
-    },
-    {
-      source: {
-        uri:
-          'https://guidetoiceland.imgix.net/4935/x/0/top-10-beautiful-waterfalls-of-iceland-8?auto=compress%2Cformat&ch=Width%2CDPR&dpr=1&ixlib=php-2.1.1&w=883&s=1fb8e5e1906e1d18fc6b08108a9dde8d',
-      },
-      title: 'Iceland',
-    },
-  ],
-  catData: [
-    { cat_id: 0, name: 'Select Category', status: 0 },
-    { cat_id: 1, name: 'Photography', status: 0 },
-    { cat_id: 2, name: 'Videography', status: 0 },
-    { cat_id: 3, name: 'Wedding Planning', status: 0 },
-    { cat_id: 4, name: 'Makeup Artist', status: 0 },
-    { cat_id: 5, name: 'Decoration', status: 0 },
-    { cat_id: 6, name: 'Choreography', status: 0 },
-    { cat_id: 7, name: 'Astrology', status: 0 },
-    { cat_id: 8, name: 'Entertainment', status: 0 },
-  ],
-  subCatData: [
-    { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
-    { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
-    { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
-    { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
-    { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
-    { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
-    { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
-    { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
-  ],
-  my_equipments:
-    '[{ "value": "Canon 350", "rating": 5 },{ "value": "Nikon 560", "rating": 5 }]',
-  languages_known:
-    '[{"value":"English","rating":5},{"value":"Hindi","rating":5}]',
+type Portfolio = {
+  portfolio: PortfolioEntity[];
 };
 
-const nature: Array<any> = [
-  {
-    source: {
-      uri:
-        'https://images.fineartamerica.com/images/artworkimages/mediumlarge/1/1-forest-in-fog-russian-nature-forest-mist-dmitry-ilyshev.jpg',
-    },
-    title: 'Switzerland',
-  },
+type Response = UserEntity & Portfolio;
 
-  {
-    source: {
-      uri:
-        'https://i.pinimg.com/564x/a5/1b/63/a51b63c13c7c41fa333b302fc7938f06.jpg',
-    },
-    title: 'USA',
-    width: 400,
-    height: 800,
-  },
-  {
-    source: {
-      uri:
-        'https://guidetoiceland.imgix.net/4935/x/0/top-10-beautiful-waterfalls-of-iceland-8?auto=compress%2Cformat&ch=Width%2CDPR&dpr=1&ixlib=php-2.1.1&w=883&s=1fb8e5e1906e1d18fc6b08108a9dde8d',
-    },
-    title: 'Iceland',
-    width: 880,
-    height: 590,
-  },
-];
-
-export default class ProfileEdit extends React.PureComponent<any, State> {
-  private combinedCatData: any = [];
-  private catData: any = [];
+export default class ProfileEdit extends React.PureComponent<Props, State> {
+  private selectedSubCat: any = [];
+  private catData: Array<any> = [];
   private subCatData: any = [];
-  private userId: Promise<string | null>;
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      fullName: 'Aman Chhabra',
-      user_image: '',
-      imageIndex: 0,
-      about: '',
-      state: 'Select State',
-      city: 'Select City',
-      selectedSkill: 'Select Skill',
-      selectedRating: 0,
-      ableToTravel: 'No',
-      enteredLanguage: '',
-      workExperience: '1 year',
-      gender: 'Male',
-      dateOfBirth: 'Nov 3, 1996',
-      enteredEquipment: '',
+  private userId: string | Promise<string | null> | null | undefined;
+  state = {
+    fullName: '',
+    userImage: '',
+    about: '',
+    state: '',
+    city: '',
+    selectedSkill: 'Select Skill',
+    ableToTravel: 'no',
+    enteredLanguage: '',
+    workExperience: '',
+    gender: 'Male',
+    dateOfBirth: 'Nov 3, 1996',
+    enteredEquipment: '',
 
-      showSkillModal: false,
-      allowEdit: false,
-      isLoading: false,
-      isImageViewVisible: false,
-      showDatePicker: false,
-      showEquipmentsModal: false,
-      showLanguagesModal: false,
+    showSkillModal: false,
+    allowEdit: false,
+    isLoading: true,
+    isImageViewVisible: false,
+    showDatePicker: false,
+    showEquipmentsModal: false,
+    showLanguagesModal: false,
 
-      skillData: [],
-      equipmentsData: [],
-      portfolio: [],
-      languagesData: [],
-      selectedItems: [],
-      selectedSubCat: [],
+    stateData: [],
+    cityData: [],
+    skillData: [],
+    equipmentsData: [],
+    portfolio: [],
+    languagesData: [],
+    selectedCatIds: [],
+    selectedSubCat: [],
+    combinedCatData: [],
 
-      height: 0,
-    };
-
-    this.userId = AsyncStorage.getItem('userId');
-  }
+    height: 0,
+    imageIndex: 0,
+    selectedRating: 0,
+  };
 
   componentDidMount() {
     this.setDefaultView();
@@ -231,58 +142,59 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
 
   setDefaultView = async () => {
     try {
-      // const response = await APIService.sendGetCall('/profile/main/' + this.userId);
-      const response = getResponseData;
+      this.userId = await AsyncStorage.getItem('userId');
+
+      const response: Response = await APIService.sendGetCall(
+        '/profile/' + this.userId
+      );
+
+      const stateData = await APIService.sendGetCall('/worlddata/state');
 
       const fullName: string = response.fname.concat(' ', response.lname);
 
-      let state = response.state;
-      let city = response.city;
-      if (response.state === '' || response.state === null || !state) {
-        state = 'Select State';
-      }
-      if (response.city === '' || response.city === null || !city) {
-        city = 'Select City';
+      let cityData = [];
+      if (response.state) {
+        cityData = await APIService.sendGetCall(
+          '/worlddata/city/' + response.state
+        );
       }
 
-      let user_image = response.user_image;
-      if (!user_image) {
-        user_image = '';
+      let userImage = response.user_image;
+      if (!userImage) {
+        userImage = '';
       }
 
-      this.catData = response.catData;
-      this.subCatData = response.subCatData;
+      if (userImage.length > 0) {
+        userImage = completeImageUrl(userImage);
+      }
 
-      for (let i of this.catData) {
-        let childrenArr = [];
-        for (let j of this.subCatData) {
-          if (i.cat_id === j.cat_id) {
-            let subCatObj = {
-              id: j.sub_cat_id,
-              cat_id: j.cat_id,
-              name: j.name,
-              status: j.status,
-            };
-            childrenArr.push(subCatObj);
-          }
+      let selectedSubCat: any[] = JSON.parse(response.my_skills);
+      if (!selectedSubCat) {
+        selectedSubCat = [];
+      }
+      this.selectedSubCat = selectedSubCat;
+
+      this.catData = catData;
+      this.subCatData = subCatData;
+
+      this.subCatData.forEach((item: { sub_cat_id: any; status: boolean }) => {
+        if (selectedSubCat.includes(item.sub_cat_id)) {
+          item.status = true;
         }
-        let catObj: any = {
-          id: i.cat_id,
-          name: i.name,
-          status: i.status,
-          children: childrenArr,
-        };
-        this.combinedCatData.push(catObj);
-      }
+      });
 
-      let portfolio = response.portfolio;
+      const combinedData = combinedCatData(this.catData, this.subCatData);
+
+      let portfolio: any = response.portfolio;
       if (!portfolio) {
         portfolio = [];
       }
 
-      let selectedSubCat = response.sub_cat;
-      if (!selectedSubCat || selectedSubCat === '') {
-        selectedSubCat = '[]';
+      if (portfolio.length > 0) {
+        portfolio.forEach((item: any) => {
+          item.image_url = completeImageUrl(item.image_url);
+          item.uri = item.image_url;
+        });
       }
 
       let equipmentsData = response.my_equipments;
@@ -295,26 +207,30 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         languagesData = '[]';
       }
 
-      setTimeout(() => {
-        this.setState({
-          fullName: fullName,
-          about: response.about,
-          state: state,
-          city: city,
-          user_image: user_image,
-          portfolio: portfolio,
-          dateOfBirth: response.DOB,
-          gender: response.gender,
-          workExperience: response.work_experience,
-          ableToTravel: response.able_to_travel,
-          selectedSubCat: JSON.parse(selectedSubCat),
-          equipmentsData: JSON.parse(equipmentsData),
-          languagesData: JSON.parse(languagesData),
-          isLoading: false,
-        });
-      }, 10000);
+      this.setState({
+        fullName: fullName,
+        about: response.about,
+        state: response.state,
+        city: response.city,
+        userImage: userImage,
+        portfolio: portfolio,
+        dateOfBirth: response.dob,
+        gender: response.gender,
+        workExperience: response.work_experience,
+        ableToTravel: response.able_to_travel,
+        selectedSubCat: selectedSubCat,
+        equipmentsData: JSON.parse(equipmentsData),
+        languagesData: JSON.parse(languagesData),
+        isLoading: false,
+        combinedCatData: combinedData,
+        stateData: stateData,
+        cityData: cityData,
+      });
     } catch (err) {
-      console.log(err);
+      this.setState({
+        isLoading: false,
+      });
+      GlobalErr(err);
     }
   };
 
@@ -331,7 +247,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         path: 'images',
       },
     };
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, async (response) => {
       // console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -341,17 +257,32 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = response.uri;
-
-        console.log('response', response);
-        console.log('source', source);
-
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        this.setState({
-          user_image: source,
+        const payload = new FormData();
+        payload.append('userImage', {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
         });
+
+        try {
+          const apiResponse: UserEntity = await APIService.sendPostCall(
+            '/profile/userimage/' + this.userId,
+            payload
+          );
+
+          if (!apiResponse) {
+            return;
+          }
+
+          this.setState({
+            userImage: response.uri,
+          });
+        } catch (err) {
+          GlobalErr(err);
+        }
       }
     });
   };
@@ -363,13 +294,14 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
     }
     const options = {
       title: 'Select Portfolio Image',
+      noData: true,
       // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
       storageOptions: {
         skipBackup: true,
         path: 'images',
       },
     };
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, async (response) => {
       // console.log('Response = ', response);
 
       if (response.didCancel) {
@@ -379,28 +311,54 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = response.uri;
-
-        console.log('response', response);
-        console.log('source', source);
-
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        let imageObj = {
-          source: { uri: source },
-          title: response.fileName,
-        };
-
         this.setState({
-          portfolio: [imageObj, ...this.state.portfolio],
+          isLoading: true,
         });
+        const payload = new FormData();
+        payload.append('portfolioImage', {
+          uri: response.uri,
+          type: response.type,
+          name: response.fileName,
+        });
+        payload.append('userId', this.userId);
+
+        try {
+          const apiResponse: PortfolioEntity = await APIService.sendPostCall(
+            '/profile/portfolio',
+            payload
+          );
+
+          if (!apiResponse) {
+            Alert.alert(
+              'Alert',
+              'Image upload failed. Please try again later!'
+            );
+            return;
+          }
+
+          const imageObj = {
+            portfolio_id: apiResponse.portfolio_id,
+            image_url: completeImageUrl(apiResponse.image_url),
+            uri: completeImageUrl(apiResponse.image_url),
+            image_name: apiResponse.image_name,
+          };
+
+          this.setState({
+            isLoading: false,
+            portfolio: [imageObj, ...this.state.portfolio],
+          });
+        } catch (err) {
+          GlobalErr(err);
+        }
       }
     });
   };
 
   _renderProfileImage = () => {
-    const { allowEdit, user_image } = this.state;
+    const { allowEdit, userImage } = this.state;
     let buttonText = '';
     if (allowEdit) {
       buttonText = 'Save Profile';
@@ -418,10 +376,10 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         ]}
         style={{ flex: 1 }}
       >
-        <View style={{ justifyContent: 'center', height: 250 }}>
+        <View style={{ justifyContent: 'center', height: 290 }}>
           <View
             style={{
-              height: 200,
+              height: 245,
               paddingTop: 30,
               justifyContent: 'center',
               alignItems: 'center',
@@ -432,32 +390,41 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                 rounded
                 size={'xlarge'}
                 source={
-                  user_image === ''
+                  userImage === ''
                     ? require('../../Images/avatar.png')
-                    : { uri: user_image }
+                    : { uri: userImage }
                 }
                 showEditButton={allowEdit}
               />
             </TouchableWithoutFeedback>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: 'white',
+                paddingTop: 10,
+              }}
+            >
               {this.state.fullName}
             </Text>
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <TouchableOpacity onPress={this.saveHandler}>
-              <View
-                style={{
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: 'white',
-                  padding: 5,
-                  margin: 5,
-                }}
-              >
-                <Text style={{ color: 'white' }}>{buttonText}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+
+          <TouchableOpacity
+            style={{ alignItems: 'flex-end' }}
+            onPress={this.saveHandler}
+          >
+            <View
+              style={{
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: 'white',
+                padding: 5,
+                margin: 5,
+              }}
+            >
+              <Text style={{ color: 'white' }}>{buttonText}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </LinearGradient>
     );
@@ -468,9 +435,25 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
     if (portfolio.length === 0) {
       return (
         <>
-          <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 10 }}>
-            Portfolio
-          </Text>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+          >
+            <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 10 }}>
+              Portfolio
+            </Text>
+            {allowEdit ? (
+              <TouchableOpacity
+                onPress={this._renderPortfolioUpload}
+                style={{ justifyContent: 'center', margin: 10 }}
+              >
+                <Icon
+                  name="cloud-upload"
+                  size={30}
+                  color={Styles.PrimaryColor}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
           <View
             style={{
               flex: 1,
@@ -484,7 +467,6 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
         </>
       );
     }
-    const portfolioLength = portfolio.length - 1;
     return (
       <AppCard style={{ overflow: 'visible' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -504,8 +486,8 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
           style={styles.portfolioStyle}
           data={portfolio}
           horizontal={true}
-          keyExtractor={(item, index: number) => index.toString()}
-          renderItem={({ item, index }) => (
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }: any) => (
             <View>
               <TouchableOpacity
                 style={{ marginRight: 5 }}
@@ -520,64 +502,35 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                   {allowEdit ? (
                     <TouchableOpacity
                       onPress={async () => {
+                        this.setState({ isLoading: true });
                         const response = await APIService.sendDelCall(
-                          'portfolio/' + item.id
+                          '/profile/portfolio/' + item.portfolio_id
                         );
-                        //Need testing for negative test
-                        if (response) {
-                          this.setState({
-                            portfolio: portfolio.filter(
-                              (newItem, newIndex) => index !== newIndex
-                            ),
-                          });
+                        //Need negative testing
+                        if (!response) {
+                          return;
                         }
+                        this.setState({
+                          portfolio: portfolio.filter(
+                            (newItem, newIndex) => index !== newIndex
+                          ),
+                          isLoading: false,
+                        });
                       }}
-                      style={[
-                        styles.crossIconStyle,
-                        index === portfolioLength ? { marginRight: 20 } : {},
-                      ]}
+                      style={[styles.crossIconStyle]}
                     >
                       <Icon name="close" size={35} color="white" />
                     </TouchableOpacity>
                   ) : null}
-
-                  {index === portfolioLength ? (
-                    <Image
-                      style={{
-                        width: 300,
-                        height: 200,
-                        borderRadius: 30,
-                        marginRight: 15,
-                      }}
-                      source={item.source}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <View>
-                      {index === 0 ? (
-                        <Image
-                          style={{
-                            width: 300,
-                            height: 200,
-                            borderRadius: 30,
-                            marginLeft: 20,
-                          }}
-                          source={item.source}
-                          resizeMode="cover"
-                        />
-                      ) : (
-                        <Image
-                          style={{
-                            width: 300,
-                            height: 200,
-                            borderRadius: 30,
-                          }}
-                          source={item.source}
-                          resizeMode="cover"
-                        />
-                      )}
-                    </View>
-                  )}
+                  <Image
+                    style={{
+                      width: 300,
+                      height: 200,
+                      borderRadius: 30,
+                    }}
+                    source={{ uri: item.image_url }}
+                    resizeMode="cover"
+                  />
                 </View>
               </TouchableOpacity>
             </View>
@@ -590,52 +543,57 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   /**
    * async function for API call and save data to local and server
    */
-  saveHandler = () => {
+  saveHandler = async () => {
     const {
+      allowEdit,
       about,
       state,
       city,
-      user_image,
       dateOfBirth,
       workExperience,
       ableToTravel,
       selectedSubCat,
+      selectedCatIds,
       equipmentsData,
       languagesData,
     } = this.state;
-    if (this.state.allowEdit) {
+    if (allowEdit) {
       try {
         this.setState(
           {
             isLoading: true,
           },
           async () => {
-            const params = {
+            const payload = {
               about: about,
               state: state,
               city: city,
-              user_image: user_image,
               // portfolio:portfolio,portfolio will have different API
               dateOfBirth: dateOfBirth,
               workExperience: workExperience,
               ableToTravel: ableToTravel,
-              sub_cat: selectedSubCat,
-              my_equipments: equipmentsData,
-              languages_known: languagesData,
+              mySkills: selectedSubCat,
+              myEquipments: equipmentsData,
+              languagesKnown: languagesData,
+              myCategories:
+                selectedSubCat !== this.selectedSubCat
+                  ? selectedCatIds
+                  : undefined,
             };
 
             const response = await APIService.sendPatchCall(
-              'profile/main/' + this.userId,
-              params
+              '/profile/' + this.userId,
+              payload
             );
-            if (response) {
-              Alert.alert('Alert', 'Your data is saved');
-            }
 
             this.setState({
               allowEdit: false,
               isLoading: false,
             });
+            if (!response) {
+              return;
+            }
+            Alert.alert('Alert', response.message);
           }
         );
       } catch (err) {
@@ -681,138 +639,64 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
     );
   };
 
-  // _renderGender = () => {
-  // let male = false;
-  // let female = false;
-  // const { allowEdit, gender } = this.state;
-  // if (gender.toUpperCase() === 'MALE') {
-  //   male = true;
-  //   female = false;
-  // } else if (gender.toUpperCase() === 'FEMALE') {
-  //   male = false;
-  //   female = true;
-  // }
-  //   return (
-  //     <AppCard>
-  //       <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Gender</Text>
-
-  // <View style={{ flexDirection: 'row' }}>
-  //   <CheckBox
-  //     onPress={() => {
-  //       if (!allowEdit) {
-  //         return;
-  //       }
-  //       this.setState({
-  //         gender: 'male'
-  //       });
-  //     }}
-  //     title={'Male'}
-  //     checkedIcon="dot-circle-o"
-  //     uncheckedIcon="circle-o"
-  //     checked={male}
-  //   />
-  //   <CheckBox
-  //     onPress={() => {
-  //       if (!allowEdit) {
-  //         return;
-  //       }
-  //       this.setState({
-  //         gender: 'female'
-  //       });
-  //     }}
-  //     title={'Female'}
-  //     checkedIcon="dot-circle-o"
-  //     uncheckedIcon="circle-o"
-  //     checked={female}
-  //   />
-  // </View>
-  //     </AppCard>
-  //   );
-  // };
-
   _renderLocation = () => {
-    const { state, allowEdit, city } = this.state;
-    let onlyState: string[] = [];
-    for (let i in RegionList) {
-      onlyState.push(i);
-    }
-    let onlyCity = [];
-    for (let i in RegionList) {
-      if (i === state) {
-        onlyCity = RegionList[i];
-      }
-    }
+    const { state, allowEdit, city, stateData, cityData } = this.state;
     return (
       <AppCard>
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Location</Text>
         <View style={{ marginTop: 5 }}>
           <Text style={styles.headingStyle}>State</Text>
-          {allowEdit ? (
-            <Picker
-              selectedValue={state}
-              style={{ height: 50, width: 150 }}
-              onValueChange={(itemValue: any) =>
-                this.setState({ state: itemValue })
-              }
-              mode="dropdown"
-            >
-              {onlyState.map((item, index) => {
-                return <Picker.Item key={index} label={item} value={item} />;
-              })}
-            </Picker>
-          ) : (
-            <View style={{ margin: 6 }}>
-              <Text style={{ fontSize: 16 }}>{state}</Text>
-            </View>
-          )}
+          <Picker
+            selectedValue={state}
+            style={{ height: 50, width: 200 }}
+            onValueChange={async (itemValue: any) => {
+              const cityData = await APIService.sendGetCall(
+                `/worlddata/city/${itemValue}`
+              );
+              this.setState({ state: itemValue, cityData: cityData });
+            }}
+            mode="dropdown"
+            enabled={allowEdit}
+          >
+            {stateData.map((item: any, index) => {
+              return (
+                <Picker.Item
+                  key={index}
+                  label={item.state_name}
+                  value={item.state_id}
+                />
+              );
+            })}
+          </Picker>
 
           <Text style={styles.headingStyle}>City</Text>
-          {allowEdit ? (
-            <Picker
-              selectedValue={city}
-              style={{ height: 50, width: 150 }}
-              onValueChange={(itemValue: any) =>
-                this.setState({ city: itemValue })
-              }
-              mode="dropdown"
-            >
-              {onlyCity.map(
-                (item: string, index: string | number | undefined) => {
-                  return <Picker.Item key={index} label={item} value={item} />;
-                }
-              )}
-            </Picker>
-          ) : (
-            <View style={{ margin: 6 }}>
-              <Text style={{ fontSize: 16 }}>{city}</Text>
-            </View>
-          )}
+          <Picker
+            selectedValue={city}
+            style={{ height: 50, width: 200 }}
+            onValueChange={(itemValue: any) =>
+              this.setState({ city: itemValue })
+            }
+            mode="dropdown"
+            enabled={allowEdit}
+          >
+            {cityData.map((item: any) => {
+              return (
+                <Picker.Item
+                  key={item.id}
+                  label={item.city_name}
+                  value={item.id}
+                />
+              );
+            })}
+          </Picker>
         </View>
       </AppCard>
     );
   };
 
-  // _renderName = () => {
-  //   return (
-  //     <View style={styles.cardStyle}>
-  //       <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Location</Text>
-  //       <AppInput
-  //         style={styles.inputStyle}
-  //         editable={false}
-  //         value={this.state.fullName}
-  //         onChangeText={(name: string) => {
-  //           this.setState({
-  //             fullName: name
-  //           });
-  //         }}
-  //       />
-  //     </View>
-  //   );
-  // };
-
   _renderSkillSection = () => {
     const { allowEdit, selectedSubCat } = this.state;
-    let filteredSubCat = [];
+    const filteredSubCat = [];
     for (let i of selectedSubCat) {
       for (let j of this.subCatData) {
         if (j.sub_cat_id === i) {
@@ -831,7 +715,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                 this.setState({ showSkillModal: true });
               }}
             >
-              ADD
+              EDIT
             </AppButton>
           ) : null}
         </View>
@@ -856,24 +740,10 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
           >
             {filteredSubCat.map((item, index) => {
               return (
-                // <SkillBox
-                //   key={index}
-                //   value={item.value}
-                //   level={item.rating}
-                //   showCross={this.state.allowEdit}
-                //   onCrossPress={() => {
-                //     this.setState({
-                //       skillData: this.state.skillData.filter((item, newIndex) => {
-                //         return index !== newIndex;
-                //       }),
-                //     });
-                //   }}
-                // />
                 <BoxText
-                  size={16}
+                  size={14}
                   key={item.sub_cat_id}
                   text={item.name}
-                  showCross={allowEdit}
                   onPress={() => {
                     this.setState({
                       selectedSubCat: this.state.selectedSubCat.filter(
@@ -893,54 +763,116 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   _renderSkillModal = () => {
     const { selectedSubCat } = this.state;
     return (
-      <AppModal visible={this.state.showSkillModal}>
+      <AppModal
+        onRequestClose={() => this.setState({ showSkillModal: false })}
+        visible={this.state.showSkillModal}
+      >
         <View style={styles.modalContainer}>
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Text style={styles.headingStyle}>Please Select Skill.</Text>
-              <AppButton
-                style={{ backgroundColor: 'white' }}
-                onPress={() => {
-                  this.setState({ showSkillModal: false });
-                }}
-              >
-                <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
-              </AppButton>
-            </View>
-            <View>
-              <SectionedMultiSelect
-                items={this.combinedCatData}
-                uniqueKey="id"
-                subKey="children"
-                selectText="Choose Skill..."
-                showDropDowns={false}
-                readOnlyHeadings={true}
-                onSelectedItemsChange={(selectedSubCat) =>
-                  this.setState({ selectedSubCat })
-                }
-                selectedItems={this.state.selectedSubCat}
-              />
-            </View>
-          </View>
-
-          {selectedSubCat.length !== 0 ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.headingStyle}>Please Select Skill.</Text>
             <AppButton
-              style={{ margin: 10 }}
+              style={{ backgroundColor: 'white' }}
               onPress={() => {
-                this.setState({
-                  showSkillModal: false,
-                });
+                this.setState({ showSkillModal: false });
               }}
             >
-              DONE
+              <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
             </AppButton>
-          ) : null}
+          </View>
+          <FlatList
+            data={this.state.combinedCatData}
+            style={{ flex: 1 }}
+            keyExtractor={(item: any) => item.cat_id.toString()}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }: any) => (
+              <View>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                  {item.name}
+                </Text>
+                {item.children.map(
+                  (
+                    childItem: {
+                      name: React.ReactNode;
+                      status: boolean;
+                      sub_cat_id: number;
+                      cat_id: number;
+                    },
+                    childIndex: React.ReactText
+                  ) => (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                      key={childItem.sub_cat_id}
+                    >
+                      <Text
+                        style={{ fontSize: 16, color: 'grey', paddingLeft: 5 }}
+                      >
+                        {childItem.name}
+                      </Text>
+                      <CheckBox
+                        checkedColor="green"
+                        onPress={() => {
+                          const combinedCatData: any = [
+                            ...this.state.combinedCatData,
+                          ];
+                          combinedCatData[index].children[
+                            childIndex
+                          ].status = !childItem.status;
+                          if (
+                            combinedCatData[index].children[childIndex].status
+                          ) {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              selectedSubCat: [
+                                ...this.state.selectedSubCat,
+                                childItem.sub_cat_id,
+                              ],
+                              selectedCatIds: [
+                                ...this.state.selectedCatIds,
+                                childItem.cat_id,
+                              ],
+                            });
+                          } else {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              selectedSubCat: this.state.selectedSubCat.filter(
+                                (myItem) => myItem !== childItem.sub_cat_id
+                              ),
+                              selectedCatIds: [
+                                ...this.state.selectedCatIds,
+                                childItem.cat_id,
+                              ],
+                            });
+                          }
+                        }}
+                        checked={childItem.status}
+                      />
+                    </View>
+                  )
+                )}
+              </View>
+            )}
+          />
+          <AppButton
+            style={{ margin: 10 }}
+            disabled={selectedSubCat.length !== 0 ? false : true}
+            onPress={() => {
+              this.setState({
+                showSkillModal: false,
+              });
+            }}
+          >
+            DONE
+          </AppButton>
         </View>
       </AppModal>
     );
@@ -1003,7 +935,10 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   _renderEquipmentsModal = () => {
     const { enteredEquipment, selectedRating } = this.state;
     return (
-      <AppModal visible={this.state.showEquipmentsModal}>
+      <AppModal
+        onRequestClose={() => this.setState({ showEquipmentsModal: false })}
+        visible={this.state.showEquipmentsModal}
+      >
         <View style={styles.modalContainer}>
           <View>
             <View
@@ -1032,6 +967,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                   this.setState({ enteredEquipment });
                 }}
                 placeholder="Enter Name of Equipment"
+                style={styles.modalInput}
               />
             </View>
 
@@ -1062,49 +998,37 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
               </View>
             ) : null}
           </View>
-          {selectedRating !== 0 && enteredEquipment !== '' ? (
-            <AppButton
-              style={{ margin: 10 }}
-              onPress={() => {
-                if (this.state.equipmentsData.length === 3) {
-                  Alert.alert(
-                    'Alert',
-                    'Equipment selection limit has reached, Please remove old equipment to add new.'
-                  );
-                  return;
-                }
-                let equipmentsObj = {
-                  value: this.state.enteredEquipment,
-                  rating: this.state.selectedRating,
-                };
+          <AppButton
+            style={{ margin: 10 }}
+            disabled={
+              selectedRating !== 0 && enteredEquipment !== '' ? false : true
+            }
+            onPress={() => {
+              if (this.state.equipmentsData.length === 3) {
+                Alert.alert(
+                  'Alert',
+                  'Equipment selection limit has reached, Please remove old equipment to add new.'
+                );
+                return;
+              }
+              let equipmentsObj = {
+                value: this.state.enteredEquipment,
+                rating: this.state.selectedRating,
+              };
 
-                this.setState({
-                  equipmentsData: [equipmentsObj, ...this.state.equipmentsData],
-                  enteredEquipment: '',
-                  selectedRating: 0,
-                });
-              }}
-            >
-              ADD
-            </AppButton>
-          ) : null}
+              this.setState({
+                equipmentsData: [equipmentsObj, ...this.state.equipmentsData],
+                enteredEquipment: '',
+                selectedRating: 0,
+              });
+            }}
+          >
+            ADD
+          </AppButton>
         </View>
       </AppModal>
     );
   };
-
-  // _renderSaveButton = () => {
-  //   return (
-  //     <AppButton
-  //       style={styles.buttonStyle}
-  //       onPress={() => {
-  //         this.saveHandler;
-  //       }}
-  //     >
-  //       SAVE
-  //     </AppButton>
-  //   );
-  // };
 
   _renderOthers = () => {
     const {
@@ -1244,8 +1168,11 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   _renderLanguagesModal = () => {
     const { enteredLanguage, selectedRating } = this.state;
     return (
-      <AppModal visible={this.state.showLanguagesModal}>
-        <AppCard>
+      <AppModal
+        onRequestClose={() => this.setState({ showLanguagesModal: false })}
+        visible={this.state.showLanguagesModal}
+      >
+        <View style={styles.modalContainer}>
           <View>
             <View
               style={{
@@ -1275,6 +1202,7 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                 }}
                 placeholder="Ex:- English."
                 maxLength={10}
+                style={styles.modalInput}
               />
             </View>
 
@@ -1304,59 +1232,37 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
                 </View>
               </View>
             ) : null}
-            {selectedRating !== 0 && enteredLanguage !== '' ? (
-              <AppButton
-                style={{ margin: 10 }}
-                onPress={() => {
-                  if (this.state.languagesData.length === 3) {
-                    Alert.alert(
-                      'Alert',
-                      'Language selection limit has reached, Please remove old Languages to add new.'
-                    );
-                    return;
-                  }
-                  let languageObj = {
-                    value: this.state.enteredLanguage,
-                    rating: this.state.selectedRating,
-                  };
-
-                  this.setState({
-                    languagesData: [languageObj, ...this.state.languagesData],
-                    enteredLanguage: '',
-                    selectedRating: 0,
-                  });
-                }}
-              >
-                ADD
-              </AppButton>
-            ) : null}
           </View>
-        </AppCard>
-      </AppModal>
-    );
-  };
 
-  _renderLanguagesKnown = () => {
-    const { allowEdit, enteredLanguage } = this.state;
-    return (
-      <AppCard>
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
-          Languages Known
-        </Text>
-        {allowEdit ? (
-          <AppInput
-            placeholder={'Ex:- English, Hindi'}
-            onChangeText={(enteredLanguage: string) => {
-              this.setState({ enteredLanguage });
+          <AppButton
+            style={{ margin: 10 }}
+            disabled={
+              selectedRating !== 0 && enteredLanguage !== '' ? false : true
+            }
+            onPress={() => {
+              if (this.state.languagesData.length === 3) {
+                Alert.alert(
+                  'Alert',
+                  'Language selection limit has reached, Please remove old Languages to add new.'
+                );
+                return;
+              }
+              const languageObj = {
+                value: this.state.enteredLanguage,
+                rating: this.state.selectedRating,
+              };
+
+              this.setState({
+                languagesData: [languageObj, ...this.state.languagesData],
+                enteredLanguage: '',
+                selectedRating: 0,
+              });
             }}
-            value={enteredLanguage}
-          />
-        ) : (
-          <View style={{ margin: 6 }}>
-            <Text>{enteredLanguage}</Text>
-          </View>
-        )}
-      </AppCard>
+          >
+            ADD
+          </AppButton>
+        </View>
+      </AppModal>
     );
   };
 
@@ -1400,51 +1306,56 @@ export default class ProfileEdit extends React.PureComponent<any, State> {
   };
 
   render() {
-    const { isLoading, showDatePicker, dateOfBirth } = this.state;
+    const {
+      isLoading,
+      showDatePicker,
+      dateOfBirth,
+      portfolio,
+      imageIndex,
+      isImageViewVisible,
+    } = this.state;
     return (
-      <ScrollView scrollEnabled={!isLoading}>
-        {this._renderSkillModal()}
-        {this._renderEquipmentsModal()}
-        {this._renderLanguagesModal()}
-        {this._renderProfileImage()}
-        {this._renderPortfolio()}
-        {this._renderAbout()}
-        {this._renderLocation()}
-        {this._renderSkillSection()}
-        {this._renderEquipmentsSection()}
-        {this._renderOthers()}
-        {this._renderLanguagesSection()}
-        <ImageView
-          glideAlways
-          images={nature}
-          imageIndex={this.state.imageIndex}
-          animationType="slide"
-          isVisible={this.state.isImageViewVisible}
-          onClose={() => this.setState({ isImageViewVisible: false })}
-          // onImageChange={index => {
-          //     console.log(index);
-          // }}
-        />
-        {showDatePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date(dateOfBirth)}
-            mode={'date'}
-            display="default"
-            onChange={(event, selectedDate) => {
-              if (event.type !== 'dismissed') {
-                this.setState({
-                  dateOfBirth: Moment(selectedDate).format('MMM DD, YYYY'),
-                  showDatePicker: false,
-                });
-              }
-              this.setState({ showDatePicker: false });
-            }}
+      <>
+        <ScrollView scrollEnabled={!isLoading}>
+          {this._renderSkillModal()}
+          {this._renderEquipmentsModal()}
+          {this._renderLanguagesModal()}
+          {this._renderProfileImage()}
+          {this._renderPortfolio()}
+          {this._renderAbout()}
+          {this._renderLocation()}
+          {this._renderSkillSection()}
+          {this._renderEquipmentsSection()}
+          {this._renderOthers()}
+          {this._renderLanguagesSection()}
+          <ImageView
+            images={portfolio}
+            imageIndex={imageIndex}
+            animationType="slide"
+            visible={isImageViewVisible}
+            onRequestClose={() => this.setState({ isImageViewVisible: false })}
           />
-        )}
-        {this._renderCheckReviews()}
-        <Loader visible={isLoading} />
-      </ScrollView>
+          {showDatePicker && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={new Date(dateOfBirth)}
+              mode={'date'}
+              display="default"
+              onChange={(event, selectedDate) => {
+                if (event.type !== 'dismissed') {
+                  this.setState({
+                    dateOfBirth: Moment(selectedDate).format('MMM DD, YYYY'),
+                    showDatePicker: false,
+                  });
+                }
+                this.setState({ showDatePicker: false });
+              }}
+            />
+          )}
+          {this._renderCheckReviews()}
+          <Loader visible={isLoading} />
+        </ScrollView>
+      </>
     );
   }
 }
@@ -1477,13 +1388,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10,
     right: 0,
-    margin: 5,
+    margin: 10,
   },
   portfolioStyle: {
     height: 205,
-    marginLeft: '-4%',
-    marginRight: '-4%',
     marginTop: 5,
   },
-  modalContainer: { padding: 10, flex: 1, justifyContent: 'space-between' },
+  modalContainer: {
+    padding: 10,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  modalInput: { textAlign: 'center' },
 });

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/mac/snaplancing-mobile/android/app/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-hi/values-hi.xml",
+            "outputFile": "/Users/mac/takeusnow-react-native/android/app/build/intermediates/incremental/mergeReleaseResources/merged.dir/values-hi/values-hi.xml",
             "map": [
                 {
-                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/4052e92473897288980a59d77b12e8ec/res/values-hi/values-hi.xml",
+                    "source": "/Users/mac/.gradle/caches/transforms-2/files-2.1/9cf7af26b66aa536f2a01a6b52055b25/res/values-hi/values-hi.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

@@ -35,7 +35,7 @@ export default class Splash extends React.PureComponent<{}, State> {
       this.setState({
         appReady: true, // for IOS
       });
-      SplashScreen.hide(); // for Android
+      // SplashScreen.hide(); // for Android
     }, 3000);
   }
 

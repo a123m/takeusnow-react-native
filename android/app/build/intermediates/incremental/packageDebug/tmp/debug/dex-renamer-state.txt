@@ -1,4 +1,10 @@
-#Tue Jul 07 16:32:48 IST 2020
-base.0=/Users/mac/takeusnow-react-native/android/app/build/intermediates/transforms/dexMerger/debug/0
+#Mon Sep 07 17:33:41 IST 2020
+path.2=classes3.dex
+path.1=classes2.dex
 path.0=classes.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
 renamed.0=classes.dex
+base.2=/Users/mac/takeusnow-react-native/android/app/build/intermediates/transforms/dexMerger/debug/0
+base.1=/Users/mac/takeusnow-react-native/android/app/build/intermediates/transforms/dexMerger/debug/0
+base.0=/Users/mac/takeusnow-react-native/android/app/build/intermediates/transforms/dexMerger/debug/0

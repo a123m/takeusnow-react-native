@@ -5,61 +5,81 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   Animated,
   StatusBar,
+  Image,
+  FlatList,
 } from 'react-native';
-import * as Progress from 'react-native-progress';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
+import ImageView from 'react-native-image-viewing';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-import { Avatar, SkillBox } from '../../components';
+import { Avatar, SkillBox, AppCard, BoxText, Loader } from '../../components';
 import APIService from '../../utils/APIService';
+import { completeImageUrl, GlobalErr } from '../../utils/utils';
 
 import { Styles } from '../../common';
-
-// let skillData = [
-//   { value: 'Photography', rating: 3 },
-// ];
 
 interface Props {
   toBack: any;
   toReview: any;
+  userId: number;
 }
 
 interface State {
-  userId: number;
-  username: string;
+  fullName: string;
   about: string;
-  project_completed: number;
-  repeated_hire: number;
-  work_on_time: number;
-  work_knowledge: number;
   skillData: Array<any>;
+  equipmentsData: Array<object | string>;
+  height: any;
+  gender: string;
+  state: string;
+  city: string;
+  selectedSkill: string;
+  selectedRating: number;
+  userImage: any;
+  imageIndex: number;
+  portfolio: Array<any>;
+  languagesData: Array<object>;
+  ableToTravel: string;
+  enteredLanguage: string;
+  workExperience: string;
+  dateOfBirth: string;
+  enteredEquipment: string;
+  selectedSubCat: Array<any>;
+  selectedItems: Array<any>;
   showMore: boolean;
+  isImageViewVisible: boolean;
+  isLoading: boolean;
 }
 
-interface Response {
-  profile: ProfileData;
-}
-
-interface ProfileData {
-  userId: number;
-  about: string;
-  project_completed: string;
-  repeated_hire: string;
-  work_on_time: string;
-  work_knowledge: string;
-  my_skills: string;
-  fname: string;
-  lname: string;
-}
+const catData = [
+  { cat_id: 0, name: 'Select Category', status: 0 },
+  { cat_id: 1, name: 'Photography', status: 0 },
+  { cat_id: 2, name: 'Videography', status: 0 },
+  { cat_id: 3, name: 'Wedding Planning', status: 0 },
+  { cat_id: 4, name: 'Makeup Artist', status: 0 },
+  { cat_id: 5, name: 'Decoration', status: 0 },
+  { cat_id: 6, name: 'Choreography', status: 0 },
+  { cat_id: 7, name: 'Astrology', status: 0 },
+  { cat_id: 8, name: 'Entertainment', status: 0 },
+];
+const subCatData = [
+  { sub_cat_id: 1, cat_id: 1, name: 'Still', status: 0 },
+  { sub_cat_id: 2, cat_id: 1, name: 'Videograph', status: 0 },
+  { sub_cat_id: 3, cat_id: 1, name: 'Wedding Planners', status: 0 },
+  { sub_cat_id: 4, cat_id: 1, name: 'Makeup Artist', status: 0 },
+  { sub_cat_id: 5, cat_id: 2, name: 'Decorators', status: 0 },
+  { sub_cat_id: 6, cat_id: 2, name: 'Choreographers', status: 0 },
+  { sub_cat_id: 7, cat_id: 2, name: 'Astrologers', status: 0 },
+  { sub_cat_id: 8, cat_id: 3, name: 'Entertainers', status: 0 },
+];
 
 export default class Profile extends React.PureComponent<Props, State> {
+  private combinedCatData: any = [];
+  private catData: any = [];
+  private subCatData: any = [];
   scrollY = new Animated.Value(0);
   startHeight = 300;
   endHeight = 80;
@@ -80,65 +100,140 @@ export default class Profile extends React.PureComponent<Props, State> {
   });
   name = '';
   about = '';
-  constructor(props: any) {
+  userId = this.props.userId;
+  constructor(props: Props) {
     super(props);
-    this.name = 'Aman Chhabra';
-
     this.state = {
-      userId: 0,
-      username: '',
+      fullName: '',
+      userImage: '',
       about: '',
-      project_completed: 0,
-      repeated_hire: 0,
-      work_on_time: 0,
-      work_knowledge: 0,
+      state: 'Select State',
+      city: 'Select City',
+      selectedSkill: 'Select Skill',
+      selectedRating: 0,
+      ableToTravel: 'No',
+      enteredLanguage: '',
+      workExperience: '',
+      gender: 'Male',
+      dateOfBirth: '',
+      enteredEquipment: '',
+
       skillData: [],
+      equipmentsData: [],
+      portfolio: [],
+      languagesData: [],
+      selectedItems: [],
+      selectedSubCat: [],
+
+      height: 0,
+      imageIndex: 0,
+
       showMore: false,
+      isImageViewVisible: false,
+      isLoading: true,
     };
   }
 
   componentDidMount() {
-    // this.setDefaultView();
-    this.setState({
-      about: 'hello',
-    });
+    this.setDefaultView();
   }
 
   setDefaultView = async () => {
     try {
-      // let id = await AsyncStorage.getItem('userId');
-      let id = 23;
-      let params = { id: id };
-      const response = await APIService.sendPostCall('/profile/main', params);
-
-      if (response.status !== 200) {
-        Alert.alert('Alert', response.data.message);
-        // this.setState({
-        //   isLoading: false
-        // });
+      const response = await APIService.sendGetCall('/profile/' + this.userId);
+      if (!response) {
+        this.setState({ isLoading: false });
         return;
       }
-      let result: Response = response.data;
 
-      let firstName: string = result.profile.fname;
-      let lastName: string = result.profile.lname;
+      const fullName: string = response.fname.concat(' ', response.lname);
 
-      let username: string = firstName.concat(' ', lastName);
+      let state = response.state;
+      let city = response.city;
+      if (response.state === '' || response.state === null || !state) {
+        state = 'Select State';
+      }
+      if (response.city === '' || response.city === null || !city) {
+        city = 'Select City';
+      }
 
-      let skillData = JSON.parse(result.profile.my_skills);
+      let userImage = response.user_image;
+      if (!userImage) {
+        userImage = '';
+      }
+      if (userImage.length > 0) {
+        userImage = completeImageUrl(userImage);
+      }
 
-      parseFloat;
+      this.catData = catData;
+      this.subCatData = subCatData;
+
+      for (let i of this.catData) {
+        let childrenArr = [];
+        for (let j of this.subCatData) {
+          if (i.cat_id === j.cat_id) {
+            let subCatObj = {
+              id: j.sub_cat_id,
+              cat_id: j.cat_id,
+              name: j.name,
+              status: j.status,
+            };
+            childrenArr.push(subCatObj);
+          }
+        }
+        let catObj: any = {
+          id: i.cat_id,
+          name: i.name,
+          status: i.status,
+          children: childrenArr,
+        };
+        this.combinedCatData.push(catObj);
+      }
+
+      let portfolio = response.portfolio;
+      if (!portfolio) {
+        portfolio = [];
+      }
+      if (portfolio.length > 0) {
+        portfolio.forEach((item: any) => {
+          item.image_url = completeImageUrl(item.image_url);
+          item.uri = item.image_url;
+        });
+      }
+
+      let selectedSubCat = response.my_skills;
+      if (!selectedSubCat || selectedSubCat === '') {
+        selectedSubCat = '[]';
+      }
+
+      let equipmentsData = response.my_equipments;
+      if (!equipmentsData || equipmentsData === '') {
+        equipmentsData = '[]';
+      }
+
+      let languagesData = response.languages_known;
+      if (!languagesData || languagesData === '') {
+        languagesData = '[]';
+      }
+
       this.setState({
-        username: username,
-        about: result.profile.about,
-        project_completed: parseFloat(result.profile.project_completed),
-        repeated_hire: parseFloat(result.profile.repeated_hire),
-        work_on_time: parseFloat(result.profile.work_on_time),
-        work_knowledge: parseFloat(result.profile.work_knowledge),
-        skillData: skillData,
+        fullName: fullName,
+        about: response.about,
+        state: state,
+        city: city,
+        userImage: userImage,
+        portfolio: portfolio,
+        dateOfBirth: response.dob,
+        gender: response.gender,
+        workExperience: response.work_experience,
+        ableToTravel: response.able_to_travel,
+        selectedSubCat: JSON.parse(selectedSubCat),
+        equipmentsData: JSON.parse(equipmentsData),
+        languagesData: JSON.parse(languagesData),
+        isLoading: false,
       });
     } catch (err) {
-      console.log(err);
+      GlobalErr(err);
     }
   };
 
@@ -191,7 +286,7 @@ export default class Profile extends React.PureComponent<Props, State> {
                 position: 'absolute',
               }}
             >
-              Aman Chhabra
+              {this.state.fullName}
             </Animated.Text>
             <Animated.View
               style={[
@@ -199,21 +294,17 @@ export default class Profile extends React.PureComponent<Props, State> {
                 { opacity: this.animatedOpacityHide },
               ]}
             >
-              <Avatar
-                size={'large'}
-                source={
-                  'https://upload.wikimedia.org/wikipedia/commons/3/36/Hopetoun_falls.jpg'
-                }
-              />
+              <Avatar size={'large'} source={this.state.userImage} />
               <Text
                 style={{ fontSize: 22, fontWeight: 'bold', color: 'white' }}
               >
-                {/* {this.state.username} */}
-                Aman Chhabra
+                {this.state.fullName}
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Icon name="location-pin" color="white" size={16} />
-                <Text style={{ fontSize: 12, color: 'white' }}>Noida,UP</Text>
+                <Text style={{ fontSize: 12, color: 'white' }}>
+                  {this.state.city}, {this.state.state}
+                </Text>
               </View>
             </Animated.View>
           </LinearGradient>
@@ -222,21 +313,83 @@ export default class Profile extends React.PureComponent<Props, State> {
     );
   };
 
+  _renderPortfolio = () => {
+    const { portfolio } = this.state;
+    if (portfolio.length === 0) {
+      return (
+        <>
+          <Text style={{ fontSize: 30, fontWeight: 'bold', margin: 10 }}>
+            Portfolio
+          </Text>
+          <View
+            style={{
+              flex: 1,
+              height: 205,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text>No Images!</Text>
+          </View>
+        </>
+      );
+    }
+    return (
+      <AppCard style={{ overflow: 'visible' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Portfolio</Text>
+        </View>
+
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          style={styles.portfolioStyle}
+          data={portfolio}
+          horizontal={true}
+          keyExtractor={(item, index: number) => index.toString()}
+          renderItem={({ item, index }) => (
+            <View>
+              <TouchableOpacity
+                style={{ marginRight: 5 }}
+                onPress={() => {
+                  this.setState({
+                    imageIndex: index,
+                    isImageViewVisible: true,
+                  });
+                }}
+              >
+                <Image
+                  style={{
+                    width: 300,
+                    height: 200,
+                    borderRadius: 30,
+                  }}
+                  source={{ uri: item.image_url }}
+                  resizeMode="cover"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      </AppCard>
+    );
+  };
+
   _renderAboutSection = () => {
     let str = this.state.about;
     let showMore = '';
-    if (str.length > 250 && !this.state.showMore) {
-      str = this.state.about.slice(0, 250);
-      showMore = 'Show More';
+    const allowedStrLength = 250;
+    if (str.length > allowedStrLength && !this.state.showMore) {
+      str = this.state.about.slice(0, allowedStrLength);
+      showMore = 'show more';
     } else {
-      showMore = 'Show Less';
+      showMore = 'show less';
     }
 
     return (
       <View style={styles.cardStyle}>
         <Text style={{ fontSize: 30, fontWeight: 'bold' }}>About</Text>
         <Text>{str}</Text>
-        {this.state.about.length > 250 ? (
+        {this.state.about.length > allowedStrLength ? (
           <TouchableOpacity
             onPress={() => {
               str = this.state.about;
@@ -260,87 +413,209 @@ export default class Profile extends React.PureComponent<Props, State> {
     );
   };
 
-  _renderReportSection = () => {
+  // _renderReportSection = () => {
+  //   return (
+  //     <View
+  //       style={[
+  //         styles.cardStyle,
+  //         { flexDirection: 'row', justifyContent: 'space-around' },
+  //       ]}
+  //     >
+  //       <View style={{ alignItems: 'center' }}>
+  //         <Progress.Circle
+  //           size={60}
+  //           progress={this.state.project_completed}
+  //           showsText={true}
+  //           color={Styles.PrimaryColor2}
+  //           formatText={() => {
+  //             let item = this.state.project_completed;
+  //             item * 100;
+  //             return <Text>{item}%</Text>;
+  //           }}
+  //         />
+  //         <Text style={styles.textStyle}>Projects</Text>
+  //         <Text style={styles.textStyle}>Completed</Text>
+  //       </View>
+  //       <View style={{ alignItems: 'center' }}>
+  //         <Progress.Circle
+  //           size={60}
+  //           progress={this.state.repeated_hire}
+  //           showsText={true}
+  //           color={Styles.PrimaryColor2}
+  //           formatText={() => {
+  //             let item = this.state.repeated_hire;
+  //             item * 100;
+  //             return <Text>{item}%</Text>;
+  //           }}
+  //         />
+  //         <Text style={styles.textStyle}>Repeat</Text>
+  //         <Text style={styles.textStyle}>Hire</Text>
+  //       </View>
+  //       <View style={{ alignItems: 'center' }}>
+  //         <Progress.Circle
+  //           size={60}
+  //           progress={this.state.work_on_time}
+  //           showsText={true}
+  //           color={Styles.PrimaryColor2}
+  //           formatText={() => {
+  //             let item = this.state.work_on_time;
+  //             item * 100;
+  //             return <Text>{item}%</Text>;
+  //           }}
+  //         />
+  //         <Text style={styles.textStyle}>Work</Text>
+  //         <Text style={styles.textStyle}>On Time</Text>
+  //       </View>
+  //       <View style={{ alignItems: 'center' }}>
+  //         <Progress.Circle
+  //           size={60}
+  //           progress={this.state.work_knowledge}
+  //           showsText={true}
+  //           color={Styles.PrimaryColor2}
+  //           formatText={() => {
+  //             let item = this.state.work_knowledge;
+  //             item * 100;
+  //             return <Text>{item}%</Text>;
+  //           }}
+  //         />
+  //         <Text style={styles.textStyle}>Work</Text>
+  //         <Text style={styles.textStyle}>Knowledge</Text>
+  //       </View>
+  //     </View>
+  //   );
+  // };
+
+  _renderSkillSection = () => {
+    const { selectedSubCat } = this.state;
+    let filteredSubCat = [];
+    for (let i of selectedSubCat) {
+      for (let j of this.subCatData) {
+        if (j.sub_cat_id === i) {
+          filteredSubCat.push(j);
+        }
+      }
+    }
     return (
-      <View
-        style={[
-          styles.cardStyle,
-          { flexDirection: 'row', justifyContent: 'space-around' },
-        ]}
-      >
-        <View style={{ alignItems: 'center' }}>
-          <Progress.Circle
-            size={60}
-            progress={this.state.project_completed}
-            showsText={true}
-            color={Styles.PrimaryColor2}
-            formatText={() => {
-              let item = this.state.project_completed;
-              item * 100;
-              return <Text>{item}%</Text>;
-            }}
-          />
-          <Text style={styles.textStyle}>Projects</Text>
-          <Text style={styles.textStyle}>Completed</Text>
+      <View style={styles.cardStyle}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold' }}>My Skills</Text>
         </View>
-        <View style={{ alignItems: 'center' }}>
-          <Progress.Circle
-            size={60}
-            progress={this.state.repeated_hire}
-            showsText={true}
-            color={Styles.PrimaryColor2}
-            formatText={() => {
-              let item = this.state.repeated_hire;
-              item * 100;
-              return <Text>{item}%</Text>;
+        {filteredSubCat.length === 0 ? (
+          <View
+            style={{
+              height: 100,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
-          />
-          <Text style={styles.textStyle}>Repeat</Text>
-          <Text style={styles.textStyle}>Hire</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Progress.Circle
-            size={60}
-            progress={this.state.work_on_time}
-            showsText={true}
-            color={Styles.PrimaryColor2}
-            formatText={() => {
-              let item = this.state.work_on_time;
-              item * 100;
-              return <Text>{item}%</Text>;
+          >
+            <Text>No Skills</Text>
+          </View>
+        ) : (
+          <View
+            style={{
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              flexDirection: 'row',
             }}
-          />
-          <Text style={styles.textStyle}>Work</Text>
-          <Text style={styles.textStyle}>On Time</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Progress.Circle
-            size={60}
-            progress={this.state.work_knowledge}
-            showsText={true}
-            color={Styles.PrimaryColor2}
-            formatText={() => {
-              let item = this.state.work_knowledge;
-              item * 100;
-              return <Text>{item}%</Text>;
-            }}
-          />
-          <Text style={styles.textStyle}>Work</Text>
-          <Text style={styles.textStyle}>Knowledge</Text>
-        </View>
+          >
+            {filteredSubCat.map((item) => {
+              return (
+                <BoxText size={16} key={item.sub_cat_id} text={item.name} />
+              );
+            })}
+          </View>
+        )}
       </View>
     );
   };
 
-  _renderSkillSection = () => {
+  _renderEquipmentsSection = () => {
+    const { equipmentsData } = this.state;
     return (
       <View style={styles.cardStyle}>
-        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>My Skills</Text>
-        {this.state.skillData.map((item, index) => {
-          return (
-            <SkillBox key={index} value={item.value} level={item.rating} />
-          );
-        })}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+            My Equipments
+          </Text>
+        </View>
+        {equipmentsData.length === 0 ? (
+          <View
+            style={{
+              height: 100,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text>No EquipmentsData</Text>
+          </View>
+        ) : (
+          equipmentsData.map((item: any, index: number) => {
+            return (
+              <SkillBox key={index} value={item.value} level={item.rating} />
+            );
+          })
+        )}
+      </View>
+    );
+  };
+
+  _renderOthers = () => {
+    const { workExperience, gender, dateOfBirth, ableToTravel } = this.state;
+    return (
+      <AppCard>
+        <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Others</Text>
+        <View style={{ marginTop: 5 }}>
+          <Text style={styles.headingStyle}>Date of Birth</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{dateOfBirth}</Text>
+          </View>
+
+          <Text style={styles.headingStyle}>Gender</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{gender}</Text>
+          </View>
+
+          <Text style={styles.headingStyle}>Work Experience</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{workExperience}</Text>
+          </View>
+
+          <Text style={styles.headingStyle}>Able to Travel</Text>
+          <View style={styles.otherSectionContainer}>
+            <Text style={styles.otherSectionText}>{ableToTravel}</Text>
+          </View>
+        </View>
+      </AppCard>
+    );
+  };
+
+  _renderLanguagesSection = () => {
+    const { languagesData } = this.state;
+    return (
+      <View style={styles.cardStyle}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={{ fontSize: 30, fontWeight: 'bold' }}>
+            Languages Known
+          </Text>
+        </View>
+        {languagesData.length === 0 ? (
+          <View
+            style={{
+              height: 100,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text>No Languages</Text>
+          </View>
+        ) : (
+          languagesData.map((item: any, index: number) => {
+            return (
+              <SkillBox key={index} value={item.value} level={item.rating} />
+            );
+          })
+        )}
       </View>
     );
   };
@@ -361,10 +636,14 @@ export default class Profile extends React.PureComponent<Props, State> {
   _renderProfileView = () => {
     return (
       <>
+        {this._renderPortfolio()}
         {this._renderAboutSection()}
-        {this._renderReportSection()}
         {this._renderSkillSection()}
+        {this._renderEquipmentsSection()}
+        {this._renderOthers()}
+        {this._renderLanguagesSection()}
         {this._renderCheckReviews()}
+        <View style={{ height: 305 }} />
       </>
     );
   };
@@ -374,7 +653,7 @@ export default class Profile extends React.PureComponent<Props, State> {
     return (
       <TouchableOpacity
         onPress={() => {
-          toReview(this.state.userId);
+          toReview(this.userId);
         }}
       >
         <View
@@ -408,29 +687,22 @@ export default class Profile extends React.PureComponent<Props, State> {
     );
   };
 
-  // _tabNavigator = () => {
-  //   const Tab = createMaterialTopTabNavigator();
-  //   return (
-  //     <NavigationContainer>
-  //       <Tab.Navigator initialRouteName={'Profile'}>
-  //         <Tab.Screen name="Profile" component={this._renderProfileView} />
-  //         <Tab.Screen name="Reviews" component={this._renderProfileView} />
-  //       </Tab.Navigator>
-  //     </NavigationContainer>
-  //   );
-  // };
-
   render() {
     return (
-      <View>
-        <StatusBar
-          backgroundColor="transparent"
-          barStyle="light-content"
-          translucent
-        />
+      <>
+        <StatusBar backgroundColor="transparent" barStyle="light-content" />
         {this._renderHeaderSection()}
         {this._renderProfileSection()}
-      </View>
+        <ImageView
+          images={this.state.portfolio}
+          imageIndex={this.state.imageIndex}
+          visible={this.state.isImageViewVisible}
+          onRequestClose={() => this.setState({ isImageViewVisible: false })}
+        />
+        {this.state.isLoading ? (
+          <Loader visible={this.state.isLoading} />
+        ) : null}
+      </>
     );
   }
 }
@@ -440,8 +712,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // marginTop: 20
-    // backgroundColor: 'black',
   },
   cardStyle: {
     padding: 8,
@@ -455,4 +725,11 @@ const styles = StyleSheet.create({
   rating: {
     backgroundColor: 'transparent',
   },
+  portfolioStyle: {
+    height: 205,
+    marginTop: 5,
+  },
+  headingStyle: { fontSize: 18 },
+  otherSectionContainer: { margin: 6 },
+  otherSectionText: { fontSize: 16 },
 });

@@ -4,15 +4,17 @@ import {
   Text,
   StyleSheet,
   Alert,
-  Picker,
-  Dimensions
+  Dimensions,
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-import { AppInput, AppButton, AppModal, AppCard } from '../../components';
+import { AppInput, AppButton, AppModal, BoxText } from '../../components';
 import Globals from '../../utils/Globals';
+import { catData, subCatData, combinedCatData } from '../../utils/utils';
 
 import { Styles } from '../../common';
+import { CheckBox } from 'react-native-elements';
 
 interface Props {
   toPostProject4: any;
@@ -20,17 +22,10 @@ interface Props {
 
 interface State {
   detail: string;
-  skillData: Array<string | object>;
+  skillData: any;
   showSkillModal: boolean;
-  selectedSkill: string;
+  combinedCatData: Array<any>;
 }
-
-const skillList = [
-  'Select Skill',
-  'TickTock Photography',
-  'Marriage Photography',
-  'Personal PhotoShoot'
-];
 
 export default class PostProject3 extends React.PureComponent<Props, State> {
   constructor(props: any) {
@@ -39,7 +34,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
       detail: '',
       skillData: [],
       showSkillModal: false,
-      selectedSkill: 'Select Skill'
+      combinedCatData: [],
     };
   }
 
@@ -48,136 +43,170 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
   }
 
   setDefaultView = () => {
+    const combinedData = combinedCatData(catData, subCatData);
     this.setState({
       detail: Globals.PostProject.detail,
-      skillData: Globals.PostProject.skills
+      skillData: Globals.PostProject.skills,
+      combinedCatData: combinedData,
     });
   };
 
   _renderSkill = () => {
     const { skillData } = this.state;
     return (
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {skillData.map((item, index) => {
-          return (
-            <View
-              style={{
-                borderRadius: 5,
-                borderColor: Styles.PrimaryColor2,
-                borderWidth: 1,
-                // margin: 4,
-                padding: 2
-              }}
-              key={index}
-            >
-              <Text style={{ fontSize: 10, color: Styles.PrimaryColor2 }}>
-                {item}
-              </Text>
-            </View>
-          );
+      <View
+        style={{
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          flexDirection: 'row',
+        }}
+      >
+        {skillData.map((item: string, index: string | number | undefined) => {
+          return <BoxText size={14} key={index} text={item} />;
         })}
       </View>
     );
   };
 
-  /**
-   * handle the button request
-   */
+  // * handle the button request
   nextHandler = () => {
     const { toPostProject4 } = this.props;
     const { detail, skillData } = this.state;
 
-    console.log(Globals.PostProject.title);
-    if (detail.length < 15) {
+    if (detail.length < 100 || detail.length > 800) {
       Alert.alert(
         'Alert',
-        'Please provide at least 150 characters to your project details'
+        'Please provide at least 100 - 800 characters to your project details'
       );
-      return;
-    }
-    if (detail.length > 800) {
-      Alert.alert('Alert', 'Detail is too long!');
       return;
     }
     Globals.PostProject.detail = detail;
     Globals.PostProject.skills = skillData;
-    // Globals.PostProject. = state;
-    // Globals.PostProject.city = city;
 
-    console.log(Globals.PostProject.detail);
     toPostProject4();
   };
 
-  /**
-   * Skill Modal
-   */
+  // * Skill Modal
   _renderSkillModal = () => {
-    const { selectedSkill } = this.state;
+    const { skillData } = this.state;
     return (
-      <AppModal visible={this.state.showSkillModal}>
-        <AppCard>
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-            >
-              <Text style={styles.headingStyle}>Please Select Skill.</Text>
-              <AppButton
-                style={{ backgroundColor: 'white' }}
-                onPress={() => {
-                  this.setState({ showSkillModal: false });
-                }}
-              >
-                <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
-              </AppButton>
-            </View>
-            <View style={{ alignItems: 'center' }}>
-              <Picker
-                selectedValue={selectedSkill}
-                style={{ height: 50, width: 250 }}
-                onValueChange={(itemValue: any) =>
-                  this.setState({ selectedSkill: itemValue })
-                }
-              >
-                {skillList.map(
-                  (item: string, index: string | number | undefined) => {
-                    return (
-                      <Picker.Item key={index} label={item} value={item} />
-                    );
-                  }
-                )}
-              </Picker>
-            </View>
-
+      <AppModal
+        onRequestClose={() => this.setState({ showSkillModal: false })}
+        visible={this.state.showSkillModal}
+      >
+        <View style={styles.modalContainer}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.headingStyle}>Please Select Skill.</Text>
             <AppButton
-              disabled={selectedSkill !== 'Select Skill' ? false : true}
+              style={{ backgroundColor: 'white' }}
               onPress={() => {
-                if (this.state.skillData.length === 10) {
-                  Alert.alert('Alert', 'Skill selection limit has reached');
-                  return;
-                }
-                let selectedSkill = this.state.selectedSkill;
-
-                this.setState({
-                  skillData: [selectedSkill, ...this.state.skillData],
-                  selectedSkill: 'Select Skill'
-                });
+                this.setState({ showSkillModal: false });
               }}
             >
-              ADD
+              <Icon name={'close'} size={20} color={Styles.PrimaryColor} />
             </AppButton>
           </View>
-        </AppCard>
+          <FlatList
+            data={this.state.combinedCatData}
+            style={{ flex: 1 }}
+            keyExtractor={(item: any) => item.cat_id.toString()}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item, index }: any) => (
+              <View>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>
+                  {item.name}
+                </Text>
+                {item.children.map(
+                  (
+                    childItem: {
+                      name: React.ReactNode;
+                      status: boolean;
+                      sub_cat_id: number;
+                      cat_id: number;
+                    },
+                    childIndex: React.ReactText
+                  ) => (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                      key={childItem.sub_cat_id}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: 'grey',
+                          paddingLeft: 5,
+                        }}
+                      >
+                        {childItem.name}
+                      </Text>
+                      <CheckBox
+                        checkedColor="green"
+                        onPress={() => {
+                          const combinedCatData: any = [
+                            ...this.state.combinedCatData,
+                          ];
+                          combinedCatData[index].children[
+                            childIndex
+                          ].status = !childItem.status;
+                          if (
+                            combinedCatData[index].children[childIndex].status
+                          ) {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              skillData: [
+                                ...this.state.skillData,
+                                combinedCatData[index].children[childIndex]
+                                  .name,
+                              ],
+                            });
+                          } else {
+                            this.setState({
+                              combinedCatData: combinedCatData,
+                              skillData: this.state.skillData.filter(
+                                (item: any) =>
+                                  item !==
+                                  combinedCatData[index].children[childIndex]
+                                    .name
+                              ),
+                            });
+                          }
+                        }}
+                        checked={childItem.status}
+                      />
+                    </View>
+                  )
+                )}
+              </View>
+            )}
+          />
+
+          <AppButton
+            disabled={skillData.length !== 0 ? false : true}
+            onPress={() => {
+              this.setState({
+                showSkillModal: false,
+              });
+            }}
+          >
+            DONE
+          </AppButton>
+        </View>
       </AppModal>
     );
   };
 
-  /**
-   * main render
-   */
+  // * Main Render
   render() {
     return (
       <>
@@ -185,7 +214,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
           style={{
             width: '75%',
             height: 4,
-            backgroundColor: Styles.PrimaryColor
+            backgroundColor: Styles.PrimaryColor,
           }}
         />
         {this._renderSkillModal()}
@@ -193,7 +222,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
           style={{
             height: Math.round(Dimensions.get('window').height) - 83,
             backgroundColor: 'white',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <View style={{ padding: 10 }}>
@@ -203,7 +232,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
                 padding: 8,
                 height: 140,
                 borderBottomColor: Styles.PrimaryColor2,
-                borderBottomWidth: 1
+                borderBottomWidth: 1,
               }}
             >
               <AppInput
@@ -224,7 +253,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}
               >
                 <Text style={styles.headingStyle}>
@@ -259,6 +288,7 @@ export default class PostProject3 extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
   headingStyle: {
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
+  modalContainer: { padding: 10, flex: 1, justifyContent: 'space-between' },
 });

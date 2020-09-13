@@ -1,8 +1,9 @@
 import React from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+// eslint-disable-next-line no-unused-vars
+import { TextInput, StyleSheet, TextStyle } from 'react-native';
 
 type input = {
-  style?: Object;
+  style?: TextStyle;
   placeholder?: string | undefined;
   onChangeText: any;
   value: string | undefined;
@@ -29,7 +30,7 @@ type input = {
   numberOfLines?: any;
   onContentSizeChange?: any;
   placeholderTextColor?: any;
-  maxLength?:number | undefined;
+  maxLength?: number | undefined;
 };
 
 const AppInput = (props: input) => {
@@ -58,10 +59,10 @@ const styles = StyleSheet.create({
   input: {
     // height: 40,
     textAlign: 'left',
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
     // paddingLeft: 15,
     // paddingRight: 15
-  }
+  },
 });
 
 export default AppInput;

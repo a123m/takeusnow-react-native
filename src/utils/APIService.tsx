@@ -1,13 +1,23 @@
 import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import { Alert } from 'react-native';
+import { Alert, NativeModules } from 'react-native';
 
 import Config from '../utils/Config';
 import { GlobalErr } from './utils';
 
 axios.defaults.baseURL = Config.Debug ? Config.LocalIP : Config.ServerIP;
-axios.defaults.timeout = 9000;
+axios.defaults.timeout = 60000;
+if (Config.Debug) {
+  axios.interceptors.request.use((request: any) => {
+    console.log('=======request=======\n', request.data);
+    return request;
+  });
+  axios.interceptors.response.use((response: any) => {
+    console.log('=======response======\n', response.data);
+    return response;
+  });
+}
 
 /**
  * Class for sending all Get, Put and Post Calls.
@@ -29,50 +39,43 @@ export default class APIService {
     } else {
       headerObj.headers = { 'Content-Type': 'application/json' };
     }
+
     const netStatus = await NetInfo.fetch();
+    if (netStatus.isConnected == false) {
+      Alert.alert(
+        'Alert',
+        'Unable to access internet, Please check your connectivity and try again'
+      );
+      return;
+    }
+
     try {
-      if (netStatus.isConnected == false) {
-        Alert.alert(
-          'Alert',
-          'Unable to access internet, Please check your connectivity and try again'
-        );
-        return new Error('Network Fail');
-      }
-
-      axios.interceptors.request.use((request: object) => {
-        // console.log('=====request======\n', request);
-        return request;
-      });
-
-      const response: any = await axios.get(url, headerObj);
-      if (response.status === 500) {
-        Alert.alert('Alert', 'Please Login Again');
-        return;
-      }
-      if (response.status !== 200) {
-        if (response.message) {
-          Alert.alert('Alert', response.message);
-          return;
-        }
-        Alert.alert('Alert', 'Something went wrong please try again');
-        return;
-      }
+      const response = await axios.get(url, headerObj);
       return response.data;
     } catch (err) {
-      // console.log(err.response)
-      return err.response;
+      let errMessage: string = err.response.data.message;
+      if (!errMessage) {
+        errMessage = 'Something Went wrong please try again!';
+      }
+      Alert.alert('Alert', errMessage);
+      if (errMessage.toUpperCase().includes('TOKEN')) {
+        await AsyncStorage.clear();
+        NativeModules.DevSettings.reload();
+      }
+
+      GlobalErr(err);
     }
   }
 
   /**
    * This is async function for making all Post Calls to server.
    * @param url
-   * @param params
+   * @param payload
    * @param headers
    * @returns {Promise<void>}
    */
 
-  static async sendPostCall(url: string, params: object) {
+  static async sendPostCall(url: string, payload: object) {
     const token = await AsyncStorage.getItem('userToken');
     let headerObj = { headers: {} };
     if (token) {
@@ -83,45 +86,32 @@ export default class APIService {
     } else {
       headerObj.headers = { 'Content-Type': 'application/json' };
     }
+
     const netStatus = await NetInfo.fetch();
+    if (netStatus.isConnected == false) {
+      Alert.alert(
+        'Alert',
+        'Unable to access internet. Please check your connectivity and try again!'
+      );
+      return;
+    }
+
     try {
-      if (netStatus.isConnected == false) {
-        Alert.alert(
-          'Alert',
-          'Unable to access internet, Please check your connectivity and try again'
-        );
-        return new Error('Network Fail');
-      }
-
-      axios.interceptors.request.use((request: object) => {
-        // console.log('=====request======\n', request);
-        return request;
-      });
-
-      const response = await axios.post(url, params, headerObj);
-      if (response.status === 500) {
-        Alert.alert('Alert', 'Please Login Again');
-        return;
-      }
-      if (response.status !== 200) {
-        Alert.alert('Alert', 'Something went wrong please try again');
-        return;
-      }
+      const response = await axios.post(url, payload, headerObj);
       return response.data;
     } catch (err) {
-      // console.log(err.response)
-      return err.response;
+      GlobalErr(err);
     }
   }
 
   /**
    * This is async function for making all Patch Calls to server.
    * @param url
-   * @param params
+   * @param payload
    * @param headers
    * @returns {Promise<void>}
    */
-  static async sendPatchCall(url: string, params: object) {
+  static async sendPatchCall(url: string, payload: object) {
     const token = await AsyncStorage.getItem('userToken');
     let headerObj = { headers: {} };
     if (token) {
@@ -133,44 +123,29 @@ export default class APIService {
       headerObj.headers = { 'Content-Type': 'application/json' };
     }
     const netStatus = await NetInfo.fetch();
-    try {
-      if (netStatus.isConnected == false) {
-        Alert.alert(
-          'Alert',
-          'Unable to access internet, Please check your connectivity and try again'
-        );
-        return new Error('Network Fail');
-      }
-
-      axios.interceptors.request.use((request: object) => {
-        // console.log('=====request======\n', request);
-        return request;
-      });
-
-      const response = await axios.patch(url, params, headerObj);
-      if (response.status === 500) {
-        Alert.alert('Alert', 'Please Login Again');
-        return;
-      }
-      if (response.status === 200 || response.status === 204) {
-        return response.data;
-      }
-      Alert.alert('Alert', 'Something went wrong please try again');
+    if (netStatus.isConnected == false) {
+      Alert.alert(
+        'Alert',
+        'Unable to access internet. Please check your connectivity and try again!'
+      );
       return;
+    }
+    try {
+      const response = await axios.patch(url, payload, headerObj);
+      return response.data;
     } catch (err) {
-      // console.log(err.response)
-      return err.response;
+      GlobalErr(err);
     }
   }
 
   /**
    * This is async function for making all PUT Calls to server.
    * @param url
-   * @param params
+   * @param payload
    * @param headers
    * @returns {Promise<void>}
    */
-  static async sendPutCall(url: string, params: object) {
+  static async sendPutCall(url: string, payload: object) {
     const token = await AsyncStorage.getItem('userToken');
     let headerObj = { headers: {} };
     if (token) {
@@ -182,33 +157,19 @@ export default class APIService {
       headerObj.headers = { 'Content-Type': 'application/json' };
     }
     const netStatus = await NetInfo.fetch();
+    if (netStatus.isConnected == false) {
+      Alert.alert(
+        'Alert',
+        'Unable to access internet. Please check your connectivity and try again!'
+      );
+      return;
+    }
+
     try {
-      if (netStatus.isConnected == false) {
-        Alert.alert(
-          'Alert',
-          'Unable to access internet, Please check your connectivity and try again'
-        );
-        return new Error('Network Fail');
-      }
-
-      axios.interceptors.request.use((request: object) => {
-        // console.log('=====request======\n', request);
-        return request;
-      });
-
-      const response = await axios.put(url, params, headerObj);
-      if (response.status === 500) {
-        Alert.alert('Alert', 'Please Login Again');
-        return;
-      }
-      if (response.status !== 200) {
-        Alert.alert('Alert', 'Something went wrong please try again');
-        return;
-      }
+      const response = await axios.put(url, payload, headerObj);
       return response.data;
     } catch (err) {
-      // console.log(err.response)
-      return err.response;
+      GlobalErr(err);
     }
   }
 
@@ -230,33 +191,18 @@ export default class APIService {
       headerObj.headers = { 'Content-Type': 'application/json' };
     }
     const netStatus = await NetInfo.fetch();
+    if (netStatus.isConnected == false) {
+      Alert.alert(
+        'Alert',
+        'Unable to access internet. Please check your connectivity and try again!'
+      );
+      return;
+    }
     try {
-      if (netStatus.isConnected == false) {
-        Alert.alert(
-          'Alert',
-          'Unable to access internet, Please check your connectivity and try again'
-        );
-        throw new Error('Network Fail');
-      }
-
-      axios.interceptors.request.use((request: object) => {
-        // console.log('=====request======\n', request);
-        return request;
-      });
-
       const response = await axios.delete(url, headerObj);
-
-      if (response.status === 500) {
-        Alert.alert('Alert', 'Please Login Again');
-        return;
-      }
-      if (response.status === 200 || response.status === 200) {
-        return response.data;
-      }
-      Alert.alert('Alert', 'Something went wrong please try again');
+      return response.data;
     } catch (err) {
       GlobalErr(err);
-      return;
     }
   }
 }

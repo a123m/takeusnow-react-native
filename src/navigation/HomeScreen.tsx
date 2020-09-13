@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Home from '../screens/Home';
-
 import { Styles } from '../common';
 
 export default class HomeScreen extends React.PureComponent<any> {
@@ -9,6 +8,7 @@ export default class HomeScreen extends React.PureComponent<any> {
     headerTitle: 'Home',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
+    headerStyle: Styles.AppHeaderStyle.headerStyle,
     // headerRight: () => (
     //   <HeaderRight
     //     name={'bubbles'}
@@ -16,7 +16,7 @@ export default class HomeScreen extends React.PureComponent<any> {
     //       navigation.navigate('Messenger');
     //     }}
     //   />
-    // )
+    // ),
   });
 
   render() {
@@ -24,6 +24,12 @@ export default class HomeScreen extends React.PureComponent<any> {
       <Home
         onViewSignOut={() => this.props.navigation.navigate('Auth')}
         upgradePressHandler={() => this.props.navigation.navigate('Plans')}
+        toCategory={(categoryId: number, insideText: string) =>
+          this.props.navigation.navigate('Category', {
+            categoryId: categoryId,
+            insideText: insideText,
+          })
+        }
       />
     );
   }

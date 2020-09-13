@@ -1,5 +1,4 @@
 import React from 'react';
-import {} from 'react-native';
 
 import MyProfile from '../screens/EditProfile';
 import { HeaderRight } from '../components';
@@ -11,6 +10,7 @@ export default class ProfileEditScreen extends React.PureComponent<any> {
     headerTitle: 'My Profile',
     headerTitleStyle: Styles.AppHeaderStyle.textStyle,
     headerTintColor: Styles.AppHeaderStyle.headerTintColor,
+    headerStyle: Styles.AppHeaderStyle.headerStyle,
     headerRight: () => (
       <HeaderRight
         name={'settings'}
@@ -28,6 +28,7 @@ export default class ProfileEditScreen extends React.PureComponent<any> {
         toReview={(userId: string) =>
           navigation.navigate('Review', { userId: userId })
         }
+        toSettings={() => navigation.navigate('Settings')}
       />
     );
   }

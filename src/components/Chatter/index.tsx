@@ -14,7 +14,7 @@ type Props = {
 };
 
 const _renderChatter = (props: Props) => {
-  let time = convertTime(props.time);
+  const time = convertTime(props.time);
   return (
     <TouchableOpacity onLongPress={props.onLongPress} onPress={props.onPress}>
       <View style={styles.mainContainer}>
